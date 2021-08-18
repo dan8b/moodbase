@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 
-app=FastAPI()
 
-@app.get('/')
+moodbase=FastAPI()
+
+@moodbase.get('/')
 def index():
     return "Test"
 
-@app.get('')
-def about():
+@moodbase.post('/api/testrequest')
+def testRequest():
+    return {"message":"received"}
+    

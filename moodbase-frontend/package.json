@@ -1,0 +1,45 @@
+{
+  "name": "moodbase-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "autoprefixer": "^9.8.6",
+    "buefy": "^0.9.8",
+    "bulma": "^0.9.3",
+    "chart.js": "^2.9.4",
+    "core-js": "^3.6.5",
+    "d3": "^7.0.0",
+    "postcss": "^7.0.36",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4",
+    "twojs-ts": "^0.7.0-13",
+    "vee-validate": "^4.4.5",
+    "vue": "^3.0.0",
+    "vue-chart-3": "^0.4.8",
+    "vue-chartjs": "^3.5.1",
+    "vue-router": "^4.0.0-0",
+    "vue3-chart-v2": "^0.8.2",
+    "vuescroll": "^4.17.3",
+    "vuex": "^4.0.0-0",
+    "vuex-persistedstate": "^4.0.0-beta.3",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0",
+    "sass": "^1.35.1",
+    "sass-loader": "^10.2.0"
+  }
+}
