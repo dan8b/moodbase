@@ -55,34 +55,18 @@ export default {
       this.message = "";
       this.successful = false;
       this.$store.dispatch("auth/login", user)
-      .then( () => 
-        (response) => {
-          this.message = response.message;
-          this.successful = true;
-          this.loading = false;
-          this.$router.push('/home')
-        },
-        (error) => {
-          console.log(error)
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.successful = false;
-          this.loading = false;
-          alert(this.message)
+      .then( response => {
+        if (response.ok) {
+        this.$router.push('/home')
         }
-        
+        else{
+          alert("Username or password is incorrect")
+        }
+      }
+      )
 
-        )
-        // () =>  {
-        //   this.$router.push("/home");
-        // },
- 
+    }
     },
-  },
 };
 </script>
 

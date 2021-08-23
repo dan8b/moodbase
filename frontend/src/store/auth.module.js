@@ -13,7 +13,7 @@ export const auth = {
        return AuthService.login(user).then(
         response=>
           {
-            if (response.ok===true) {
+            if (response.ok) {
               commit('loginSuccess',response)
               return response
             }
@@ -32,15 +32,13 @@ export const auth = {
     register({ commit }, user) {
       return AuthService.register(user).then(
         response => {
-            if(response.ok===true){
-              console.log(response)
+            if(response.ok){
               commit('registerSuccess');
-             return response        
+              return response        
         }
         else{
-          console.log(response)
           commit('registerFailure');
-          return "Failure";
+          return Error(response.statusText || response.status)
         }
         }
       )

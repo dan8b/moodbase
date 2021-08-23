@@ -67,25 +67,15 @@ export default {
       this.successful = false;
       this.loading = true;
       this.$store.dispatch("auth/register", user).then(
-        (response) => {
-          this.message = response.message;
-          this.successful = true;
-          this.loading = false;
-          this.$router.push("/login");
-        },
-        (error) => {
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.successful = false;
-          this.loading = false;
-          alert(this.message)
-        }
-      );
-    },
+        response => {
+          if (response.ok){
+            this.$router.push('/login')
+          }
+          else{
+            alert("User with that username already exists")
+          }
+        })
+    }
   },
 };
 
