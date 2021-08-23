@@ -1,13 +1,28 @@
-from fastapi import FastAPI
+# from models.userModel import User
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from pymongo import MongoClient
+from routes import loginandregistration
+from fastapi.security import OAuth2PasswordBearer
 
+app=FastAPI()
+oauth2_scheme= OAuth2PasswordBearer(tokenUrl="token")
 
-moodbase=FastAPI()
+origins=[
+    "http://localhost:8080"
+]
 
-@moodbase.get('/')
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(loginandregistration.loginAndRegistrationRoute)
+
+@app.get('/')
 def index():
     return "Test"
-
-@moodbase.post('/api/testrequest')
-def testRequest():
-    return {"message":"received"}
     

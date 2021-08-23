@@ -9,14 +9,21 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    async login({ commit }, user) {
-      await AuthService.login(user).then(data => {
-          commit('loginSuccess', data);
-          return data
-          }).catch((error) => {
+    login({ commit }, user) {
+       return AuthService.login(user).then(
+        response=>
+          {
+            if (response.ok===true) {
+              commit('loginSuccess',response)
+              return response
+            }
+          else{
           commit('loginFailure');
-          return Promise.reject(error);
-        })
+          return Error(response.statusText || response.status)
+          }
+        }
+        
+        )
       },
     logout({ commit }, user) {
       AuthService.logout(user);
@@ -24,15 +31,20 @@ export const auth = {
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
-          response => {
-            commit('registerSuccess');
-            return response        
-        },
-        error => {
-          commit('registerFailure');
-          return Promise.reject(error);
+        response => {
+            if(response.ok===true){
+              console.log(response)
+              commit('registerSuccess');
+             return response        
         }
-      )},
+        else{
+          console.log(response)
+          commit('registerFailure');
+          return "Failure";
+        }
+        }
+      )
+    },
     },
   mutations: {
     loginSuccess(state, user) {

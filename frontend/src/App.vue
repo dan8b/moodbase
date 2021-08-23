@@ -1,4 +1,5 @@
 <template>
+  <button @click="testfast">test fast</button>
   <div id="nav">
 
   <ul v-if="currentUser" class="flex">
@@ -40,7 +41,11 @@ export default {
       }
   },
 
-methods:{ logOut() {
+methods:{ 
+  testfast(){
+    console.log(fetch('http://localhost:8000/api/testrequest'))
+  },
+  logOut() {
       const currentUser=this.$store.state.auth.user
       this.$store.commit('currentMoodColors/wipeColorState')
       this.$store.dispatch('auth/logout',currentUser);

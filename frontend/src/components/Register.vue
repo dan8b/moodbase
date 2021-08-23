@@ -11,7 +11,6 @@
         <Field class="field" name="password" type="text" /><br><br>
         <button type="submit">Submit</button>
     </Form>
-    <div v-if="message">Account created successfully</div>
 </div>   
 </template>
 
@@ -83,6 +82,7 @@ export default {
             error.toString();
           this.successful = false;
           this.loading = false;
+          alert(this.message)
         }
       );
     },

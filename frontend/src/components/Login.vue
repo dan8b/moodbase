@@ -49,23 +49,34 @@ export default {
     }
   },
   methods: {
-    async handleLogin(user) {
-      this.$store.state.auth.status.loggedIn
+    handleLogin(user) {
+      // this.$store.state.auth.status.loggedIn
       this.loading = true;
+      this.message = "";
+      this.successful = false;
       this.$store.dispatch("auth/login", user)
-      .then( () => {this.$router.push('/home')} )
-      .catch(       (error) => {
+      .then( () => 
+        (response) => {
+          this.message = response.message;
+          this.successful = true;
           this.loading = false;
+          this.$router.push('/home')
+        },
+        (error) => {
+          console.log(error)
           this.message =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
             error.message ||
             error.toString();
-            alert("Login failed - there's no such user in the moodbase, please try again")
+          this.successful = false;
+          this.loading = false;
+          alert(this.message)
         }
-      );
-      
+        
+
+        )
         // () =>  {
         //   this.$router.push("/home");
         // },
