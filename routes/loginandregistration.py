@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models.userModel import UserForLogin,UserForRegistration
+from models.authModel import AuthenticateUser
 
 loginAndRegistrationRoute=APIRouter(
     prefix="/api/user",
@@ -7,9 +7,9 @@ loginAndRegistrationRoute=APIRouter(
 )
 
 @loginAndRegistrationRoute.post('/registeruser')
-def registerUser(newUser: UserForRegistration):
+def registerUser(newUser: AuthenticateUser):
     return newUser.addUserToDatabase()
     
 @loginAndRegistrationRoute.post('/loginuser')
-def loginUser(userToLogin: UserForLogin):
+def loginUser(userToLogin: AuthenticateUser):
     return userToLogin.loginUser()
