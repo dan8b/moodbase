@@ -1,11 +1,12 @@
 from typing import Optional
 from db import userData
 import bcrypt
-from fastapi import HTTPException
+from fastapi import HTTPException, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from schemas.userSchema import parseUser
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime,timedelta
-import jwt 
+# import jwt 
 
 global secret
 secret="BLo08OM2380wAit2381I2370Me3an1530Wa7r82t9sBL6o013od15102430Sp325r4e3aDs760750372w3aRTs294419Yo15U6234510Sa33iD459374"
@@ -19,19 +20,10 @@ class AuthenticateUser(BaseModel):
 
     #JWT STUFF
 
-    def encodeToken(self,scope):
-        payload = {
-            'exp' : datetime.utcnow() + timedelta(days=0, minutes=30),
-            'iat' : datetime.utcnow(),
-            'scope': scope, #access_token or refresh_token
-            'sub' : self.username
-        }
-        return jwt.encode(
-            payload, 
-            secret,
-            algorithm='HS256'
-        )
-    def decodeAccessToken(self,token):
+
+        
+
+    def decodeToken(self,token):
         try:
             payload = jwt.decode(token, secret, algorithms=['HS256'])
             if (payload['scope'] == 'access_token'):
@@ -54,6 +46,9 @@ class AuthenticateUser(BaseModel):
             raise HTTPException(status_code=401, detail='Refresh token expired')
         except jwt.InvalidTokenError:
             raise HTTPException(status_code=401, detail='Invalid refresh token')
+    
+    def authWrapper(self, auth: HTTPAuthorizationCredentials = Security()):
+        return self.decodeToken(auth.credentials)
 
     def addUserToDatabase(self):
         checkUsername={'username':self.username}
@@ -67,17 +62,17 @@ class AuthenticateUser(BaseModel):
             userData.insert_one(userToDB)
             return {"Message":"User created successfully"}
 
-        def loginUser(self):
+    def loginUser(self):
         checkUsername={'username':self.username}
         if userData.find(checkUsername).limit(1).count()<1:
-            raise HTTPException(status_code=404,detail="Username not registered")
+            raise HTTPException(status_code=400,detail="Username not registered")
         else:
             userToCheck=userData.find_one(checkUsername)
             if bcrypt.checkpw(self.password.encode('utf-8'), userToCheck['password']):
                 encodedJWT=self.encodeToken(self.username)
-                return {'token': encodedJWT}
+                return {'access_token': encodedJWT, "token_type":"bearer"}
             else:
-                raise HTTPException(status_code=404,detail="Password is incorrect")    
+                raise HTTPException(status_code=400,detail="Password is incorrect")    
 
 
 
