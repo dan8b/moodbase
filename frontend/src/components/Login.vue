@@ -19,6 +19,7 @@
 
 <script>
 import { Form, Field } from "vee-validate";
+// import {authHeader} from '@/services/auth-header';
 import * as yup from "yup";
 export default {
   name: "Login",
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+      return this.$store.state.auth.loggedIn;
     },
   },
   created() {
@@ -49,12 +50,15 @@ export default {
     }
   },
   methods: {
-    handleLogin(user) {
+    refreshToken(){
+
+    },
+    handleLogin(loginForm) {
       // this.$store.state.auth.status.loggedIn
       this.loading = true;
       this.message = "";
       this.successful = false;
-      this.$store.dispatch("auth/login", user)
+      this.$store.dispatch("auth/login", loginForm)
       .then( response => {
         if (response.ok) {
         this.$router.push('/home')

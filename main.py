@@ -2,11 +2,13 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-from routes import loginandregistration
+from routes import auth
 from fastapi.security import OAuth2PasswordBearer
 
+authenticator=OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 app=FastAPI()
-oauth2_scheme= OAuth2PasswordBearer(tokenUrl="loginuser")
+
+
 
 origins=[
     "http://localhost:8080"
@@ -20,9 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(loginandregistration.loginAndRegistrationRoute)
+app.include_router(auth.authRoute)
 
-@app.get('/')
-def index(token: str = Depends(oauth2_scheme)):
-    return {"token":token}
+@app.post('/')
+def index(token: str=Depends(authenticator)):
+    return {"token":"poop"}
     

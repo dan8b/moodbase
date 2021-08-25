@@ -16,6 +16,7 @@
 
 <script>
 
+import AuthService from '@/services/auth.service'
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
@@ -53,7 +54,7 @@ export default {
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+      return this.$store.state.auth.loggedIn;
     },
   },
   mounted() {
@@ -62,12 +63,13 @@ export default {
     }
   },
   methods: {
-    handleRegistration(user) {
+    handleRegistration(registrationForm) {
       this.message = "";
       this.successful = false;
       this.loading = true;
-      this.$store.dispatch("auth/register", user).then(
+      AuthService.register(registrationForm).then(
         response => {
+          console.log(response)
           if (response.ok){
             this.$router.push('/login')
           }
