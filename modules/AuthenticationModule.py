@@ -1,6 +1,9 @@
 # database stuff
 from db import userData
 
+# email stuff
+import modules.EmailModule as email
+
 # dependency injection stuff
 from fastapi import HTTPException, Depends
 
@@ -8,12 +11,6 @@ from fastapi import HTTPException, Depends
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime,timedelta
-
-# mail stuff
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-import os
-from dotenv import load_dotenv
-load_dotenv('.env')
 
 global secret
 secret="BLo08OM2380wAit2381I2370Me3an1530Wa7r82t9sBL6o013od15102430Sp325r4e3aDs760750372w3aRTs294419Yo15U6234510Sa33iD459374"
@@ -52,7 +49,7 @@ def addUserToDatabase(user):
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
-        return {"Message":"User created successfully"}
+        return email.send_email_async("Test","danbidikov@gmail.com","poop")
 
 def getUserFromToken(token):
     decoded = jwt.decode(token, secret, 'HS256')
@@ -60,50 +57,3 @@ def getUserFromToken(token):
     user = userData.find_one({'username':userStr})
     return user
 
-# environment variables
-
-class Envs:
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    MAIL_FROM = os.getenv('MAIL_FROM')
-    MAIL_PORT = int(os.getenv('MAIL_PORT'))
-    MAIL_SERVER = os.getenv('MAIL_SERVER')
-    MAIL_FROM_NAME = os.getenv('MAIN_FROM_NAME')
-
-# mail config
-
-mailer = ConnectionConfig(
-    MAIL_USERNAME=Envs.MAIL_USERNAME,
-    MAIL_PASSWORD=Envs.MAIL_PASSWORD,
-    MAIL_FROM=Envs.MAIL_FROM,
-    MAIL_PORT=Envs.MAIL_PORT,
-    MAIL_SERVER=Envs.MAIL_SERVER,
-    MAIL_FROM_NAME="",
-    MAIL_TLS=True,
-    MAIL_SSL=False,
-    USE_CREDENTIALS=True,
-)
-
-# mail functions
-
-async def send_email_async(subject: str, email_to: str, body: dict):
-    message = MessageSchema(
-        subject=subject,
-        recipients=[email_to],
-        body=body,
-        subtype='html',
-    )
-    
-    fm = FastMail(mailer)
-    await fm.send_message(message, template_name='email.html')
-
-# def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
-#     message = MessageSchema(
-#         subject=subject,
-#         recipients=[email_to],
-#         body=body,
-#         subtype='html',
-#     )
-#     fm = FastMail(conf)
-#     background_tasks.add_task(
-#        fm.send_message, message, template_name='email.html')
