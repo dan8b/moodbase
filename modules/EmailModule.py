@@ -33,18 +33,16 @@ mailer = ConnectionConfig(
 
 async def send_email_async(subject: str, email_to: str, emailType: str):
     
-    # path=Path('../templates')/emailType
-    # with open(path, 'r') as f:
-    #     bodyText=f.read()
+    path=Path('./templates')/emailType
+    with open(path, 'r') as f:
+        bodyText=f.read()
     # emailBody={"test":"Once please"}
-    bodyText=""" 
-    <p> Butthole </p> 
-    """
+    # bodyText="abc"
     message = MessageSchema(
         subject=subject,
         recipients=[email_to],
         body=bodyText,
-        # subtype='html',
+        subtype='html',
     )
     
     fm = FastMail(mailer)
