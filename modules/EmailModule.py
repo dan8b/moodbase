@@ -26,7 +26,7 @@ mailer = ConnectionConfig(
     MAIL_TLS=True,
     MAIL_SSL=False,
     USE_CREDENTIALS=True,
-    # TEMPLATE_FOLDER=Path(__file__).parent.parent.absolute() / "templates"
+    TEMPLATE_FOLDER=Path('.').parent / "templates"
 )
 
 # mail functions
@@ -46,7 +46,7 @@ async def send_email_async(subject: str, email_to: str, emailType: str):
     )
     
     fm = FastMail(mailer)
-    await fm.send_message(message)
+    await fm.send_message(message,template_name="templates.py")
 
 # def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
 #     message = MessageSchema(
