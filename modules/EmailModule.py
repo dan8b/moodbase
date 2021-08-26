@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 load_dotenv('.env')
 from decouple import config
 
-
 # environment variables
 class Envs:
     MAIL_USERNAME = config('MAIL_USERNAME')
@@ -31,22 +30,20 @@ mailer = ConnectionConfig(
 
 # mail functions
 
-async def send_email_async(subject: str, email_to: str, emailType: str):
-    
-    path=Path('./templates')/emailType
-    with open(path, 'r') as f:
-        bodyText=f.read()
-    # emailBody={"test":"Once please"}
-    # bodyText="abc"
+async def send_email_async(url:str, subject: str, recipient: str, template: str):
+    recipient="danbidikov@gmail.com"
+    template_body={'url':url}
     message = MessageSchema(
         subject=subject,
-        recipients=[email_to],
-        body=bodyText,
+        recipients=[recipient],
+        template_body=template_body,
         subtype='html',
     )
     
     fm = FastMail(mailer)
-    await fm.send_message(message,template_name="templates.py")
+    await fm.send_message(message,template_name=template)
+
+
 
 # def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
 #     message = MessageSchema(

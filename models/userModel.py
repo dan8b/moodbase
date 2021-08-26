@@ -7,7 +7,7 @@ class User(BaseModel):
     username: str 
     password: str
     email: EmailStr
-    active:bool
+    active=False
 
 
         

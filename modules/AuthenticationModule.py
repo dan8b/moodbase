@@ -43,19 +43,27 @@ def createAccessToken(subName):
 
 def addUserToDatabase(user):
     checkUsername={'username':user.username}
+    checkEmail={'email':user.email}
     # use find.limit instead of find_one because find will return whether or not doc exists
     # and find_one will return the whole doc
-    if userData.find(checkUsername).limit(1).count()>0:
-        raise HTTPException(status_code=404,detail="User already exists, try another username")
+    if userData.find(checkUsername).limit(1).count()>0 or userData.find(checkEmail).limit(1).count()>0:
+        raise HTTPException(status_code=404,detail="User already exists with this ID or email address")
     else: 
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
-        return email.send_email_async("Test","danbidikov@gmail.com","ActivationEmail.html")
+        url=createUrlForEmail(user.username)
+        return email.send_email_async(url=url,subject="Activation email",recipient=checkEmail['email'],template="ActivationEmail.html")
 
 def getUserFromToken(token):
     decoded = jwt.decode(token, secret, 'HS256')
     userStr=decoded['sub']
     user = userData.find_one({'username':userStr})
     return user
+
+def createUrlForEmail(username):
+    token=createAccessToken(username)
+    url=f"http://localhost:8080/home/{token}"
+    return url
+
 

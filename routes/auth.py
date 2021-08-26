@@ -17,12 +17,12 @@ async def registerUser(newUser: User):
     await auth.addUserToDatabase(newUser)
     return {"success":True}
     
-@authRoute.post('/login/{wantsRefresh}/{userActivation}/{activatedUser}')
-def loginUser(userActivation: Optional[bool], wantsRefresh: Optional[bool], activatedUser: Optional[str],
+@authRoute.post('/login/{wantsRefresh}/{userActivation}/{optionalToken}')
+def loginUser(optionalToken: Optional[str], userActivation: Optional[bool], wantsRefresh: Optional[bool], activatedUser: Optional[str],
                  user: OAuth2PasswordRequestForm = Depends()): 
     if userActivation==True or wantsRefresh==True:
-        token=auth.createAccessToken(user.username)
-        return {"access_token":token,"token_type":"bearer"}
+        return {"access_token":optionalToken
+        ,"token_type":"bearer"}
     checkedUser = auth.verifyUserAtLogin({'username': user.username, 'password': user.password})  
     if not checkedUser:
         raise HTTPException(
