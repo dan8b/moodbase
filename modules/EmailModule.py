@@ -1,17 +1,18 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-import os
+from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv('.env')
+from decouple import config
+
 
 # environment variables
-
 class Envs:
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    MAIL_FROM = os.getenv('MAIL_FROM')
-    MAIL_PORT = int(os.getenv('MAIL_PORT'))
-    MAIL_SERVER = os.getenv('MAIL_SERVER')
-    MAIL_FROM_NAME = os.getenv('MAIL_FROM_NAME')
+    MAIL_USERNAME = config('MAIL_USERNAME')
+    MAIL_PASSWORD = config('MAIL_PASSWORD')
+    MAIL_FROM = config('MAIL_FROM')
+    MAIL_PORT = int(config('MAIL_PORT'))
+    MAIL_SERVER = config('MAIL_SERVER')
+    MAIL_FROM_NAME = config('MAIL_FROM_NAME')
 
 # mail config
 
@@ -25,20 +26,29 @@ mailer = ConnectionConfig(
     MAIL_TLS=True,
     MAIL_SSL=False,
     USE_CREDENTIALS=True,
+    # TEMPLATE_FOLDER=Path(__file__).parent.parent.absolute() / "templates"
 )
 
 # mail functions
 
-async def send_email_async(subject: str, email_to: str, body: str):
+async def send_email_async(subject: str, email_to: str, emailType: str):
+    
+    # path=Path('../templates')/emailType
+    # with open(path, 'r') as f:
+    #     bodyText=f.read()
+    # emailBody={"test":"Once please"}
+    bodyText=""" 
+    <p> Butthole </p> 
+    """
     message = MessageSchema(
         subject=subject,
         recipients=[email_to],
-        body=body,
-        subtype='html',
+        body=bodyText,
+        # subtype='html',
     )
     
     fm = FastMail(mailer)
-    await fm.send_message(message, template_name='email.html')
+    await fm.send_message(message)
 
 # def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
 #     message = MessageSchema(

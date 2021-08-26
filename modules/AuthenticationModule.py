@@ -11,9 +11,11 @@ from fastapi import HTTPException, Depends
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime,timedelta
+from dotenv import load_dotenv
+load_dotenv('.env')
+from decouple import config
 
-global secret
-secret="BLo08OM2380wAit2381I2370Me3an1530Wa7r82t9sBL6o013od15102430Sp325r4e3aDs760750372w3aRTs294419Yo15U6234510Sa33iD459374"
+secret=config('secret')
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -49,7 +51,7 @@ def addUserToDatabase(user):
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
-        return email.send_email_async("Test","danbidikov@gmail.com","poop")
+        return email.send_email_async("Test","danbidikov@gmail.com","ActivationEmail.html")
 
 def getUserFromToken(token):
     decoded = jwt.decode(token, secret, 'HS256')

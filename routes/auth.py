@@ -17,9 +17,9 @@ async def registerUser(newUser: User):
     await auth.addUserToDatabase(newUser)
     return {"success":True}
     
-@authRoute.post('/login/{wantsRefresh}/{userActivation}')
-def loginUser(userActivation: Optional[bool]=False, wantsRefresh: Optional[bool]=False, 
-                user: OAuth2PasswordRequestForm = Depends()): 
+@authRoute.post('/login/{wantsRefresh}/{userActivation}/{activatedUser}')
+def loginUser(userActivation: Optional[bool], wantsRefresh: Optional[bool], activatedUser: Optional[str],
+                 user: OAuth2PasswordRequestForm = Depends()): 
     if userActivation==True or wantsRefresh==True:
         token=auth.createAccessToken(user.username)
         return {"access_token":token,"token_type":"bearer"}
