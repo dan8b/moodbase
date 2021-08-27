@@ -1,9 +1,10 @@
 from itertools import filterfalse
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
-from models.userModel import User
+from models.userModel import User, AdditionalAuthenticationInfo 
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 import modules.AuthenticationModule as auth
+from schemas.userSchema import parseUser
 
 authenticator=OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
@@ -17,14 +18,25 @@ async def registerUser(newUser: User):
     await auth.addUserToDatabase(newUser)
     return {"success":True}
     
-@authRoute.post('/login/{wantsRefresh}/{userActivation}/{optionalToken}')
-def loginUser(optionalToken: Optional[str], userActivation: Optional[bool], wantsRefresh: Optional[bool], activatedUser: Optional[str],
+@authRoute.post('/login')
+def loginUser( 
                  user: OAuth2PasswordRequestForm = Depends()): 
-    if userActivation==True or wantsRefresh==True:
-        return {"access_token":optionalToken
-        ,"token_type":"bearer"}
+    # if additionalInformation:
+    #     if additionalInformation.activationToken!="":
+    #         userToActivate=auth.getUserFromToken(additionalInformation.activationToken)
+    #         parseUser(userToActivate).activateUser()
+    #         return {"access_token":additionalInformation.activationToken ,"token_type":"bearer"}
+    #     elif additionalInformation.wantsRefresh==True:
+    #         return {"access_token":additionalInformation.activationToken ,"token_type":"bearer"}
+    #     else:
+    #         raise HTTPException(
+    #             status_code=status.HTTP_418_IM_A_TEAPOT,
+    #             detail="Something happened",
+    #             headers={"WWW-Authenticate":"Bearer"}
+    #         )
+    print(user.username)
     checkedUser = auth.verifyUserAtLogin({'username': user.username, 'password': user.password})  
-    if not checkedUser:
+    if not checkedUser==False:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",

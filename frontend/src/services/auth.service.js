@@ -1,13 +1,13 @@
 const API_URL = 'http://localhost:8000/api/auth/';
 
 class AuthService {
-    login(user) {
+    login(formData) {
         return fetch(API_URL + 'login',{
                 method: 'POST',
                 mode: 'cors',
                 credentials: 'include',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({'username': user.username,'password': user.password})
+                headers: {'Content-Type': 'x-www-form-urlencoded'},
+                body: JSON.stringify(formData)
             })
             }
     

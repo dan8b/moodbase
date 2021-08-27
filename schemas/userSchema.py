@@ -3,5 +3,6 @@ def parseUser(user) -> dict:
         "id":str(user['_id']),
         "username":user['username'],
         "email":user['email'],
-        "password":user['password']
+        "password":user['password'],
+        "active":user['active']
     }

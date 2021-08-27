@@ -10,5 +10,10 @@ class User(BaseModel):
     active=False
 
 
-        
-         
+    def activateUser(self):
+        self.active=True
+        return True    
+
+class AdditionalAuthenticationInfo(BaseModel):
+    activationToken="",
+    wantsRefresh=False,

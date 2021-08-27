@@ -30,20 +30,7 @@ export const auth = {
       AuthService.logout(user);
       commit('logout');
     },
-    register({ commit }, user) {
-      return AuthService.register(user).then(
-        response => {
-            if(response.ok){
-              commit('registerSuccess');
-              return response        
-        }
-        else{
-          commit('registerFailure');
-          return Error(response.statusText || response.status)
-        }
-        }
-      )
-    },
+  
     },
   mutations: {
     loginSuccess(state, token) {
@@ -58,12 +45,7 @@ export const auth = {
       state.status.loggedIn = false;
       state.user = null;
     },
-    registerSuccess(state) {
-      state.status.loggedIn = false;
-    },
-    registerFailure(state) {
-      state.status.loggedIn = false;
-    }
+ 
   },
 
 };

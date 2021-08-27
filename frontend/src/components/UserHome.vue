@@ -1,6 +1,6 @@
 <template>
       
-          <VisualizationDashboard v-if="this.$store.state.auth.status.loggedIn===true" />
+          <VisualizationDashboard v-if="checkedLoggedIn===true" />
 
 
 </template>
@@ -14,7 +14,7 @@ name: 'UserHome',
 
 
 computed: {
-    currentUser() {
+    checkedLoggedIn() {
       return this.$store.state.auth.user;
     }
  },

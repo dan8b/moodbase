@@ -58,7 +58,8 @@ export default {
       this.loading = true;
       this.message = "";
       this.successful = false;
-      this.$store.dispatch("auth/login", loginForm)
+      loginForm.grant_type="password"
+      this.$store.dispatch("auth/login",loginForm)
       .then( response => {
         if (response.ok) {
         this.$router.push('/home')

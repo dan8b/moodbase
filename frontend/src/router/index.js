@@ -28,7 +28,8 @@ const routes = [
     component: RegPage
   },
   {
-    path:'/home',
+    path:'/home/:token',
+    props:true,
     name:'UserHomePage',
     component: UserHomePage,
   },
