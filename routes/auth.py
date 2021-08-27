@@ -18,10 +18,10 @@ async def registerUser(newUser: User):
     await auth.addUserToDatabase(newUser)
     return {"success":True}
     
+
 @authRoute.post('/login')
-def loginUser( 
-                 user: OAuth2PasswordRequestForm = Depends()): 
-    # if additionalInformation:
+def loginUser( user: OAuth2PasswordRequestForm=Depends()): 
+    # if additionalInformation is not None:
     #     if additionalInformation.activationToken!="":
     #         userToActivate=auth.getUserFromToken(additionalInformation.activationToken)
     #         parseUser(userToActivate).activateUser()
@@ -33,10 +33,8 @@ def loginUser(
     #             status_code=status.HTTP_418_IM_A_TEAPOT,
     #             detail="Something happened",
     #             headers={"WWW-Authenticate":"Bearer"}
-    #         )
-    print(user.username)
     checkedUser = auth.verifyUserAtLogin({'username': user.username, 'password': user.password})  
-    if not checkedUser==False:
+    if checkedUser==False:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",

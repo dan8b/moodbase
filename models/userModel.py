@@ -7,8 +7,11 @@ class User(BaseModel):
     username: str 
     password: str
     email: EmailStr
-    active=False
-
+    active= False
+    # {
+    #     'token':"",
+    #     wantsRefresh=False,
+    # }
 
     def activateUser(self):
         self.active=True

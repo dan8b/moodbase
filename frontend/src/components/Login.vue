@@ -44,11 +44,11 @@ export default {
       return this.$store.state.auth.loggedIn;
     },
   },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/home");
-    }
-  },
+  // created() {
+  //   if (this.loggedIn) {
+  //     this.$router.push("/home");
+  //   }
+  // },
   methods: {
     refreshToken(){
 
@@ -58,17 +58,18 @@ export default {
       this.loading = true;
       this.message = "";
       this.successful = false;
-      loginForm.grant_type="password"
       this.$store.dispatch("auth/login",loginForm)
-      .then( response => {
-        if (response.ok) {
-        this.$router.push('/home')
-        }
-        else{
-          alert("Username or password is incorrect")
-        }
-      }
-      )
+      .then( response => response.json()).then(data=>{console.log(data)})
+      // {
+      //   if (response.ok) {
+      //     console.log(response)
+      //   this.$router.push('/home')
+      //   }
+      //   else{
+      //     alert("Username or password is incorrect")
+      //   }
+      // }
+      // )
 
     }
     },
