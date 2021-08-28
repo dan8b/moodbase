@@ -50,26 +50,22 @@ export default {
   //   }
   // },
   methods: {
-    refreshToken(){
-
-    },
+ 
     handleLogin(loginForm) {
-      // this.$store.state.auth.status.loggedIn
       this.loading = true;
       this.message = "";
       this.successful = false;
-      this.$store.dispatch("auth/login",loginForm)
-      .then( response => response.json()).then(data=>{console.log(data)})
-      // {
-      //   if (response.ok) {
-      //     console.log(response)
-      //   this.$router.push('/home')
-      //   }
-      //   else{
-      //     alert("Username or password is incorrect")
-      //   }
-      // }
-      // )
+      return this.$store.dispatch("auth/login",loginForm)
+      .then(
+        response =>{
+        if (Object.keys(response)[0]==="access_token"){
+          this.$router.push('/home')
+        }
+        else {
+          alert(new Error(response.detail))
+        }
+        })
+      //   })
 
     }
     },

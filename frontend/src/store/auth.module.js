@@ -11,39 +11,42 @@ export const auth = {
   state: initialState,
   actions: {
     login({ commit }, user) {
-       return AuthService.login(user).then(
-        response=>
-          {
-            if (response.ok) {
-              commit('loginSuccess',response)
-              return response
-            }
-          else{
-          commit('loginFailure');
-          return Error(response.statusText || response.status)
-          }
+      return AuthService.login(user)
+      .then(
+        response=>response.json())
+      .then(
+        data => {
+          commit('loginSuccess',data)
+          return data
         }
-        
+      )
+      .catch(
+        (error) => {
+          commit('loginFailure');
+          return error
+      }
         )
-      },
-    logout({ commit }, user) {
-      AuthService.logout(user);
-      commit('logout');
     },
-  
-    },
+    logout({ commit }) {
+      localStorage.removeItem('token')
+      commit('logoutSuccess');
+
+    }
+  },
   mutations: {
     loginSuccess(state, token) {
       state.loggedIn = true;
-      state.accessToken = token;
+      state.accessToken = token.access_token;
+      window.localStorage.setItem('token', state.accessToken);
     },
     loginFailure(state) {
       state.loggedIn = false;
       state.user = null;
     },
-    logout(state) {
-      state.status.loggedIn = false;
-      state.user = null;
+    logoutSuccess(state) {
+      state.loggedIn = false;
+      state.accessToken = "";
+      state.wantsRefresh=false;
     },
  
   },

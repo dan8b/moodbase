@@ -1,8 +1,7 @@
 <template>
-  <button @click="testfast">test fast</button>
   <div id="nav">
 
-  <ul v-if="currentUser" class="flex">
+  <ul v-if="checkLogin" class="flex">
     <li class="mr-6">
     <router-link to="/home">Home</router-link> 
   </li>
@@ -13,7 +12,7 @@
       <router-link to="/allot">Allot</router-link>
   </li>
   <li class="mr-6">
-    <a id="logoutButton" @click="logOut">Logout</a>
+    <a id="logoutButton" @click="logout">Logout</a>
   </li>  
   </ul>
       <ul v-else class="flex">
@@ -33,11 +32,11 @@
 </template>
 
 <script>
-
+// import {mapActions} from 'vuex'
 export default {
   computed: { 
-    currentUser() {
-      return this.$store.state.auth.user;
+    checkLogin() {
+      return this.$store.state.auth.loggedIn;
       }
   },
 
@@ -45,13 +44,15 @@ methods:{
   testfast(){
     console.log(fetch('http://localhost:8000/api/testrequest'))
   },
-  logOut() {
-      const currentUser=this.$store.state.auth.user
-      this.$store.commit('currentMoodColors/wipeColorState')
-      this.$store.dispatch('auth/logout',currentUser);
-      this.$router.push('/login');
-    // }
-    }
+  logout() { this.$store.dispatch('auth/logout')}
+  // ...mapActions({logout:'/auth/logout'})
+  
+  // logOut() {
+  //     this.$store.commit('currentMoodColors/wipeColorState')
+  //     this.$store.dispatch('auth/logout');
+  //     this.$router.push('/login');
+  //   // }
+  //   }
 }
 
 }

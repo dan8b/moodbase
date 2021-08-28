@@ -6,7 +6,6 @@ class AuthService {
         for (var key in loginForm){
             formData.append(key,loginForm[key])
         }
-        console.log(loginForm)
         return fetch(API_URL + 'login',{
                 method: 'POST',
                 mode: 'cors',
@@ -17,17 +16,17 @@ class AuthService {
             })
             }
     
-    logout(user) {
-                fetch(API_URL + 'logout', {
-                method: 'POST',
-                mode: 'cors',
-                credentials:'include',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({'user':user.id})
-            })         
+    // logout(user) {
+    //             fetch(API_URL + 'logout', {
+    //             method: 'POST',
+    //             mode: 'cors',
+    //             credentials:'include',
+    //             headers: {'Content-Type': 'application/json'},
+    //             body: JSON.stringify({'user':user.id})
+    //         })         
         
-        localStorage.removeItem('user');
-        }
+    //     localStorage.removeItem('user');
+    //     }
     
     register(user) {
         return fetch(API_URL + 'register', {
