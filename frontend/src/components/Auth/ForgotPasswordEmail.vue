@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import AuthService from '@/services/auth.service.js'
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 export default {
@@ -26,13 +27,7 @@ name:'ForgotPasswordEmail',
   },
   methods: {
     submitResetRequest(e){
-      fetch('http://localhost:5000/api/sendresetemail' ,{
-            method: 'POST',
-            mode: 'cors',
-            credentials:'include',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(e)
-        })
+      return AuthService.forgot(e.email).then(response=>response.json()).then(data=>{alert(data.message)})
     }
   }
 }

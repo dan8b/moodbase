@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import AuthService from '@/services/auth.service.js'
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 export default {
@@ -26,19 +27,17 @@ export default {
       })
       return {schema}
   },
-   
+  
   methods:{
-      resetPassword(e){
+      resetPassword(newPassword){
         const checkToken=this.$route.params.token
-        e['token']=checkToken
-        console.log(fetch('http://localhost:5000/api/resetpassword' ,{
-            method: 'POST',
-            mode: 'cors',
-            credentials:'include',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(e)
-        }))
-
+        const passwordPayload=
+        {
+          newPassword:newPassword.password,
+          token:checkToken
+        }
+        console.log(passwordPayload)
+        return AuthService.reset(passwordPayload)
     }
   }
 }

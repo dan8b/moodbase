@@ -52,6 +52,13 @@ def activate(tokenDict:ActivationModel):
     newToken = auth.activateUser(tokenDict)
     return {"access_token":newToken, "token_type":"bearer"} 
 
-@authRoute.post('/resetEmail')
-def sendResetEmail(email:ResetModel):
-    return True
+@authRoute.post('/forgot')
+async def sendResetEmail(email:ResetModel):
+    await auth.sendResetEmail(email.email)
+    return {'message':f"reset email sent to {email}"}
+
+@authRoute.post('/reset')
+def reset(newPassword:ResetModel):
+    print(newPassword)
+    auth.resetPassword(newPassword)
+    return {'message':'password reset successful'}

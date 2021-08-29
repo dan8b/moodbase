@@ -13,4 +13,6 @@ class ActivationModel(BaseModel):
     token:str
 
 class ResetModel(BaseModel):
-    email:EmailStr
+    email:Optional[EmailStr]
+    token:Optional[str]
+    newPassword:Optional[str]

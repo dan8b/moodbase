@@ -55,7 +55,8 @@ def addUserToDatabase(user):
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
-        url=createUrlForEmail(user.username)
+        activationToken=createAccessToken(user.username,{'days':2,'minutes':0})
+        url=createUrlForEmail("activate",activationToken)
         return email.send_email_async(url=url,subject="Activation email",recipient="danbidikov@gmail.com",
         template="ActivationEmail.html")
 
@@ -65,9 +66,8 @@ def getUserFromToken(token):
     user = userData.find_one({'username':userStr})
     return user
 
-def createUrlForEmail(username):
-    token=createAccessToken(username,{'days':2,'minutes':0})
-    url=f"http://localhost:8080/activate/{token}"
+def createUrlForEmail(route,token):
+    url=f"http://localhost:8080/{route}/{token}"
     return url
 
 def activateUser(tokenDict):
@@ -76,7 +76,20 @@ def activateUser(tokenDict):
     returnToken=createAccessToken(user['username'],{'days':0,'minutes':30})
     return returnToken
 
-def sendResetEmail(email):
-    return True
+def sendResetEmail(emailAddr):
+    user=userData.find_one({'email':emailAddr})
+    forgotToken=createAccessToken(user['username'],{'days':0,'minutes':60})
+    url=createUrlForEmail("reset",forgotToken)
+    return email.send_email_async(url=url,subject="Activation email",recipient=emailAddr,
+        template="ResetEmail.html")
+
+def resetPassword(newPassword):
+    resetToken=newPassword.token
+    user=getUserFromToken(resetToken)
+    if not user: raise HTTPException({detail:'Did not work'})
+    userData.update_one(user,{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
+    return {'message':'password reset successfully'}
+    
+
 
 

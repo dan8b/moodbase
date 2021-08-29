@@ -48,6 +48,27 @@ class AuthService {
             body: JSON.stringify({'token':token})
         })         
         }
+    forgot(emailAddr){
+        console.log("Sending reset email")
+        return fetch(API_URL + 'forgot', {
+            method: 'POST',
+            mode: 'cors',
+            credentials:'include',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'email':emailAddr})
+        })       
+    }
+    reset(newPasswordAndToken){
+        console.log("Resetting password")
+        console.log(newPasswordAndToken)
+        return fetch(API_URL + 'reset', {
+            method: 'POST',
+            mode: 'cors',
+            credentials:'include',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(newPasswordAndToken)
+        }) 
+    }
     
     
 }
