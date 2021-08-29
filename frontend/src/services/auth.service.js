@@ -1,8 +1,8 @@
 const API_URL = 'http://localhost:8000/api/auth/';
 
 class AuthService {
-    genericFetch(payload){
-        return fetch(API_URL + 'register', {
+    genericFetch(payload,route){
+        return fetch(API_URL + route, {
             method: 'POST',
             mode: 'cors',
             credentials:'include',
@@ -27,26 +27,26 @@ class AuthService {
             }    
     register(user) {
         console.log("User registration in progress")
-        return this.genericFetch({'username':user.username,'email':user.email,'password':user.password})
+        return this.genericFetch({'username':user.username,'email':user.email,'password':user.password},'register')
         }
     activate(token){
         console.log("User activation in progress")
-        return this.genericFetch({'token':token})      
+        return this.genericFetch({'token':token},'activate')      
         }
     forgot(emailAddr){
         console.log("Sending reset email")
-        return this.genericFetch({'email':emailAddr})
+        return this.genericFetch({'email':emailAddr},'forgot')
     }
     reset(newPasswordAndToken){
         console.log("Resetting password")
-        return this.genericFetch(newPasswordAndToken)
+        return this.genericFetch(newPasswordAndToken,'reset')
     }
     refresh(){
         const tokenToRefresh=localStorage.getItem('token')
-        this.genericFetch(tokenToRefresh)
+        this.genericFetch(tokenToRefresh,'refresh')
         .then(response=>response.json())
         .then(data=>{
-                this.$state.dispatch('auth/loginSuccess',data.access_token)
+                return data.access_token
             }) 
     }
 }

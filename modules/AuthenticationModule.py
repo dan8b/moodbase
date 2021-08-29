@@ -73,7 +73,7 @@ def createUrlForEmail(route,token):
 def activateUser(tokenDict):
     user=getUserFromToken(tokenDict.token)
     userData.update_one(user,{'$set':{'active':True}})
-    returnToken=createAccessToken(user['username'],{'days':0,'minutes':30})
+    returnToken=createAccessToken(user['username'],{'days':0,'minutes':1})
     return returnToken
 
 def sendResetEmail(emailAddr):
@@ -92,7 +92,7 @@ def resetPassword(newPassword):
     
 def refreshToken(oldToken):
     user=getUserFromToken(oldToken)
-    return createAccessToken(user, {'days':0,'minutes':30})
+    return createAccessToken(user, {'days':0,'minutes':1})
 
 
 

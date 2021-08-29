@@ -51,24 +51,32 @@ export default {
     }
   },
   methods: {
- 
+    refreshToken(){
+      const token=AuthService.refresh()
+      this.$store.dispatch('auth/activate',token)
+    },
+    testrefresh(){
+      return fetch('http://localhost:8000/api/auth/testjwt', {
+            method: 'POST',
+            mode: 'cors',
+            credentials:'include',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify("abc")
+        })     
+    },
     handleLogin(loginForm) {
-      this.loading = true;
-      this.message = "";
-      this.successful = false;
       return this.$store.dispatch("auth/login",loginForm)
       .then(
         response =>{
         if (Object.keys(response)[0]==="access_token"){
-          setInterval(AuthService.refresh(),1800000)
+          setTimeout(this.testRefresh,600001)
+          setInterval(this.refreshToken,18000000)
           this.$router.push('/home')
         }
         else {
           alert(new Error(response.detail))
         }
         })
-      //   })
-
     }
     },
 };

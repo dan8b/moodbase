@@ -55,3 +55,7 @@ def reset(newPassword:ResetModel):
 def refresh(oldToken):
     newToken=auth.refreshToken(oldToken)
     return {'access_token':newToken,"token_type":"bearer"}
+
+@authRoute.post('/testjwt')
+def testjwt(test:str=Depends(authenticator)):
+    return {'message':'thing works'}
