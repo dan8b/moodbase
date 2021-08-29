@@ -2,7 +2,7 @@
       <Form :validation-schema="schema" id="ForgotPasswordEmail" @submit="submitResetRequest">
         <br>
         <label for="email">Your email address </label>
-        <Field name="email" type="text" /><br><br>
+        <Field class="field" name="email" type="text" /><br><br>
     </Form>
 </template>
 

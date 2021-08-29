@@ -1,7 +1,7 @@
 from itertools import filterfalse
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
-from models.userModel import User, AdditionalAuthenticationInfo 
+from models.userModel import User,ActivationModel,ResetModel
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 import modules.AuthenticationModule as auth
 from schemas.userSchema import parseUser
@@ -40,9 +40,18 @@ def loginUser( user: OAuth2PasswordRequestForm=Depends()):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    token=auth.createAccessToken(checkedUser['username'])
+    token=auth.createAccessToken(checkedUser['username'],{'days':0,'minutes':30})
     return {"access_token":token,"token_type":"bearer"}
 
 @authRoute.post('/logout')
 def logout(token: str = Depends(authenticator)):
     return {"delete":True}
+
+@authRoute.post('/activate')
+def activate(tokenDict:ActivationModel):
+    newToken = auth.activateUser(tokenDict)
+    return {"access_token":newToken, "token_type":"bearer"} 
+
+@authRoute.post('/resetEmail')
+def sendResetEmail(email:ResetModel):
+    return True

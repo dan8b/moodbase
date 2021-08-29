@@ -1,6 +1,9 @@
 # database stuff
 from db import userData
 
+
+from models.userModel import User
+
 # email stuff
 import modules.EmailModule as email
 
@@ -30,9 +33,9 @@ def verifyUserAtLogin(loginAttempt):
         else:
             return False    
 
-def createAccessToken(subName):
+def createAccessToken(subName,duration):
     payload = {
-        'exp' : datetime.utcnow() + timedelta(days=0, minutes=30),
+        'exp' : datetime.utcnow() + timedelta(days=duration['days'], minutes=duration['minutes']),
         'iat' : datetime.utcnow(),
         'sub' : subName        }
     return jwt.encode(
@@ -43,17 +46,18 @@ def createAccessToken(subName):
 
 def addUserToDatabase(user):
     checkUsername={'username':user.username}
-    checkEmail={'email':user.email}
+    # checkEmail={'email':user.email}
     # use find.limit instead of find_one because find will return whether or not doc exists
     # and find_one will return the whole doc
-    if userData.find(checkUsername).limit(1).count()>0 or userData.find(checkEmail).limit(1).count()>0:
+    if userData.find(checkUsername).limit(1).count()>0:
         raise HTTPException(status_code=404,detail="User already exists with this ID or email address")
     else: 
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
         url=createUrlForEmail(user.username)
-        return email.send_email_async(url=url,subject="Activation email",recipient=checkEmail['email'],template="ActivationEmail.html")
+        return email.send_email_async(url=url,subject="Activation email",recipient="danbidikov@gmail.com",
+        template="ActivationEmail.html")
 
 def getUserFromToken(token):
     decoded = jwt.decode(token, secret, 'HS256')
@@ -62,8 +66,17 @@ def getUserFromToken(token):
     return user
 
 def createUrlForEmail(username):
-    token=createAccessToken(username)
-    url=f"http://localhost:8080/home/{token}"
+    token=createAccessToken(username,{'days':2,'minutes':0})
+    url=f"http://localhost:8080/activate/{token}"
     return url
+
+def activateUser(tokenDict):
+    user=getUserFromToken(tokenDict.token)
+    userData.update_one(user,{'$set':{'active':True}})
+    returnToken=createAccessToken(user['username'],{'days':0,'minutes':30})
+    return returnToken
+
+def sendResetEmail(email):
+    return True
 
 

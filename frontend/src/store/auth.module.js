@@ -31,6 +31,9 @@ export const auth = {
       localStorage.removeItem('token')
       commit('logoutSuccess');
 
+    },
+    activate({commit},tokenDict){
+      commit('loginSuccess',tokenDict)
     }
   },
   mutations: {

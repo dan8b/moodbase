@@ -29,6 +29,7 @@ class AuthService {
     //     }
     
     register(user) {
+        console.log("User registration in progress")
         return fetch(API_URL + 'register', {
             method: 'POST',
             mode: 'cors',
@@ -37,6 +38,17 @@ class AuthService {
             body: JSON.stringify({'username': user.username,'email':user.email,'password':user.password})
         })         
         }
+    activate(token){
+        console.log("User activation in progress")
+        return fetch(API_URL + 'activate', {
+            method: 'POST',
+            mode: 'cors',
+            credentials:'include',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'token':token})
+        })         
+        }
+    
     
 }
 

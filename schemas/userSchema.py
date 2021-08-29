@@ -1,3 +1,6 @@
+from collections import UserDict
+from models.userModel import User
+
 def parseUser(user) -> dict:
     return{
         "id":str(user['_id']),

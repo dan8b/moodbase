@@ -7,7 +7,7 @@ import PlotPage from '../views/PlotPage.vue'
 import WeightPage from '../views/WeightPage.vue'
 import ForgotEmailPage from '../views/ForgotEmailPage.vue'
 import ResetPasswordPage from '../views/ResetPasswordPage.vue'
-
+import ActivatePage from '../views/ActivatePage.vue'
 const routes = [
 
 
@@ -52,6 +52,12 @@ const routes = [
     props:true,
     name:'ResetPasswordPage',
     component: ResetPasswordPage,
+  },
+  {
+    path:'/activate/:token',
+    props:true,
+    name:'ActivatePage',
+    component:ActivatePage
   }
 
 ]

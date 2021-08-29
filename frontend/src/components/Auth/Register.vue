@@ -67,14 +67,14 @@ export default {
       this.message = "";
       this.successful = false;
       this.loading = true;
-      AuthService.register(registrationForm).then(
+      return AuthService.register(registrationForm).then(
         response => {
           console.log(response)
-          if (response.ok){
-            this.$router.push('/login')
+          if (response.status===200){
+            alert("Success! You'll be getting an activation link in your email soon.")
           }
-          else{
-            alert("User with that username already exists")
+          else if (response.status!=200){
+            alert("User with that username or email already exists")
           }
         })
     }

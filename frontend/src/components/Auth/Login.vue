@@ -44,11 +44,11 @@ export default {
       return this.$store.state.auth.loggedIn;
     },
   },
-  // created() {
-  //   if (this.loggedIn) {
-  //     this.$router.push("/home");
-  //   }
-  // },
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/home");
+    }
+  },
   methods: {
  
     handleLogin(loginForm) {

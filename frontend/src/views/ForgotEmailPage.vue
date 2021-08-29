@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ForgotPasswordEmail from '@/components/ForgotPasswordEmail.vue'
+import ForgotPasswordEmail from '@/components/Auth/ForgotPasswordEmail.vue'
 export default {
     name:'ForgotEmailPage',
     components: {ForgotPasswordEmail,}
