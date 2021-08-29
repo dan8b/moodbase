@@ -86,10 +86,13 @@ def sendResetEmail(emailAddr):
 def resetPassword(newPassword):
     resetToken=newPassword.token
     user=getUserFromToken(resetToken)
-    if not user: raise HTTPException({detail:'Did not work'})
+    if not user: raise HTTPException(status_code=404,detail='Did not work')
     userData.update_one(user,{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
     return {'message':'password reset successfully'}
     
+def refreshToken(oldToken):
+    user=getUserFromToken(oldToken)
+    return createAccessToken(user, {'days':0,'minutes':30})
 
 
 

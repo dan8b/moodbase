@@ -17,8 +17,8 @@ export default {
     .then(data=>
       {
         store.dispatch('auth/activate',data)
+        setInterval(AuthService.refresh(),1800000)
         router.push('/home')
-
       })
   }
 }

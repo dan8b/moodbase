@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import AuthService from '@/services/auth.service.js'
 import { Form, Field } from "vee-validate";
 // import {authHeader} from '@/services/auth-header';
 import * as yup from "yup";
@@ -59,6 +60,7 @@ export default {
       .then(
         response =>{
         if (Object.keys(response)[0]==="access_token"){
+          setInterval(AuthService.refresh(),1800000)
           this.$router.push('/home')
         }
         else {

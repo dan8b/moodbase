@@ -21,18 +21,6 @@ async def registerUser(newUser: User):
 
 @authRoute.post('/login')
 def loginUser( user: OAuth2PasswordRequestForm=Depends()): 
-    # if additionalInformation is not None:
-    #     if additionalInformation.activationToken!="":
-    #         userToActivate=auth.getUserFromToken(additionalInformation.activationToken)
-    #         parseUser(userToActivate).activateUser()
-    #         return {"access_token":additionalInformation.activationToken ,"token_type":"bearer"}
-    #     elif additionalInformation.wantsRefresh==True:
-    #         return {"access_token":additionalInformation.activationToken ,"token_type":"bearer"}
-    #     else:
-    #         raise HTTPException(
-    #             status_code=status.HTTP_418_IM_A_TEAPOT,
-    #             detail="Something happened",
-    #             headers={"WWW-Authenticate":"Bearer"}
     checkedUser = auth.verifyUserAtLogin({'username': user.username, 'password': user.password})  
     if checkedUser==False:
         raise HTTPException(
@@ -62,3 +50,8 @@ def reset(newPassword:ResetModel):
     print(newPassword)
     auth.resetPassword(newPassword)
     return {'message':'password reset successful'}
+
+@authRoute.post('/refresh')
+def refresh(oldToken):
+    newToken=auth.refreshToken(oldToken)
+    return {'access_token':newToken,"token_type":"bearer"}
