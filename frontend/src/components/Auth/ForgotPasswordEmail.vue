@@ -27,7 +27,12 @@ name:'ForgotPasswordEmail',
   },
   methods: {
     submitResetRequest(e){
-      return AuthService.forgot(e.email).then(response=>response.json()).then(data=>{alert(data.message)})
+      const resetModelObject={
+        email:e.email,
+        token:"",
+        newPassword:""
+      }
+      return AuthService.forgot(resetModelObject).then(response=>response.json()).then(data=>{alert(data.message)})
     }
   }
 }

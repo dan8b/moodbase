@@ -1,6 +1,6 @@
 <template>
   <div id="nav">
-
+  
   <ul v-if="checkLogin" class="flex">
     <li class="mr-6">
     <router-link to="/home">Home</router-link> 
@@ -25,7 +25,7 @@
     </ul>
 
   <br>
-    <router-view />
+    <router-view :key="$route.fullPath"></router-view>
 </div>
 
   
@@ -44,7 +44,10 @@ methods:{
   testfast(){
     console.log(fetch('http://localhost:8000/api/testrequest'))
   },
-  logout() { this.$store.dispatch('auth/logout')}
+  logout() { 
+    this.$store.dispatch('auth/logout')
+    this.$router.push('/')
+    }
   // ...mapActions({logout:'/auth/logout'})
   
   // logOut() {

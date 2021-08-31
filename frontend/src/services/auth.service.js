@@ -6,7 +6,10 @@ class AuthService {
             method: 'POST',
             mode: 'cors',
             credentials:'include',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Authorization':'Bearer '+localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+        },
             body: JSON.stringify(payload)
         })       
     }
@@ -33,9 +36,9 @@ class AuthService {
         console.log("User activation in progress")
         return this.genericFetch({'token':token},'activate')      
         }
-    forgot(emailAddr){
+    forgot(emailObj){
         console.log("Sending reset email")
-        return this.genericFetch({'email':emailAddr},'forgot')
+        return this.genericFetch(emailObj,'forgot')
     }
     reset(newPasswordAndToken){
         console.log("Resetting password")
@@ -48,6 +51,10 @@ class AuthService {
         .then(data=>{
                 return data.access_token
             }) 
+    }
+    checkAuth(){
+        return this.genericFetch({"turd":"butt"},'testcred')
+
     }
 }
 

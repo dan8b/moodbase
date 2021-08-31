@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import AuthService from '@/services/auth.service.js'
 import { Form, Field } from "vee-validate";
 // import {authHeader} from '@/services/auth-header';
 import * as yup from "yup";
@@ -51,19 +50,6 @@ export default {
     }
   },
   methods: {
-    refreshToken(){
-      const token=AuthService.refresh()
-      this.$store.dispatch('auth/activate',token)
-    },
-    testrefresh(){
-      return fetch('http://localhost:8000/api/auth/testjwt', {
-            method: 'POST',
-            mode: 'cors',
-            credentials:'include',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify("abc")
-        })     
-    },
     handleLogin(loginForm) {
       return this.$store.dispatch("auth/login",loginForm)
       .then(

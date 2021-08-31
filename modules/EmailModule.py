@@ -1,3 +1,4 @@
+from fastapi import BackgroundTasks
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from pathlib import Path
 from dotenv import load_dotenv
@@ -30,28 +31,39 @@ mailer = ConnectionConfig(
 
 # mail functions
 
-async def send_email_async(url:str, subject: str, recipient: str, template: str):
+async def send_email_async(emailSpecs):
     recipient="danbidikov@gmail.com"
-    template_body={'url':url}
+    # template_body={'url':url}
     message = MessageSchema(
-        subject=subject,
+        subject=emailSpecs['subject'],
         recipients=[recipient],
-        template_body=template_body,
+        template_body=emailSpecs['urlDict'],
         subtype='html',
     )
     
     fm = FastMail(mailer)
-    await fm.send_message(message,template_name=template)
+    await fm.send_message(message,template_name=emailSpecs['template'])
 
+async def testing():
+    fm=FastMail(mailer)
+    print(BackgroundTasks)
+    message = MessageSchema(
+        subject="Fastapi mail module",
+        recipients=['danbidikov@gmail.com'],
+        body="Simple background task",
+        )
+    await fm.send_message(message)
 
+async def sendEmailBackground(emailSpecs:dict):
+    recipient="danbidikov@gmail.com"
+    message = MessageSchema(
+        subject=emailSpecs['subject'],
+        recipients=[recipient],
+        template_body=emailSpecs['urlDict'],
+        subtype='html',
+    )
+    # background_task=BackgroundTasks
+    fm = FastMail(mailer)
+    await fm.send_message( message, template_name=emailSpecs['template'])
 
-# def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
-#     message = MessageSchema(
-#         subject=subject,
-#         recipients=[email_to],
-#         body=body,
-#         subtype='html',
-#     )
-#     fm = FastMail(conf)
-#     background_tasks.add_task(
-#        fm.send_message, message, template_name='email.html')
+    # return {'message':'email has been sent'}
