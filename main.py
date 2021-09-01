@@ -1,14 +1,12 @@
 # from models.userModel import User
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from routes import auth, plot
-from fastapi.security import OAuth2PasswordBearer
 
-authenticator=OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
 app=FastAPI()
-
-
 
 origins=[
     "http://localhost:8080"
@@ -25,7 +23,3 @@ app.add_middleware(
 app.include_router(auth.authRoute)
 app.include_router(plot.plotRoute)
 
-@app.post('/')
-def index(token: str=Depends(authenticator)):
-    return {"token":"poop"}
-    

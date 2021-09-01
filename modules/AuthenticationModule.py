@@ -8,8 +8,8 @@ from models.userModel import User
 import modules.EmailModule as email
 
 # dependency injection stuff
-from fastapi import HTTPException, Depends,BackgroundTasks
-
+from fastapi import HTTPException, Depends,BackgroundTasks, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 # jwt and password stuff
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -18,7 +18,11 @@ from dotenv import load_dotenv
 load_dotenv('.env')
 from decouple import config
 
+security = HTTPBearer()
+
 secret=config('secret')
+
+authjwt_secret_key = secret
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -34,7 +38,9 @@ def checkToken(token):
         return createAccessToken(decoded['sub'],{'days':0,'minutes':30})
     else: 
         return token
-        
+         
+def gate(userAuth: HTTPAuthorizationCredentials = Security(security)):
+    return getUserFromToken(userAuth.credentials)
 
 def verifyUserAtLogin(loginAttempt):
     checkUsername={'username':loginAttempt['username']}
@@ -47,9 +53,9 @@ def verifyUserAtLogin(loginAttempt):
         else:
             return False    
 
-def createAccessToken(subName,duration):
+def createAccessToken(subName,*args):
     payload = {
-        'exp' : datetime.now(timezone.utc) + timedelta(days=duration['days'], minutes=duration['minutes']),
+        'exp' : datetime.now(timezone.utc) + timedelta(days=args[0], hours=args[1], minutes=args[2]),
         'iat' : datetime.now(tz=timezone.utc),
         'sub' : subName        }
     return jwt.encode(
@@ -57,6 +63,12 @@ def createAccessToken(subName,duration):
         secret,
         algorithm='HS256'
     )
+
+def getUserFromToken(token):
+    decoded = jwt.decode(token, secret, 'HS256')
+    userStr=decoded['sub']
+    # user = userData.find_one({'username':userStr})
+    return userStr
 
 def addUserToDatabase(user):
     checkUsername={'username':user.username}
@@ -69,16 +81,10 @@ def addUserToDatabase(user):
         userToDB=user.dict()
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
-        activationToken=createAccessToken(user.username,{'days':2,'minutes':0})
+        activationToken=createAccessToken(user.username,2,0,0)
         url=createUrlForEmail("activate",activationToken)
         activationSpecs={'urlDict':{'url':url},'subject':'Activation email','recipient':user.email,'template':'ActivationEmail.html'}
         return activationSpecs
-
-def getUserFromToken(token):
-    decoded = jwt.decode(token, secret, 'HS256')
-    userStr=decoded['sub']
-    user = userData.find_one({'username':userStr})
-    return user
 
 def createUrlForEmail(route,token):
     url=f"http://localhost:8080/{route}/{token}"
@@ -87,13 +93,13 @@ def createUrlForEmail(route,token):
 def activateUser(tokenDict):
     user=getUserFromToken(tokenDict.token)
     userData.update_one(user,{'$set':{'active':True}})
-    returnToken=createAccessToken(user['username'],{'minutes':30})
+    returnToken=createAccessToken(user['username'],0,0,30)
     return returnToken
 
 def sendResetEmail(emailObj):
     lookupEmail={'email':emailObj.email}
     user=userData.find_one(lookupEmail)
-    forgotToken=createAccessToken(user['username'],{'days':0,'minutes':60})
+    forgotToken=createAccessToken(user['username'],0,0,60)
     url=createUrlForEmail("reset",forgotToken)
     emailSpecifications={'recipient':emailObj.email,'urlDict': {'url':url},'subject':"Reset password email",
     'template':'ResetEmail.html'}

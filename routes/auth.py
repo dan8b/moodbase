@@ -1,37 +1,31 @@
 from itertools import filterfalse
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Request
+from fastapi.responses import JSONResponse
 from models.userModel import User,ActivationModel,ResetModel,TestModel
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 import modules.AuthenticationModule as auth
 import modules.EmailModule as email
 from schemas.userSchema import parseUser
-
-authenticator=OAuth2PasswordBearer(tokenUrl="api/auth/login")
-
-def gate(token:str = Depends(authenticator)):
-    checked=auth.checkToken(token)
-    return checked
+from config import Secret
 
 authRoute=APIRouter(
     prefix="/api/auth",
     tags=['UserAuthentication'],
 )
 
-
 @authRoute.post('/testcred')
-async def testing(val:TestModel, test:str =Depends(gate)):
-    return {"This":test}
+def testing(username = Depends(auth.gate)):
+    
+    return {"This":'test'}
 
 @authRoute.post('/register')
 async def registerUser(newUser: User,background_tasks:BackgroundTasks):
     emailToSend=auth.addUserToDatabase(newUser)
     background_tasks.add_task(email.sendEmailBackground,emailToSend)
-    return {"success":True}
+    return 
 
 @authRoute.post('/login')
-def loginUser( user: OAuth2PasswordRequestForm=Depends()): 
-    print("Login again")
+def loginUser( user: User ): 
     checkedUser = auth.verifyUserAtLogin({'username': user.username, 'password': user.password})  
     if checkedUser==False:
         raise HTTPException(
@@ -39,12 +33,12 @@ def loginUser( user: OAuth2PasswordRequestForm=Depends()):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    token=auth.createAccessToken(checkedUser['username'],{'days':0,'minutes':30})
-    return {"access_token":token,"token_type":"bearer"}
+    access_token=auth.createAccessToken(user.username,0,3,0)
+    return {"access_token":access_token}
 
-@authRoute.post('/logout')
-def logout(token: str = Depends(authenticator)):
-    return {"delete":True}
+# @authRoute.post('/logout')
+# def logout(token: str = Depends(gate)):
+#     return {"delete":True}
 
 @authRoute.post('/activate')
 def activate(tokenDict:ActivationModel):

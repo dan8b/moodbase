@@ -1,4 +1,4 @@
-from routes.auth import gate
+# from routes.auth import gate
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from pydantic import BaseModel
 from models.plotModel import PlotDataSubmission, UserPlotData
@@ -13,13 +13,13 @@ plotRoute=APIRouter(
     tags=['PlotData'],
 )
 
-@plotRoute.post('/getplotclick')
-def getPlotClick(clickData:PlotDataSubmission, token:str=Depends(gate)):
-    user = getUserFromToken(token)['username']
-    plot.filePlotClick(user,clickData)
-    return {"ok":"Ok"}
+# @plotRoute.post('/getplotclick')
+# def getPlotClick(clickData:PlotDataSubmission, token:str=Depends(gate)):
+#     user = getUserFromToken(token)['username']
+#     plot.filePlotClick(user,clickData)
+#     return {"ok":"Ok"}
 
-@plotRoute.post('/usercolorchoice')
-def getInitialColors(nothing:Empty, token:str=Depends(gate)):
-    user=getUserFromToken(token)['username']
-    return plot.getUserColors(user)
+# @plotRoute.post('/usercolorchoice')
+# def getInitialColors(nothing:Empty, token:str=Depends(gate)):
+#     user=getUserFromToken(token)['username']
+#     return plot.getUserColors(user)
