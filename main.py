@@ -2,7 +2,7 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-from routes import auth
+from routes import auth, plot
 from fastapi.security import OAuth2PasswordBearer
 
 authenticator=OAuth2PasswordBearer(tokenUrl="/api/auth/login")
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.authRoute)
+app.include_router(plot.plotRoute)
 
 @app.post('/')
 def index(token: str=Depends(authenticator)):

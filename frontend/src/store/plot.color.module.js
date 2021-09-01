@@ -1,12 +1,11 @@
-import ColorSelection from '@/services/color.selector.service.js'
+import PlotFunctions from '@/services/plot.functions.js'
 
 const initialState={
-    user:"",
     colorProfile: {
-        happy:"",
-        calm:"",
-        anxious:"",
-        sad:"",
+        happyColor:"",
+        calmColor:"",
+        anxiousColor:"",
+        sadColor:"",
         },
     panelVisibility:false,
     colorSelection:"",
@@ -20,7 +19,6 @@ export const currentMoodColors = {
     getters: {
         packageChangeData(state){
             return {
-                uid:state.user,
                 toChange:state.colorSelection,
                 variable:state.variableSelection
             }
@@ -35,8 +33,8 @@ export const currentMoodColors = {
         }
     },
     actions: {
-        createInitialState( {commit}, uid) {
-            ColorSelection.getInitialChoices(uid)
+        createInitialState( {commit} ) {
+            PlotFunctions.post({message:"hi"},'plot/usercolorchoice')
             .then(res=>res.json())
             .then(data => {
                 commit('createState',data)
@@ -64,10 +62,10 @@ export const currentMoodColors = {
         },
         createState(state,stateData) {
             state.user=stateData.uid;
-            state.colorProfile.happy=stateData.happy;
-            state.colorProfile.calm=stateData.calm;
-            state.colorProfile.anxious=stateData.anxious;
-            state.colorProfile.sad=stateData.sad;
+            state.colorProfile.happy=stateData.happyColor;
+            state.colorProfile.calm=stateData.calmColor;
+            state.colorProfile.anxious=stateData.anxiousColor;
+            state.colorProfile.sad=stateData.sadColor;
         },
         changeColor(state,colorChoice) {
             state.colorProfile[colorChoice.variableName]=colorChoice.selectedColor;

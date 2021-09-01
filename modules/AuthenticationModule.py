@@ -24,14 +24,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # decode token
 # determine if token is still valid
-# create refresh token if within 10sec of expiry
+# create refresh token if within 5min of expiry
 # return either access or refresh token
 def checkToken(token):
     decoded = jwt.decode(token, secret, 'HS256')
     issued=datetime.fromtimestamp(decoded['iat'],tz=timezone.utc)
     now=datetime.now(timezone.utc)
-    if (now-issued)<(now-(now-timedelta(seconds=10))):
-        return createAccessToken(decoded['sub'],{'days':0,'minutes':2})
+    if (now-issued)<(now-(now-timedelta(minutes=5))):
+        return createAccessToken(decoded['sub'],{'days':0,'minutes':30})
     else: 
         return token
         
@@ -87,7 +87,7 @@ def createUrlForEmail(route,token):
 def activateUser(tokenDict):
     user=getUserFromToken(tokenDict.token)
     userData.update_one(user,{'$set':{'active':True}})
-    returnToken=createAccessToken(user['username'],{'minutes':2})
+    returnToken=createAccessToken(user['username'],{'minutes':30})
     return returnToken
 
 def sendResetEmail(emailObj):

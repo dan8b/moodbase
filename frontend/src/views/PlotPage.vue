@@ -17,7 +17,7 @@
     </div>
       <div  width="50%" height="600px" class="flex flex-row flex-wrap py-4" > 
         <PlotGrid @classified-coordinates="setClassification($event)" /> 
-        <RecentClickHistory />
+        <!-- <RecentClickHistory /> -->
       <!-- <div width="50%" @wheel.prevent="isWheelLocked===true" >
            <ClickMap @unlock-wheel="unlockWheel($event)" @lock-wheel="lockWheel($event)" /> 
         </div> -->
@@ -36,15 +36,14 @@
 </template>
 
 <script>
-import PlotGrid from '@/components/PlotGrid.vue'
-import PlotColorPicker from '@/components/PlotColorPicker.vue'
-import ColorSelectionPanel from '@/components/ColorSelectionPanel.vue'
-// import ClickMap from '@/components/ClickMap.vue'
-import RecentClickHistory from '@/components/RecentClickHistory.vue'
+import PlotGrid from '@/components/PlotComponents/PlotGrid.vue'
+import PlotColorPicker from '@/components/PlotComponents/PlotColorPicker.vue'
+import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionPanel.vue'
+// import RecentClickHistory from '@/components/RecentClickHistory.vue'
 
 export default {
     name:'PlotPage',
-    components: {PlotGrid, PlotColorPicker, ColorSelectionPanel, RecentClickHistory},
+    components: {PlotGrid, PlotColorPicker, ColorSelectionPanel},
     data() {
       return {
         initialPlotColors:{},
@@ -91,8 +90,7 @@ export default {
       },
     },
     async mounted(){
-      const uid = this.$store.state.auth.user.id
-      this.$store.dispatch("currentMoodColors/createInitialState",uid)
+      this.$store.dispatch("currentMoodColors/createInitialState")
     }
 }
 </script>

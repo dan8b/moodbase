@@ -18,7 +18,7 @@
 
 <script>
 import ColorSelection from '@/services/color.selector.service.js'
-import ColorPanelButton from '@/components/ColorPanelButton.vue'
+import ColorPanelButton from './ColorPanelButton.vue'
 export default {
     name: 'ColorSelectionPanel',
     components: {ColorPanelButton },

@@ -1,7 +1,7 @@
 from itertools import filterfalse
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
-from models.userModel import User,ActivationModel,ResetModel
+from models.userModel import User,ActivationModel,ResetModel,TestModel
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 import modules.AuthenticationModule as auth
 import modules.EmailModule as email
@@ -18,9 +18,10 @@ authRoute=APIRouter(
     tags=['UserAuthentication'],
 )
 
+
 @authRoute.post('/testcred')
-async def testing(test:str =Depends(gate)):
-    return {"This":"works"}
+async def testing(val:TestModel, test:str =Depends(gate)):
+    return {"This":test}
 
 @authRoute.post('/register')
 async def registerUser(newUser: User,background_tasks:BackgroundTasks):
@@ -38,7 +39,7 @@ def loginUser( user: OAuth2PasswordRequestForm=Depends()):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    token=auth.createAccessToken(checkedUser['username'],{'days':0,'minutes':2})
+    token=auth.createAccessToken(checkedUser['username'],{'days':0,'minutes':30})
     return {"access_token":token,"token_type":"bearer"}
 
 @authRoute.post('/logout')

@@ -1,25 +1,16 @@
-const API_URL = 'http://localhost:8000/api/auth/';
+// const API_URL = 'http://localhost:8000/api/auth/';
 
-class AuthService {
-    genericFetch(payload,route){
-        return fetch(API_URL + route, {
-            method: 'POST',
-            mode: 'cors',
-            credentials:'include',
-            headers: {
-                'Authorization':'Bearer '+localStorage.getItem('token'),
-                'Content-Type': 'application/json',
-        },
-            body: JSON.stringify(payload)
-        })       
-    }
+import FetchFunctions from './fetch.service.js'
+
+class AuthService extends FetchFunctions{
+
     login(loginForm) {
         var formData= new FormData();
         for (var key in loginForm){
             formData.append(key,loginForm[key])
         }
         // not generic fetch because the request is finicky, will have to do more investigation
-        return fetch(API_URL + 'login',{
+        return fetch('http://localhost:8000/api/auth/login',{
                 method: 'POST',
                 mode: 'cors',
                 // credentials: 'include',
@@ -30,30 +21,30 @@ class AuthService {
             }    
     register(user) {
         console.log("User registration in progress")
-        return this.genericFetch({'username':user.username,'email':user.email,'password':user.password},'register')
+        return this.post({'username':user.username,'email':user.email,'password':user.password},'auth/register')
         }
     activate(token){
         console.log("User activation in progress")
-        return this.genericFetch({'token':token},'activate')      
+        return this.post({'token':token},'auth/activate')      
         }
     forgot(emailObj){
         console.log("Sending reset email")
-        return this.genericFetch(emailObj,'forgot')
+        return this.post(emailObj,'auth/forgot')
     }
     reset(newPasswordAndToken){
         console.log("Resetting password")
-        return this.genericFetch(newPasswordAndToken,'reset')
+        return this.genericFetch(newPasswordAndToken,'auth/reset')
     }
     refresh(){
         const tokenToRefresh=localStorage.getItem('token')
-        this.genericFetch(tokenToRefresh,'refresh')
+        this.post(tokenToRefresh,'auth/refresh')
         .then(response=>response.json())
         .then(data=>{
                 return data.access_token
             }) 
     }
     checkAuth(){
-        return this.genericFetch({"turd":"butt"},'testcred')
+        return this.post({"turd":"butt"},'testcred')
 
     }
 }

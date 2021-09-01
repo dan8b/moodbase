@@ -41,9 +41,6 @@ export default {
   },
 
 methods:{ 
-  testfast(){
-    console.log(fetch('http://localhost:8000/api/testrequest'))
-  },
   logout() { 
     this.$store.dispatch('auth/logout')
     this.$router.push('/')
