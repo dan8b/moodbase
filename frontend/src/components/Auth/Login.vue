@@ -55,9 +55,7 @@ export default {
       .then(
         response =>{
         if (Object.keys(response)[0]==="access_token"){
-          setTimeout(this.testRefresh,600001)
-          setInterval(this.refreshToken,18000000)
-          this.$router.push('/home')
+         this.$router.push('/home')
         }
         else {
           alert(new Error(response.detail))

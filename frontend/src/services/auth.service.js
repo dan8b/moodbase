@@ -1,23 +1,12 @@
 // const API_URL = 'http://localhost:8000/api/auth/';
-
+import store from '@/store/index.js'
 import FetchFunctions from './fetch.service.js'
 
 class AuthService extends FetchFunctions{
 
     login(loginForm) {
-        var formData= new FormData();
-        for (var key in loginForm){
-            formData.append(key,loginForm[key])
-        }
-        // not generic fetch because the request is finicky, will have to do more investigation
-        return fetch('http://localhost:8000/api/auth/login',{
-                method: 'POST',
-                mode: 'cors',
-                // credentials: 'include',
-                accept: 'application/json',
-                // headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: formData
-            })
+        console.log("Login in progress")
+        return this.post({'username':loginForm.username,'password':loginForm.password},'auth/login')
             }    
     register(user) {
         console.log("User registration in progress")
@@ -35,18 +24,21 @@ class AuthService extends FetchFunctions{
         console.log("Resetting password")
         return this.genericFetch(newPasswordAndToken,'auth/reset')
     }
-    refresh(){
-        const tokenToRefresh=localStorage.getItem('token')
-        this.post(tokenToRefresh,'auth/refresh')
-        .then(response=>response.json())
-        .then(data=>{
-                return data.access_token
-            }) 
+    refresh(token){
+        console.log("Checking refresh token")
+        return this.genericFetch(token,'auth/refresh')
+        .then(
+            response =>{
+            if (Object.keys(response)[0]==="access_token"){
+                store.dispatch('refresh',{refreshToken:response.access_token})
+            }
+            else {
+              alert(new Error(response.detail))
+            }
+            
+        })
     }
-    checkAuth(){
-        return this.post({"turd":"butt"},'testcred')
 
-    }
 }
 
 export default new AuthService();

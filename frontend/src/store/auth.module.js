@@ -3,7 +3,7 @@ import AuthService from '../services/auth.service';
 const initialState = {
   loggedIn:false,
   accessToken:"",
-  wantsRefresh:false
+  refreshToken:"",
 }
 
 export const auth = {
@@ -34,13 +34,18 @@ export const auth = {
     },
     activate({commit},tokenDict){
       commit('loginSuccess',tokenDict)
+    },
+    refresh({commit},refreshToken){
+      commit('loginSuccess',refreshToken)
     }
   },
   mutations: {
     loginSuccess(state, token) {
       state.loggedIn = true;
       state.accessToken = token.access_token;
-      window.localStorage.setItem('token', state.accessToken);
+      state.refreshToken=token.refresh_token
+      window.localStorage.setItem('accessToken', state.accessToken);
+      window.localStorage.setItem('refreshToken', state.refreshToken);
     },
     loginFailure(state) {
       state.loggedIn = false;
@@ -51,7 +56,10 @@ export const auth = {
       state.accessToken = "";
       state.wantsRefresh=false;
     },
- 
+    refreshToken(state,newToken){
+      state.accessToken=newToken.access_token
+      window.localStorage.setItem('accessToken',state.accessToken)
+    }
   },
 
 };

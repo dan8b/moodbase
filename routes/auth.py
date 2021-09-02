@@ -14,8 +14,7 @@ authRoute=APIRouter(
 )
 
 @authRoute.post('/testcred')
-def testing(username = Depends(auth.gate)):
-    
+def testing(user = Depends(auth.gate)):
     return {"This":'test'}
 
 @authRoute.post('/register')
@@ -33,12 +32,13 @@ def loginUser( user: User ):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token=auth.createAccessToken(user.username,0,3,0)
-    return {"access_token":access_token}
+    access_token=auth.createAccessToken(user.username,0,0,1)
+    refresh_token=auth.createAccessToken(user.username,0,8,0)
+    return {"access_token":access_token,'token_type':'bearer','refresh_token':refresh_token,'token_type':'bearer'}
 
-# @authRoute.post('/logout')
-# def logout(token: str = Depends(gate)):
-#     return {"delete":True}
+@authRoute.post('/logout')
+def logout(token: str = Depends(auth.gate)):
+    return {"delete":True}
 
 @authRoute.post('/activate')
 def activate(tokenDict:ActivationModel):
@@ -56,4 +56,7 @@ def reset(newPassword:ResetModel):
     auth.resetPassword(newPassword)
     return {'message':'password reset successful'}
 
-
+@authRoute.post('/refresh')
+def refresh(refreshToken = Depends(auth.gate)):
+    newToken=auth.refresh(refreshToken)
+    return newToken

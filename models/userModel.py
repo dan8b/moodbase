@@ -6,10 +6,9 @@ class TestModel(BaseModel):
     testing:str
 
 class User(BaseModel):
-    id=""
     username: str 
     password: str
-    email: EmailStr
+    email: Optional[EmailStr]
     active= False
 
 class ActivationModel(BaseModel):

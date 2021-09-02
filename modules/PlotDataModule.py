@@ -15,7 +15,7 @@ def filePlotClick(user:str,data:PlotDataSubmission):
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
-        newColorProfile = {'user':user,'colors':{'happyColor':'orange','sadColor':'indigo','calmColor':'lightskyblue','anxiousColor':'orange'}}
+        newColorProfile = {'user':user,'colors':{'happyColor':'yellow','sadColor':'indigo','calmColor':'lightskyblue','anxiousColor':'orange'}}
         colorData.insert_one(newColorProfile)
         return newColorProfile['colors']
     else:

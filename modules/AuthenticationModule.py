@@ -8,7 +8,7 @@ from models.userModel import User
 import modules.EmailModule as email
 
 # dependency injection stuff
-from fastapi import HTTPException, Depends,BackgroundTasks, Security
+from fastapi import HTTPException, Depends,BackgroundTasks, Security, Header
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 # jwt and password stuff
 from jose import JWTError, jwt
@@ -22,27 +22,21 @@ security = HTTPBearer()
 
 secret=config('secret')
 
-authjwt_secret_key = secret
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# decode token
-# determine if token is still valid
-# create refresh token if within 5min of expiry
-# return either access or refresh token
-def checkToken(token):
-    decoded = jwt.decode(token, secret, 'HS256')
-    issued=datetime.fromtimestamp(decoded['iat'],tz=timezone.utc)
-    now=datetime.now(timezone.utc)
-    if (now-issued)<(now-(now-timedelta(minutes=5))):
-        return createAccessToken(decoded['sub'],{'days':0,'minutes':30})
-    else: 
-        return token
          
-def gate(userAuth: HTTPAuthorizationCredentials = Security(security)):
-    return getUserFromToken(userAuth.credentials)
-
-def verifyUserAtLogin(loginAttempt):
+def gate(refresh: str = Header(None), userAuth: HTTPAuthorizationCredentials = Security(security)):
+    try:
+        user=getUserFromToken(userAuth.credentials)
+        return user
+    except:
+        try:
+            newToken=attemptRefresh(refresh)
+            return {'access_token':newToken,'token_type':'bearer'} 
+        except:
+            raise HTTPException(status_code=401,detail='invalid token')
+    
+def verifyUserAtLogin(loginAttempt: User) -> User:
     checkUsername={'username':loginAttempt['username']}
     if userData.find(checkUsername).limit(1).count()<1:
         return False
@@ -53,7 +47,7 @@ def verifyUserAtLogin(loginAttempt):
         else:
             return False    
 
-def createAccessToken(subName,*args):
+def createAccessToken(subName: str,*args) -> dict():
     payload = {
         'exp' : datetime.now(timezone.utc) + timedelta(days=args[0], hours=args[1], minutes=args[2]),
         'iat' : datetime.now(tz=timezone.utc),
@@ -64,13 +58,15 @@ def createAccessToken(subName,*args):
         algorithm='HS256'
     )
 
-def getUserFromToken(token):
+def getUserFromToken(token:str)-> str:
     decoded = jwt.decode(token, secret, 'HS256')
     userStr=decoded['sub']
-    # user = userData.find_one({'username':userStr})
     return userStr
 
-def addUserToDatabase(user):
+    # user = userData.find_one({'username':userStr})
+    
+
+def addUserToDatabase(user:User) -> dict:
     checkUsername={'username':user.username}
     # checkEmail={'email':user.email}
     # use find.limit instead of find_one because find will return whether or not doc exists
@@ -86,11 +82,11 @@ def addUserToDatabase(user):
         activationSpecs={'urlDict':{'url':url},'subject':'Activation email','recipient':user.email,'template':'ActivationEmail.html'}
         return activationSpecs
 
-def createUrlForEmail(route,token):
+def createUrlForEmail(route: str,token:str) -> str:
     url=f"http://localhost:8080/{route}/{token}"
     return url
 
-def activateUser(tokenDict):
+def activateUser(tokenDict: dict) -> dict:
     user=getUserFromToken(tokenDict.token)
     userData.update_one(user,{'$set':{'active':True}})
     returnToken=createAccessToken(user['username'],0,0,30)
@@ -112,4 +108,12 @@ def resetPassword(newPassword):
     if not user: raise HTTPException(status_code=404,detail='Did not work')
     userData.update_one(user,{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
     return {'message':'password reset successfully'}
-    
+
+def attemptRefresh(refreshToken):
+    user=getUserFromToken(refreshToken)
+    print(user)
+    if user:
+        return {'access_token':createAccessToken(user,0,0,3),'token_type':'bearer'}
+    else:
+        raise HTTPException(status_code=401,detail='invalid token')
+        
