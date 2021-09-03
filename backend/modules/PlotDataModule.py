@@ -28,5 +28,11 @@ def changeUserColor(user:str,changeData:UserColorChange):
     colorData.update_one({'user':user},[{'$set':{'colors':{variableName:updatedColor}}}])
     return {'message':'color change successful'}
 
+def retrieveAndPrepareClickData(user):
+    data = plotData.find_one({'user':user})['values']
+    prepared = {'clickMap':[],'lineChart':data}
+    
+    return prepared
+
 
         

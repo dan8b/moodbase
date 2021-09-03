@@ -12,12 +12,12 @@ export default class FetchFunctions {
         })
         .then(response2=>response2.json())
         .then((data)=>{
-            window.localStorage.setItem('accessToken',data.access_token)
+            window.localStorage.setItem('accessToken',data.access_token);
         })
     }
     async post(payload, route){
         if (unprotectedRoutes.includes(route)===false){
-            await this.updateToken()
+            await this.updateToken();
         }
         return fetch(API_URL + route, {
             method: 'POST',
@@ -32,7 +32,10 @@ export default class FetchFunctions {
         })
         }
     
-    get(route){
+    async get(route){
+        if (unprotectedRoutes.includes(route)===false){
+            await this.updateToken();
+        }
         return fetch(API_URL + route, {
           method: 'GET',
           mode: 'cors',

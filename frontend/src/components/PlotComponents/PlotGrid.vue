@@ -47,7 +47,12 @@ export default {
         this.$emit('classified-coordinates',this.coordinateClassification)
               },
       collectPlotData(e) {
-        PlotFunctions.post(PlotFunctions.transformCoordinates(this.shiftCoordinates(e)),'plot/getplotclick')
+        const shifted = this.shiftCoordinates(e)
+        const transformedCoords=PlotFunctions.transformCoordinates(shifted)
+        const lineChartData={'happinessVal':transformedCoords.happinessVal,'calmVal':transformedCoords.calmVal}
+        const clickMapData={'happinessVal':shifted.happinessVal,'calmVal':shifted.calmVal}
+        const payload={'lineChart':lineChartData,'clickMap':clickMapData}
+        PlotFunctions.post(payload,'plot/getplotclick')
         },
       throttleClick:_.throttle(function(e)
       {this.collectPlotData(e);} ,5000)

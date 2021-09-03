@@ -1,22 +1,27 @@
-import VisualizationService from "@/services/visualization.service"
-
+import PlotFunctions from '@/services/plot.functions.js'
 const initialState = {
+    clickDataArray:[],
     newPoint:{}
 }
 
-export const plotData = {
+export const userData = {
     namespaced:true,
     state:initialState,
+    getters: {
+        prepareDataForLineChart(){
+
+        }
+    },
     actions: {
-        convertPointData( { commit },pointData){
-            const dataToCommit=VisualizationService.classifyMoodValues(pointData,false)
-            commit('addNewPoint',dataToCommit)
+        retrieveClickData( { commit }){
+            const dataToCommit = PlotFunctions.getData()
+            commit('createClickArray', dataToCommit)
         }
     },
     mutations:{
-        addNewPoint(state,newPointData){
-            state.newPoint=newPointData
-            // console.log(state)
+        createClickArray(state,arrayData) {
+            state.clickDataArray=arrayData
         }
+
     }
 }

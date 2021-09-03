@@ -12,11 +12,6 @@ const initialState={
 export const moodClassification = {
     namespaced:true,
     state:initialState,
-    // actions:{
-    //     classifyCoordinates(state){
-    //         console.log(state)
-    //     },
-    // },
     getters: {
         getClassification( state ){
             return state.happiness.severity;

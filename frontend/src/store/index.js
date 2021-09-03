@@ -3,7 +3,7 @@ import { auth } from "./auth.module";
 import { wheelLock  } from "./visualization.module";
 import { currentMoodColors } from "./plot.color.module";
 import { moodClassification } from "./classification.module";
-import { plotData } from './data.module'
+import { userData } from './data.module'
 import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
@@ -12,7 +12,7 @@ const store = createStore({
     currentMoodColors,
     wheelLock,
     moodClassification,
-    plotData,
+    userData,
   },
   plugins: [createPersistedState({
     paths:['auth','currentMoodColors']

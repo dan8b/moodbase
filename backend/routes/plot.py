@@ -6,6 +6,7 @@ from modules.AuthenticationModule import getUserFromToken, gate
 import os
 import modules.PlotDataModule as plot
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from db import plotData
 
 plotRoute=APIRouter(
     prefix="/api/plot",
@@ -13,21 +14,21 @@ plotRoute=APIRouter(
 )
 
 @plotRoute.post('/getplotclick')
-def getPlotClick(clickData:PlotDataSubmission, token:str=Depends(gate)):
-    user=getUserFromToken(token)
+def getPlotClick(clickData:PlotDataSubmission, user:str=Depends(gate)):
     plot.filePlotClick(user,clickData)
     return {"ok":"Ok"}
 
 @plotRoute.post('/usercolorchoice')
-def getInitialColors(token:str=Depends(gate)):
-    user=getUserFromToken(token)
+def getInitialColors(user:str=Depends(gate)):
     return plot.getUserColors(user)
 
 @plotRoute.post('/changecolors')
-def changeColor(colorChange:UserColorChange,token:str = Depends(gate)):
-    user=getUserFromToken(token)
+def changeColor(colorChange:UserColorChange,user:str = Depends(gate)):
     return plot.changeUserColor(user,colorChange)
 
+@plotRoute.get('/getclickdata')
+def getClickData(user:str = Depends(gate)):
+    return plot.retrieveAndPrepareClickData(user)
 
 @plotRoute.get('/listofcolors')
 def sendColorList():

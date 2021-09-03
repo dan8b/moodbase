@@ -16,6 +16,9 @@ computed: {
       return this.$store.state.auth.loggedIn;
     }
  },
+ mounted(){
+   this.$store.dispatch('userData/retrieveClickData')
+ }
 
 }
 

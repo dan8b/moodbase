@@ -4,15 +4,15 @@ from datetime import datetime, timezone
 
 # remember x value is happiness y value is calm
 class PlotDataSubmission(BaseModel):
-    happinessVal:float
-    calmVal:float
+    lineChart: dict
+    clickMap: dict
     timestamp = datetime.now(timezone.utc)
 
     def truncateCoordinates(self):
-        truncatedX = f"{self.happinessVal:.2f}"
-        truncatedY = f"{self.calmVal:.2f}"
-        self.happinessVal=truncatedX
-        self.calmVal=truncatedY
+        dictArr=[self.lineChart,self.clickMap]
+        for member in dictArr:
+            for key in member:
+                member[key]=f"{member[key]:.2f}"
         return True
 
 class UserPlotData(BaseModel):

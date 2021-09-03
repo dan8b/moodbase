@@ -44,7 +44,7 @@ async def sendNewToken(refresh=Header(None), check_token=Header(None)):
             raise HTTPException(status_code=401,detail='invalid token')
 
 @authRoute.post('/logout')
-def logout(refresh:str = Header(None),token: str = Depends(auth.gate)):
+def logout(refresh:str = Header(None),user: str = Depends(auth.gate)):
     auth.banKeyTTL(refresh)
     return {"delete":True}
 

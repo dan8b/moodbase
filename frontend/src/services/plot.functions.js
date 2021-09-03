@@ -67,8 +67,15 @@ class PlotFunctions extends FetchFunctions{
             mood:bucketCalm[coordinatePair.y.sign]
           },
         }
-    
         return classificationInformation
+      }
+      getData(){
+        return this.get('plot/getclickdata')
+        .then(res=>res.json())
+        .then(data => {
+          return data
+        }
+          )
       }
     
     

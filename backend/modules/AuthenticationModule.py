@@ -27,7 +27,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def gate(refresh: str = Header(None), userAuth: HTTPAuthorizationCredentials = Security(security)):
     try:
-        return checkToken(userAuth.credentials)
+        return getUserFromToken(userAuth.credentials)
     except:
         raise HTTPException(status_code=401,detail='invalid token')
 
