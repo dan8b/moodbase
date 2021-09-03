@@ -1,5 +1,5 @@
 from db import plotData, colorData
-from models.plotModel import PlotDataSubmission, UserPlotData
+from models.plotModel import PlotDataSubmission, UserPlotData,UserColorChange
 
 
 def filePlotClick(user:str,data:PlotDataSubmission):
@@ -21,5 +21,12 @@ def getUserColors(user:str):
     else:
         colorProfile = colorData.find_one({'user':user})
         return colorProfile['colors']
+
+def changeUserColor(user:str,changeData:UserColorChange):
+    variableName=changeData.variable
+    updatedColor=changeData.newColor
+    colorData.update_one({'user':user},[{'$set':{'colors':{variableName:updatedColor}}}])
+    return {'message':'color change successful'}
+
 
         

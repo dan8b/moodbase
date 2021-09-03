@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import VisualizationService from '../services/visualization.service';
+import VisualizationService from '../../services/visualization.service';
 import LineChart from '@/components/LineChart.vue'
 export default {
     name: 'LineChartContainer',

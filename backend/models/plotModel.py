@@ -4,15 +4,15 @@ from datetime import datetime, timezone
 
 # remember x value is happiness y value is calm
 class PlotDataSubmission(BaseModel):
-    x:float
-    y:float
+    happinessVal:float
+    calmVal:float
     timestamp = datetime.now(timezone.utc)
 
     def truncateCoordinates(self):
-        truncatedX = f"{self.x:.2f}"
-        truncatedY = f"{self.y:.2f}"
-        self.x=truncatedX
-        self.y=truncatedY
+        truncatedX = f"{self.happinessVal:.2f}"
+        truncatedY = f"{self.calmVal:.2f}"
+        self.happinessVal=truncatedX
+        self.calmVal=truncatedY
         return True
 
 class UserPlotData(BaseModel):
@@ -24,3 +24,7 @@ class UserColorChoices(BaseModel):
     calmColor:str
     sadColor:str
     anxiousColor:str
+
+class UserColorChange(BaseModel):
+    newColor:str
+    variable:str

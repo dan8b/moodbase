@@ -89,9 +89,7 @@ export default {
         }
       },
     },
-    async mounted(){
-      this.$store.dispatch("currentMoodColors/createInitialState")
-    }
+
 }
 </script>
 

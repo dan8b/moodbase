@@ -6,7 +6,6 @@
 
 <script>
 // import VisualizationDashboard from '@/components/VisualizationDashboard.vue'
-import AuthService from '@/services/auth.service.js'
 export default {
 // components: { VisualizationDashboard },
 name: 'UserHome',
@@ -17,10 +16,6 @@ computed: {
       return this.$store.state.auth.loggedIn;
     }
  },
- setup() {
-   return AuthService.checkAuth();
- }
-
 
 }
 

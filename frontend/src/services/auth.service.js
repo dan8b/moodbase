@@ -7,7 +7,11 @@ class AuthService extends FetchFunctions{
     login(loginForm) {
         console.log("Login in progress")
         return this.post({'username':loginForm.username,'password':loginForm.password},'auth/login')
-            }    
+            }   
+    logout(){
+        console.log("Logout in progress")
+        return this.post({},'auth/logout')
+    }
     register(user) {
         console.log("User registration in progress")
         return this.post({'username':user.username,'email':user.email,'password':user.password},'auth/register')

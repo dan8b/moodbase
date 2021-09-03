@@ -5,7 +5,7 @@
 <script>
 import Checkboxes from '@/components/Checkboxes.vue'
 import {useStore} from 'vuex'
-import VisualizationService from '../services/visualization.service';
+import VisualizationService from '../../services/visualization.service';
 import {reactive, computed,watch} from 'vue'
 import _ from 'lodash';
 export default {

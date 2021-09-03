@@ -2,9 +2,9 @@
   <svg  width="600px" height="600px"  @mousemove="getAndClassifyCoordinates">
 
     <Plotbox  
-    @click="throttleClick" :xColorLeft="currentColors.colorProfile.sad" 
-    :yColorTop="currentColors.colorProfile.calm" leftOpacity="1" 
-    :xColorRight="currentColors.colorProfile.happy" :yColorBottom="currentColors.colorProfile.anxious"
+    @click="throttleClick" :xColorLeft="currentColors.sadColor" 
+    :yColorTop="currentColors.calmColor" leftOpacity="1" 
+    :xColorRight="currentColors.happyColor" :yColorBottom="currentColors.anxiousColor"
       topOpacity=".7" bottomOpacity=".3" rightOpacity="1" idGradX="topLeftX" idGradY="topLeftY"
       /> 
     
@@ -28,7 +28,7 @@ export default {
       return this.$store.state.auth.user;
       },
     currentColors() {
-      return this.$store.state.currentMoodColors
+      return this.$store.state.currentMoodColors.colorProfile
     }
     },
     components: {
@@ -38,8 +38,8 @@ export default {
     methods: {
       shiftCoordinates(e){
         return {
-          x:e.clientX-e.target.getBoundingClientRect().x,
-          y:e.clientY-e.target.getBoundingClientRect().y
+          happinessVal:e.clientX-e.target.getBoundingClientRect().x,
+          calmVal:e.clientY-e.target.getBoundingClientRect().y
           }
       },
        getAndClassifyCoordinates(e){

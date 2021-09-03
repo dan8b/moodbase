@@ -19,7 +19,7 @@ export const currentMoodColors = {
     getters: {
         packageChangeData(state){
             return {
-                toChange:state.colorSelection,
+                newColor:state.colorSelection,
                 variable:state.variableSelection
             }
         },
@@ -33,8 +33,8 @@ export const currentMoodColors = {
         }
     },
     actions: {
-        createInitialState( {commit} ) {
-            PlotFunctions.post({message:"hi"},'plot/usercolorchoice')
+        async createInitialState( {commit} ) {
+            await PlotFunctions.post({},'plot/usercolorchoice')
             .then(res=>res.json())
             .then(data => {
                 commit('createState',data)
@@ -62,11 +62,11 @@ export const currentMoodColors = {
         },
         createState(state,stateData) {
             state.user=stateData.uid;
-            state.colorProfile.happy=stateData.happyColor;
-            state.colorProfile.calm=stateData.calmColor;
-            state.colorProfile.anxious=stateData.anxiousColor;
-            state.colorProfile.sad=stateData.sadColor;
-        },
+            state.colorProfile.happyColor=stateData.happyColor;
+            state.colorProfile.calmColor=stateData.calmColor;
+            state.colorProfile.anxiousColor=stateData.anxiousColor;
+            state.colorProfile.sadColor=stateData.sadColor;
+            },
         changeColor(state,colorChoice) {
             state.colorProfile[colorChoice.variableName]=colorChoice.selectedColor;
         },

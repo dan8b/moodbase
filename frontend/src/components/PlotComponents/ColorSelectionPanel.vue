@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import ColorSelection from '@/services/color.selector.service.js'
+import PlotFunctions from '@/services/plot.functions.js'
 import ColorPanelButton from './ColorPanelButton.vue'
 export default {
     name: 'ColorSelectionPanel',
@@ -47,12 +47,6 @@ export default {
          }
       },
     methods: {
-      testScroll(e){
-                const {target}=e;
-            console.log("top "+target.scrollTop)
-            console.log("height "+target.scrollHeight)
-            console.log("offset "+target.offsetHeight)
-      },
       hidePanel(){
         if(this.originalColor!=this.currentColor){
          
@@ -66,13 +60,13 @@ export default {
       },
       postColorChange(){
         const changeDataInfo=this.$store.getters['currentMoodColors/packageChangeData']
-        ColorSelection.commitColorChange(changeDataInfo)
+        PlotFunctions.post(changeDataInfo,'plot/changecolors')
         this.$store.commit('currentMoodColors/clearSelection')
       }
     },
     async mounted() {
         this.originalColor=this.$store.state.currentMoodColors.colorSelection;
-        this.colorOptions=await ColorSelection.getAvailableChoices().then(res=>res.json())
+        this.colorOptions=await PlotFunctions.get('plot/listofcolors').then(res=>res.json())
 
     }
 }

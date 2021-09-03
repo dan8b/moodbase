@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Weight from '@/components/Weight.vue'
+import Weight from '@/components/WeightFunctionalityComponents/Weight.vue'
 import { useStore } from 'vuex'
 import { reactive } from 'vue'
 export default {

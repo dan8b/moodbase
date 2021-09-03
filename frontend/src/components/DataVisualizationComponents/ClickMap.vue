@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import VisualizationService from '../services/visualization.service';
+import VisualizationService from '../../services/visualization.service';
 export default {
     name: 'ClickMap',
     emits: ['lock-wheel','unlock-wheel'],

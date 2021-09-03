@@ -2,8 +2,6 @@ import AuthService from '../services/auth.service';
 
 const initialState = {
   loggedIn:false,
-  accessToken:"",
-  refreshToken:"",
 }
 
 export const auth = {
@@ -18,7 +16,7 @@ export const auth = {
         data => {
           commit('loginSuccess',data)
           return data
-        }
+                  }
       )
       .catch(
         (error) => {
@@ -28,24 +26,25 @@ export const auth = {
         )
     },
     logout({ commit }) {
-      localStorage.removeItem('token')
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
       commit('logoutSuccess');
 
     },
-    activate({commit},tokenDict){
-      commit('loginSuccess',tokenDict)
+    activate({commit}){
+      commit('loginSuccess')
     },
-    refresh({commit},refreshToken){
-      commit('loginSuccess',refreshToken)
+    refresh({commit}){
+      commit('loginSuccess')
     }
   },
   mutations: {
-    loginSuccess(state, token) {
+    loginSuccess(state, tokenData) {
       state.loggedIn = true;
-      state.accessToken = token.access_token;
-      state.refreshToken=token.refresh_token
-      window.localStorage.setItem('accessToken', state.accessToken);
-      window.localStorage.setItem('refreshToken', state.refreshToken);
+      // state.accessToken = token.access_token;
+      // state.refreshToken=token.refresh_token
+      window.localStorage.setItem('accessToken', tokenData.access_token);
+      window.localStorage.setItem('refreshToken', tokenData.refresh_token);
     },
     loginFailure(state) {
       state.loggedIn = false;
@@ -53,12 +52,10 @@ export const auth = {
     },
     logoutSuccess(state) {
       state.loggedIn = false;
-      state.accessToken = "";
-      state.wantsRefresh=false;
+      return AuthService.logout();
     },
     refreshToken(state,newToken){
-      state.accessToken=newToken.access_token
-      window.localStorage.setItem('accessToken',state.accessToken)
+      window.localStorage.setItem('accessToken',newToken)
     }
   },
 

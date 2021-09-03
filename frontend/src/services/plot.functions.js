@@ -4,21 +4,21 @@ class PlotFunctions extends FetchFunctions{
     transformCoordinates(coordinates){
         const transformedCoordinates=
         {
-          x:0,
-          y:0
+          happinessVal:0,
+          calmVal:0
         }
-          if ((coordinates.x)<10){
-            transformedCoordinates.x=0
+          if ((coordinates.happinessVal)<10){
+            transformedCoordinates.happinessVal=0
           }
           else {
-            transformedCoordinates.x=(coordinates.x-300)*(7/300) 
+            transformedCoordinates.happinessVal=(coordinates.happinessVal-300)*(7/300) 
           }
-          if (coordinates.y<10){
-            transformedCoordinates.y=0
+          if (coordinates.calmVal<10){
+            transformedCoordinates.calmVal=0
     
           }
           else {
-            transformedCoordinates.y=(coordinates.y-300)*(-7/300) 
+            transformedCoordinates.calmVal=(coordinates.calmVal-300)*(-7/300) 
           }
         return transformedCoordinates
     }
@@ -30,12 +30,12 @@ class PlotFunctions extends FetchFunctions{
           y:{magnitude:0,sign:0}
         }
 
-        const signX=Math.sign(transformedCoordinates.x)
+        const signX=Math.sign(transformedCoordinates.happinessVal)
     
-        const signY=Math.sign(transformedCoordinates.y)
+        const signY=Math.sign(transformedCoordinates.calmVal)
         
-        coordinatePair.x={magnitude:Math.round(Math.abs(transformedCoordinates.x)),sign:signX}
-        coordinatePair.y={magnitude:Math.round(Math.abs(transformedCoordinates.y)),sign:signY}
+        coordinatePair.x={magnitude:Math.round(Math.abs(transformedCoordinates.happinessVal)),sign:signX}
+        coordinatePair.y={magnitude:Math.round(Math.abs(transformedCoordinates.calmVal)),sign:signY}
     
         const bucketMagnitude={
           0:"barely",

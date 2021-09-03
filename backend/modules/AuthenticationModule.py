@@ -27,8 +27,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def gate(refresh: str = Header(None), userAuth: HTTPAuthorizationCredentials = Security(security)):
     try:
-        user=getUserFromToken(userAuth.credentials)
-        return user
+        return checkToken(userAuth.credentials)
     except:
         raise HTTPException(status_code=401,detail='invalid token')
 
@@ -60,7 +59,14 @@ def getUserFromToken(checkToken:str)-> str:
     userStr=decoded['sub']
     return userStr
 
-    
+def checkToken(tokenToCheck:str)->str:
+    try:
+         jwt.decode(tokenToCheck,secret,'HS256')
+         return tokenToCheck
+    except:
+        raise HTTPException(status_code=401,detail='invalid token')
+
+   
 def addUserToDatabase(user:User) -> dict:
     checkUsername={'username':user.username}
     # checkEmail={'email':user.email}

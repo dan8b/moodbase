@@ -28,13 +28,20 @@ def loginUser( user: User ):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token=auth.createAccessToken(user.username,0,0,1)
+    access_token=auth.createAccessToken(user.username,0,0,3)
     refresh_token=auth.createAccessToken(user.username,0,8,1)
     return {"access_token":access_token,'token_type':'bearer','refresh_token':refresh_token}
 
 @authRoute.get('/refresh')
-async def sendNewToken(refresh=Header(None)):
-    return auth.attemptRefresh(refresh)
+async def sendNewToken(refresh=Header(None), check_token=Header(None)):
+    try:
+        auth.getUserFromToken(check_token)
+        return {'access_token':check_token,'token_type':'bearer'}
+    except: 
+        try: 
+            return auth.attemptRefresh(refresh)
+        except:
+            raise HTTPException(status_code=401,detail='invalid token')
 
 @authRoute.post('/logout')
 def logout(refresh:str = Header(None),token: str = Depends(auth.gate)):

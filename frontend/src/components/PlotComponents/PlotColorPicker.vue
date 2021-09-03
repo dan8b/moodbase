@@ -2,15 +2,15 @@
 
 <div class=" flex justify-evenly">
   <svg width="804" height="220 " >
-    <rect @click="colorPanelVisibility('calm')"  
-    id="calm" rx="15" width="200" height="200" :fill="currentColors.calm"/> 
-    <text y="216"> {{ currentColors.calm }} </text>
-    <rect @click="colorPanelVisibility('happy')"
-    id="happy" rx="15" x="201" width="200" height="200" :fill="currentColors.happy"/>
-    <rect @click="colorPanelVisibility('anxious')"  
-    id="anxious" rx="15" x="401" width="200" height="200" :fill="currentColors.anxious" />
-    <rect @click="colorPanelVisibility('sad')"  
-    id="sad" rx="15" x="601" width="200" height="200" :fill="currentColors.sad"/>
+    <rect @click="colorPanelVisibility('calmColor')"  
+    id="calm" rx="15" width="200" height="200" :fill="currentColors.calmColor"/> 
+    
+    <rect @click="colorPanelVisibility('happyColor')"
+    id="happy" rx="15" x="201" width="200" height="200" :fill="currentColors.happyColor"/>
+    <rect @click="colorPanelVisibility('anxiousColor')"  
+    id="anxious" rx="15" x="401" width="200" height="200" :fill="currentColors.anxiousColor" />
+    <rect @click="colorPanelVisibility('sadColor')"  
+    id="sad" rx="15" x="601" width="200" height="200" :fill="currentColors.sadColor"/>
   </svg>
   <div  class="py-2" v-if="hoverBox===true"> {{ hoverVariable }} , {{ currentColors[hoverVariable]}} </div>
 </div>
@@ -75,7 +75,8 @@ export default {
         this.hoverBox=false;
       }
     },
-    mounted(){
+    async beforeMount(){
+      await this.$store.dispatch("currentMoodColors/createInitialState")
     }
 
 }

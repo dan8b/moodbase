@@ -1,6 +1,6 @@
 <template>
 <div class="container"> 
-    <line-chart :width="420" :height="420"
+    <line-chart :height="420" :width="420"
       v-if="loaded"
       :chartdata="chartDataObject"
       :options="options"/>
@@ -8,11 +8,12 @@
 </template>
 
 <script>
-import VisualizationService from '../services/visualization.service';
+import VisualizationService from '../../services/visualization.service';
 import LineChart from '@/components/LineChart.vue'
 export default {
-    name: 'HappinessLineChart',
+    name: 'LineChartContainer',
   components: { LineChart },
+  props: {'variableOfInterest': String,},
   data() {
       
     return {
@@ -21,8 +22,8 @@ export default {
             labels: [],
             datasets: [{ 
                 data: [],
-                label: "Happiness",
-                borderColor: "#3e95cd",
+                label: "Calm",
+                borderColor: "#FF5733",
                 fill: false
             }]
         },
@@ -31,14 +32,14 @@ export default {
             
                 title: {
                     display:  true,
-                    text: "Your happiness over time",
+                    text: "Your level of calm over time",
                 },
 
             scales: {
                 yAxes: [{
                     scaleLabel: {
                         display:true,
-                        labelString: "Happiness",
+                        labelString: "variable recorded",
                     },
                     ticks: {
                         min: -7,
@@ -64,7 +65,7 @@ export default {
     const uid=this.$store.state.auth.user.id
 
     try {
-        await VisualizationService.getLineChart(uid,"happy")
+        await VisualizationService.getLineChart(uid,"calm")
             .then(res=>res.json())
             .then(data => { this.tempChartData=data })
         this.tempChartData.forEach(entry => {
