@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import VisualizationDashboard from '@/components/VisualizationDashboard.vue'
 export default {
 // components: { VisualizationDashboard },
 name: 'UserHome',

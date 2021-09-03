@@ -1,6 +1,7 @@
 import PlotFunctions from '@/services/plot.functions.js'
 const initialState = {
-    clickDataArray:[],
+    lineChartArray:[],
+    clickMapArray:[],
     newPoint:{}
 }
 
@@ -20,7 +21,8 @@ export const userData = {
     },
     mutations:{
         createClickArray(state,arrayData) {
-            state.clickDataArray=arrayData
+            state.lineChartArray=arrayData.lineChart;
+            state.clickMapArray=arrayData.clickMap
         }
 
     }
