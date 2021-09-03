@@ -17,7 +17,7 @@ class PlotDataSubmission(BaseModel):
 
 class UserPlotData(BaseModel):
     user:str
-    submissionData:list
+    dictWithLists:dict
 
 class UserColorChoices(BaseModel):
     happyColor:str

@@ -14,13 +14,11 @@
 </template>
 
 <script>
-import HappinessLineChart from '@/components/HappinessLineChart.vue'
-import CalmLineChart from '@/components/CalmLineChart.vue'
-import MoodLineChart from '@/components/MoodLineChart.vue'
-import ClickMap from '@/components/ClickMap.vue'
+import MoodLineChart from '@/components/DataVisualizationComponents/MoodLineChart.vue'
+import ClickMap from '@/components/DataVisualizationComponents/ClickMap.vue'
 export default {
     name: 'DashboardComponent',
-    components: { HappinessLineChart,CalmLineChart, MoodLineChart, ClickMap},
+    components: { MoodLineChart, ClickMap},
     props: ['componentToShow']
 }
 </script>

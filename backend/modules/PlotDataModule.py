@@ -4,14 +4,33 @@ import os
 
 def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
-    dataToDB=data.dict()
     if plotData.find({'user':user}).limit(1).count()<1:
-        newPlotDataList={'user':user,'values':[]}
-        newPlotDataList['values'].append(dataToDB)
-        plotData.insert_one(newPlotDataList)
+        plotDataObj = { 
+        'user':user,
+        'lineChartHappinessVals':[data.lineChart['happinessVal']],
+        'lineChartCalmVals':[data.lineChart['calmVal']],
+        'clickMapHappinessVals':[data.clickMap['happinessVal']],
+        'clickMapCalmVals':[data.clickMap['calmVal']],
+        'timestamp':[data.timestamp]
+        }
+        plotData.insert_one(plotDataObj)
     else:
-        plotData.update_one({'user':user},{'$push':{'values':dataToDB}})
+        plotData.update_one(
+            {'user':user},
+            
+                {'$push':
+                    {
+                    'lineChartHappinessVals':data.lineChart['happinessVal'] ,
+                    'lineChartCalmVals':data.lineChart['calmVal'],
+                    'clickMapHappinessVals':data.clickMap['happinessVal'],
+                    'clickMapCalmVals':data.clickMap['calmVal'],
+                    'timestamp':data.timestamp
+                    }
+                }
+            
+        )
     return {"Works":'works'}
+
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:

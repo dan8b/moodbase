@@ -4,8 +4,6 @@
 
 <div  class=" flex justify-between">
 
-    <DashboardComponent componentToShow="HappinessLineChart"/>
-    <DashboardComponent componentToShow="CalmLineChart"/>
     <DashboardComponent componentToShow="MoodLineChart"/>
 
 </div>
@@ -15,7 +13,7 @@
 </template>
 
 <script>
-import DashboardComponent from '@/components/DashboardComponent.vue'
+import DashboardComponent from '@/components/DataVisualizationComponents/DashboardComponent.vue'
 
 export default {
     name: 'VisualizationDashboard',

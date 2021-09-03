@@ -1,12 +1,13 @@
 <template>
-      <div v-if="checkedLoggedIn===true"> Butt </div>
-          <!-- <VisualizationDashboard v-if="checkedLoggedIn===true" /> -->
+     
+          <VisualizationDashboard v-if="checkedLoggedIn===true" />
 
 </template>
 
 <script>
+import VisualizationDashboard from '@/components/DataVisualizationComponents/VisualizationDashboard.vue'
 export default {
-// components: { VisualizationDashboard },
+components: { VisualizationDashboard },
 name: 'UserHome',
 
 
@@ -15,9 +16,7 @@ computed: {
       return this.$store.state.auth.loggedIn;
     }
  },
- mounted(){
-   this.$store.dispatch('userData/retrieveClickData')
- }
+
 
 }
 

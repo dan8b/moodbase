@@ -1,24 +1,23 @@
 <template>
 <div class="container"> 
     <line-chart :width="420" :height="420"
-      v-if="loaded"
-      :chartdata="chartDataObject"
-      :options="options"/>
+      :chartdata="chartData"
+      :options="optionsObj"/>
   </div>
 </template>
 
 <script>
-import VisualizationService from '../../services/visualization.service';
-import LineChart from '@/components/LineChart.vue'
+import {useStore} from 'vuex'
+import { ref } from 'vue'
+import LineChart from '@/components/DataVisualizationComponents/LineChart.vue'
 export default {
     name: 'LineChartContainer',
   components: { LineChart },
-  props: {'variableOfInterest': String,},
-  data() {
-      
-    return {
-        tempChartData: {},
-        chartDataObject: {
+    setup()  {
+        const store = useStore();
+        const chartData = ref(store.dispatch('userData/retrieveClickData'));
+        const optionsObj=
+        ref({
             labels: [],
             datasets: [{ 
                 data: [],
@@ -31,9 +30,7 @@ export default {
                 label: "Calm/anxiety",
                 borderColor: "#FF5733",
                 fill: false
-            }]
-        },
-        loaded: false,
+            }],
         options: {
             responsive:false,
    
@@ -62,28 +59,11 @@ export default {
                     },
                     type: 'time',
                 }]
-            },
-        },
-    }
-},
-
-  async mounted() {
-    this.loaded = false
-    const uid=this.$store.state.auth.user.id
-    try {
-        await VisualizationService.getLineChart(uid,'both')
-            .then(res=>res.json())
-            .then(data => { this.tempChartData=data })
-        this.tempChartData.forEach(entry => {
-            this.chartDataObject.labels.push(Date.parse(entry.x))
-            this.chartDataObject.datasets[0].data.push(entry.z)
-            this.chartDataObject.datasets[1].data.push(entry.y)
-          })
-      this.loaded = true
-    } catch (e) {
-      console.error(e)
+            }
         }
-    }
+    })
+    return { optionsObj, chartData}
+}
 }
 </script>
 

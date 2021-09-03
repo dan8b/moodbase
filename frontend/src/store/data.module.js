@@ -1,8 +1,16 @@
 import PlotFunctions from '@/services/plot.functions.js'
 const initialState = {
-    lineChartArray:[],
-    clickMapArray:[],
-    newPoint:{}
+    lineChartArrays:
+        {
+            happinessVals:[],
+            calmVals:[]
+        },
+    clickMapArrays:
+    {
+        happinessVals:[],
+        calmVals:[]
+    },
+    timestamps:[]
 }
 
 export const userData = {
@@ -14,15 +22,17 @@ export const userData = {
         }
     },
     actions: {
-        retrieveClickData( { commit }){
-            const dataToCommit = PlotFunctions.getData()
+        async retrieveClickData( { commit }){
+            const dataToCommit = await PlotFunctions.getData()
             commit('createClickArray', dataToCommit)
         }
     },
     mutations:{
         createClickArray(state,arrayData) {
-            state.lineChartArray=arrayData.lineChart;
-            state.clickMapArray=arrayData.clickMap
+            state.lineChartArrays.happinessVals=arrayData.lineChartHappinessVals;
+            state.lineChartArrays.calmVals=arrayData.lineChartCalmVals;
+            state.clickMapArrays.happinessVals=arrayData.lineChartHappinessVals;
+            state.clickMapArrays.calmVals=arrayData.lineChartCalmVals;
         }
 
     }

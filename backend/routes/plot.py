@@ -14,8 +14,7 @@ plotRoute=APIRouter(
 
 @plotRoute.post('/getplotclick')
 def getPlotClick(clickData:PlotDataSubmission, user:str=Depends(gate)):
-    plot.filePlotClick(user,clickData)
-    return {"ok":"Ok"}
+    return plot.filePlotClick(user,clickData)
 
 @plotRoute.post('/usercolorchoice')
 def getInitialColors(user:str=Depends(gate)):
@@ -27,7 +26,10 @@ def changeColor(colorChange:UserColorChange,user:str = Depends(gate)):
 
 @plotRoute.get('/getclickdata')
 def getClickData(user:str = Depends(gate)):
-    return plotData.find_one({'user':user})['values']
+    dataDict = plotData.find_one({'user':user})
+    del dataDict['_id']
+    return dataDict
+
 
 @plotRoute.get('/listofcolors')
 def sendColorList():
