@@ -17,8 +17,12 @@ export const userData = {
     namespaced:true,
     state:initialState,
     getters: {
-        prepareDataForLineChart(){
-
+        prepareDataForLineChart(state){
+            return {
+                x: state.lineChartArrays.happinessVals,
+                y: state.lineChartArrays.calmVals,
+                z: state.timestamps
+            }    
         }
     },
     actions: {
@@ -31,8 +35,9 @@ export const userData = {
         createClickArray(state,arrayData) {
             state.lineChartArrays.happinessVals=arrayData.lineChartHappinessVals;
             state.lineChartArrays.calmVals=arrayData.lineChartCalmVals;
-            state.clickMapArrays.happinessVals=arrayData.lineChartHappinessVals;
-            state.clickMapArrays.calmVals=arrayData.lineChartCalmVals;
+            state.clickMapArrays.happinessVals=arrayData.clickMapHappinessVals;
+            state.clickMapArrays.calmVals=arrayData.clickMapCalmVals;
+            state.timestamps=arrayData.timestamp
         }
 
     }

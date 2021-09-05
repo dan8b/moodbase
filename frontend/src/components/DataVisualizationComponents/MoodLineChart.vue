@@ -13,9 +13,10 @@ import LineChart from '@/components/DataVisualizationComponents/LineChart.vue'
 export default {
     name: 'LineChartContainer',
   components: { LineChart },
-    setup()  {
+    async setup()  {
         const store = useStore();
-        const chartData = ref(store.dispatch('userData/retrieveClickData'));
+        await store.dispatch('userData/retrieveClickData')
+        const chartData = await store.getters['userData/prepareDataForLineChart']
         const optionsObj=
         ref({
             labels: [],
