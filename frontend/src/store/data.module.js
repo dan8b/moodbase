@@ -1,4 +1,5 @@
 import PlotFunctions from '@/services/plot.functions.js'
+
 const initialState = {
     lineChartArrays:
         {
@@ -17,15 +18,31 @@ export const userData = {
     namespaced:true,
     state:initialState,
     getters: {
-        prepareDataForLineChart(state){
-            return {
-                x: state.lineChartArrays.happinessVals,
-                y: state.lineChartArrays.calmVals,
-                z: state.timestamps
-            }    
+        async returnChartData(state){
+
+            const dataObj=
+            {
+                labels: state.timestamps.map(date => Date.parse(date)),
+                datasets: [
+                { 
+                    data: state.lineChartArrays.happinessVals.map(val => Number(val)),
+                    label: "Happiness",
+                    borderColor: "#3e95cd",
+                    fill: false
+                },
+                { 
+                    data: state.lineChartArrays.calmVals.map(val=> Number(val)),
+                    label: "Calm/anxiety",
+                    borderColor: "#FF5733",
+                    fill: false
+                }
+            ]
+            }
+            return dataObj
         }
     },
     actions: {
+        
         async retrieveClickData( { commit }){
             const dataToCommit = await PlotFunctions.getData()
             commit('createClickArray', dataToCommit)

@@ -15,7 +15,11 @@ computed: {
     checkedLoggedIn() {
       return this.$store.state.auth.loggedIn;
     }
- },
+},
+  mounted(){
+
+  },
+
 
 
 }

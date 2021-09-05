@@ -12,7 +12,7 @@ class PlotDataSubmission(BaseModel):
         dictArr=[self.lineChart,self.clickMap]
         for member in dictArr:
             for key in member:
-                member[key]=f"{member[key]:.2f}"
+                member[key]=float(f"{member[key]:.2f}")
         return True
 
 class UserPlotData(BaseModel):

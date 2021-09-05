@@ -53,6 +53,7 @@ export default {
         const clickMapData={'happinessVal':shifted.happinessVal,'calmVal':shifted.calmVal}
         const payload={'lineChart':lineChartData,'clickMap':clickMapData}
         PlotFunctions.post(payload,'plot/getplotclick')
+        this.$store.dispatch('userData/retrieveClickData')
         },
       throttleClick:_.throttle(function(e)
       {this.collectPlotData(e);} ,5000)
