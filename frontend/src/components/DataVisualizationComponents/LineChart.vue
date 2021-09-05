@@ -43,6 +43,7 @@ export default{
                         labelString: "time recorded",
                     },
                     type: 'time',
+
                 }]
             }}
     }
