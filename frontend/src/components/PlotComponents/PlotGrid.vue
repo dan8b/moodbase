@@ -1,14 +1,16 @@
 <template>
-  <svg  width="600px" height="600px"  @mousemove="getAndClassifyCoordinates">
+<div width="600" height="600">
+  <svg  width="601" height="601"  @mousemove="getAndClassifyCoordinates">
 
     <Plotbox  
     @click="throttleClick" :xColorLeft="currentColors.sadColor" 
     :yColorTop="currentColors.calmColor" leftOpacity="1" 
     :xColorRight="currentColors.happyColor" :yColorBottom="currentColors.anxiousColor"
-      topOpacity=".7" bottomOpacity=".3" rightOpacity="1" idGradX="topLeftX" idGradY="topLeftY"
+      topOpacity=".7" bottomOpacity="1" rightOpacity=".3" idGradX="topLeftX" idGradY="topLeftY"
       /> 
     
  </svg>
+</div>
 </template>
 
 <script>
@@ -37,10 +39,25 @@ export default {
     emits: ['classified-coordinates'],
     methods: {
       shiftCoordinates(e){
-        return {
-          happinessVal:e.clientX-e.target.getBoundingClientRect().x,
-          calmVal:e.clientY-e.target.getBoundingClientRect().y
+
+        if(e.target.getBoundingClientRect().height===0){
+          return {
+            happinessVal:e.clientX-e.target.getBoundingClientRect().x,
+            calmVal:0
           }
+        }
+        else if (e.target.getBoundingClientRect().width===0){
+          return {
+            happinessVal:0,
+            calmVal:e.clientY-e.target.getBoundingClientRect().y
+          }
+        }
+        else{
+        return {
+            happinessVal:e.clientX-e.target.getBoundingClientRect().x,
+            calmVal:e.clientY-e.target.getBoundingClientRect().y
+          }
+        }
       },
        getAndClassifyCoordinates(e){
         this.coordinateClassification=PlotFunctions.classifyMoodValues(this.shiftCoordinates(e))
@@ -56,7 +73,7 @@ export default {
         this.$store.dispatch('userData/retrieveClickData')
         },
       throttleClick:_.throttle(function(e)
-      {this.collectPlotData(e);} ,5000)
+      {this.collectPlotData(e);},480000)
       }
   }
 
