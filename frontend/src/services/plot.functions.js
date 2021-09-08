@@ -26,7 +26,6 @@ class PlotFunctions extends FetchFunctions{
         return transformedCoordinates
     }
     classifyMoodValues(coordinates){
-      console.log(coordinates)
         const transformedCoordinates=this.transformCoordinates(coordinates)
 
         const coordinatePair=

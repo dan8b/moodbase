@@ -30,6 +30,9 @@ export const currentMoodColors = {
         },
         initialColorData(state,variable){
             return state.colorProfile[variable]
+        },
+        preparePlotBoxes(state){
+            return state.colorProfile
         }
     },
     actions: {

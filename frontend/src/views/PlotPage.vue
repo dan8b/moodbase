@@ -15,7 +15,7 @@
           <ColorSelectionPanel />
       </div>
     </div>
-      <div  width="50%" height="600px" class="flex flex-row flex-wrap py-4" > 
+       <div class="container ">
         <PlotGrid @classified-coordinates="setClassification($event)" /> 
         <!-- <RecentClickHistory /> -->
       <!-- <div width="50%" @wheel.prevent="isWheelLocked===true" >

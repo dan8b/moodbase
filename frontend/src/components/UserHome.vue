@@ -1,5 +1,5 @@
 <template>
-     
+
           <VisualizationDashboard v-if="checkedLoggedIn===true" />
 
 </template>
@@ -16,9 +16,7 @@ computed: {
       return this.$store.state.auth.loggedIn;
     }
 },
-  mounted(){
 
-  },
 
 
 

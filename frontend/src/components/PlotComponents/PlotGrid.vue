@@ -1,16 +1,17 @@
 <template>
-<div width="600" height="600">
-  <svg  width="601" height="601"  @mousemove="getAndClassifyCoordinates">
-
-    <Plotbox  
-    @click="throttleClick" :xColorLeft="currentColors.sadColor" 
-    :yColorTop="currentColors.calmColor" leftOpacity="1" 
-    :xColorRight="currentColors.happyColor" :yColorBottom="currentColors.anxiousColor"
-      topOpacity=".7" bottomOpacity="1" rightOpacity=".3" idGradX="topLeftX" idGradY="topLeftY"
-      /> 
+<div class="flex flex-col w-max " >
+    <div class="flex flex-row" @mousemove="getAndClassifyCoordinates">
+      <div>
+        <Plotbox :quadrant=1 /> 
+        <Plotbox :quadrant=3 />
+      </div>
+      <div>
+        <Plotbox :quadrant=2 /> 
+        <Plotbox :quadrant=4 />
+      </div>
+    </div>
     
- </svg>
-</div>
+ </div>
 </template>
 
 <script>
@@ -23,6 +24,11 @@ export default {
      data() {
       return {
         coordinateClassification:{},
+        boxConfig:
+        {
+          horizontal:"",
+          vertical: "",
+        }
       }
     },
     computed: {
@@ -60,6 +66,7 @@ export default {
         }
       },
        getAndClassifyCoordinates(e){
+        console.log(e.target.getBoundingClientRect())
         this.coordinateClassification=PlotFunctions.classifyMoodValues(this.shiftCoordinates(e))
         this.$emit('classified-coordinates',this.coordinateClassification)
               },

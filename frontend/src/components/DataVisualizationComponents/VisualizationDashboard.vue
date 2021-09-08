@@ -4,7 +4,7 @@
 
 <div  class=" flex justify-between">
 
-    <DashboardComponent componentToShow="MoodLineChart"/>
+    <DashboardComponent componentToShow="LineChart"/>
 
 </div>
 

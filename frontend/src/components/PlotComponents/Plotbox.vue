@@ -1,55 +1,127 @@
 <template>
+ <svg width="300" height="300" >
 
-    <svg width="600px" height="600px" >
-
-      <defs>
-        <linearGradient :id=idGradX x1="0%" y1="0" x2="100%" y2="0%">
-          <stop offset="0%" :stop-color=xColorLeft :stop-opacity=leftOpacity />
-          <stop offset="100%" :stop-color=xColorRight :stop-opacity=rightOpacity />
-        </linearGradient>
-        <linearGradient :id=idGradY x1="0%" y1="0" x2="0%" y2="100%">
-          <stop offset="0%" :stop-color=yColorTop :stop-opacity=topOpacity />
-          <stop offset="100%" :stop-color=yColorBottom :stop-opacity=bottomOpacity />
-        </linearGradient>
-      </defs>
-            <rect  width="610" height="610" :fill="'url(#' + idGradY + ')'"/>
-
-            <rect width="610" height="610" :fill="'url(#' + idGradX + ')'"/>    
+<!-- quadrant 1 -->
 
 
+<svg v-if="quadrant===1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="radial-gradientX1" cx="0" cy="1" r="1.588" gradientTransform="translate(-0.701 0.287) rotate(-44.517)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#25067b"/>
+      <stop offset="1" stop-color="#3811d1" stop-opacity="0.11"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_6" data-name="Rectangle 6" stroke="#707070" stroke-width="1" fill="url(#radial-gradientX1)" style="mix-blend-mode: darken;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
 
-            <line x1="300" y1="0" x2="300" y2="600" style="stroke:rgb(255,255,255);stroke-width:2" />
-            <line x1="0" y1="300" x2="600" y2="300" style="stroke:rgb(255,255,255);stroke-width:2" />
+  <defs>
+    <radialGradient id="radial-gradientY1" cx="1" cy="0.02" r="1.4" gradientTransform="translate(1.728 -0.666) rotate(135.568)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#73ecf0" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#73ecf0" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_8" data-name="Rectangle 8" stroke="#707070" stroke-width="1" fill="url(#radial-gradientY1)" style="mix-blend-mode: lighten;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+</svg>
+
+<!-- quadrant 2 -->
+
+<svg v-else-if="quadrant===2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="radial-gradientX2" cx="0.979" cy="0.981" r="1.402" gradientTransform="translate(1.012 2.414) rotate(-135.496)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0ab83e" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#0ab83e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_11" data-name="Rectangle 11" stroke="#707070" stroke-width="1" fill="url(#radial-gradientX2)" style="mix-blend-mode: lighten;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
 
 
 
-   
-    </svg>
+  <defs>
+    <radialGradient id="radial-gradientY2" cx="0" cy="0.02" r="1.4" gradientTransform="translate(0.014 0.006) rotate(44.41)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#73ecf0" />
+      <stop offset="1" stop-color="#73ecf0" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_12" data-name="Rectangle 12" stroke="#707070" stroke-width="1" fill="url(#radial-gradientY2)" style="mix-blend-mode: darken;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+</svg> 
+
+<!-- quadrant 3 -->
+
+
+<svg v-else-if="quadrant===3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="radial-gradientX3" cx="0.018" cy="0.02" r="1.388" gradientTransform="matrix(0.708, 0.707, -0.707, 0.708, 0.019, -0.007)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#25067b"/>
+      <stop offset="1" stop-color="#3811d1" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_9" data-name="Rectangle 9" stroke="#707070" stroke-width="1" fill="url(#radial-gradientX3)" style="mix-blend-mode: darken;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+  <defs>
+    <radialGradient id="radial-gradientY3" cx="1" cy="1" r="1.4" gradientTransform="matrix(-0.696, -0.718, 0.718, -0.696, 0.929, 2.393)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d33800"/>
+      <stop offset="1" stop-color="#d33800" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_10" data-name="Rectangle 10" stroke="#707070" stroke-width="1" fill="url(#radial-gradientY3)" style="mix-blend-mode: darken;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+</svg>
+
+<!-- quadrant 4 -->
+
+<svg v-else-if="quadrant===4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="radial-gradientX4" cx="0.979" cy="0.018" r="1.353" gradientTransform="translate(1.687 -0.659) rotate(135.29)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0ab83e"/>
+      <stop offset="1" stop-color="#0ab83e" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_13" data-name="Rectangle 13" stroke="#707070" stroke-width="1" fill="url(#radial-gradientX4)" style="mix-blend-mode: lighten;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+
+  <defs>
+    <radialGradient id="radial-gradientY4" cx="0.031" cy="1" r="1.373" gradientTransform="translate(-0.699 0.316) rotate(-45.122)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d33800"/>
+      <stop offset="1" stop-color="#d33800" stop-opacity="0.051"/>
+    </radialGradient>
+  </defs>
+  <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#radial-gradientY4)" style="mix-blend-mode: darken;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+</svg>
+
+</svg>
 </template>
 
 <script>
 export default {
-    name: 'Plotbox',
-    props: {
-      xColorLeft: String,
-      xColorRight: String,
-      yColorTop: String,
-      yColorBottom: String,
-      leftOpacity: String,
-      rightOpacity: String,
-      topOpacity: String,
-      bottomOpacity: String,
-      xOffset: String,
-      yOffset: String,
-      idGradX: String,
-      idGradY: String,
-    },
-    methods: {
-        // getAndClassifyCoordinates(e){
-        //   console.log(e)
-        // },
-
+  name: 'Plotbox',
+  props:{
+    quadrant: Number,
+  },
+  computed: {
+    boxColors() {
+      return this.$store.getters['currentMoodColors/preparePlotBoxes']
     }
+  }
 
 }
 </script>
