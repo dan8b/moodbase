@@ -6,7 +6,10 @@
 
     <DashboardComponent/>
 
-    <ClickMap />
+    <div width="50%" @wheel.prevent="isWheelLocked===true" >
+           <ClickMap @unlock-wheel="unlockWheel($event)" @lock-wheel="lockWheel($event)" /> 
+    </div>
+
 </div>
 
   
@@ -18,7 +21,7 @@ import DashboardComponent from '@/components/DataVisualizationComponents/Dashboa
 import ClickMap from './ClickMap.vue'
 export default {
     name: 'VisualizationDashboard',
-    components: { DashboardComponent, ClickMap},
+    components: { DashboardComponent, ClickMap },
     computed: {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']

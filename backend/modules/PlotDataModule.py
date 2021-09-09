@@ -45,9 +45,15 @@ def changeUserColor(user:str,changeData:UserColorChange):
     return {'message':'color change successful'}
 
 def getColorList():
-    colors=[]
+    currentCategory='blacks'
+    colors={'blacks':[],'grays':[],'blues':[],'greens':[],
+            'yellows':[],'browns':[],'oranges':[],'reds':[],
+            'pinks':[],'purples':[],'whites':[]}
     with open(os.path.join(os.path.dirname(__file__),"ColorCombinations.csv")) as colorList:
         for color in colorList:
             readCSV=color.split(',')
-            colors.append({'colorHex':readCSV[0],'colorName':readCSV[1].strip()})
+            if readCSV[0]=="Category":
+                currentCategory=readCSV[1].strip()
+            else:
+                colors[currentCategory].append({'colorHex':readCSV[0],'colorName':readCSV[1].strip()})
     return colors
