@@ -9,8 +9,7 @@ def filePlotClick(user:str,data:PlotDataSubmission):
         'user':user,
         'lineChartHappinessVals':[data.lineChart['happinessVal']],
         'lineChartCalmVals':[data.lineChart['calmVal']],
-        'clickMapHappinessVals':[data.clickMap['happinessVal']],
-        'clickMapCalmVals':[data.clickMap['calmVal']],
+        'clickMapVals':[data.clickMap],
         'timestamp':[data.timestamp]
         }
         plotData.insert_one(plotDataObj)
@@ -22,19 +21,17 @@ def filePlotClick(user:str,data:PlotDataSubmission):
                     {
                     'lineChartHappinessVals':data.lineChart['happinessVal'] ,
                     'lineChartCalmVals':data.lineChart['calmVal'],
-                    'clickMapHappinessVals':data.clickMap['happinessVal'],
-                    'clickMapCalmVals':data.clickMap['calmVal'],
+                    'clickMapVals':data.clickMap,
                     'timestamp':data.timestamp
                     }
-                }
-            
+                }      
         )
     return {"Works":'works'}
 
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
-        newColorProfile = {'user':user,'colors':{'happyColor':'#0AB83E','sadColor':'#25067B','calmColor':'#73ECF0','anxiousColor':'#D33800'}}
+        newColorProfile = {'user':user,'colors':{'happy':'#0AB83E','sad':'#25067B','calm':'#73ECF0','anxious':'#D33800'}}
         colorData.insert_one(newColorProfile)
         return newColorProfile['colors']
     else:

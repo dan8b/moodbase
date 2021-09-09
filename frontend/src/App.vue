@@ -42,6 +42,8 @@ export default {
 
 methods:{ 
   logout() { 
+    this.$store.commit('currentMoodColors/wipeColorState')
+    this.$store.commit('userData/wipeDataState')
     this.$store.dispatch('auth/logout');
     this.$router.push('/');
     }

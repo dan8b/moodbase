@@ -6,11 +6,7 @@ const initialState = {
             happinessVals:[],
             calmVals:[]
         },
-    clickMapArrays:
-    {
-        happinessVals:[],
-        calmVals:[]
-    },
+    clickMapArray:[],
     timestamps:[]
 }
 
@@ -18,8 +14,7 @@ export const userData = {
     namespaced:true,
     state:initialState,
     getters: {
-        async returnChartData(state){
-
+        returnChartData(state){
             const dataObj=
             {
                 labels: state.timestamps.map(date => Date.parse(date)),
@@ -52,9 +47,19 @@ export const userData = {
         createClickArray(state,arrayData) {
             state.lineChartArrays.happinessVals=arrayData.lineChartHappinessVals;
             state.lineChartArrays.calmVals=arrayData.lineChartCalmVals;
-            state.clickMapArrays.happinessVals=arrayData.clickMapHappinessVals;
-            state.clickMapArrays.calmVals=arrayData.clickMapCalmVals;
+            state.clickMapArray=arrayData.clickMapVals
             state.timestamps=arrayData.timestamp
+        },
+        
+        addNewClick(state,clickData){
+            state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
+            state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
+            state.clickMapArray.push(clickData.clickMap)    
+       },
+        
+        wipeDataState(state){
+            Object.keys(initialState).forEach(key => { state[key]=initialState[key]})
+
         }
 
     }

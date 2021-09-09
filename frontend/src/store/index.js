@@ -15,7 +15,7 @@ const store = createStore({
     userData,
   },
   plugins: [createPersistedState({
-    paths:['auth','currentMoodColors']
+    paths:['auth','currentMoodColors','userData']
   })],
 
 });

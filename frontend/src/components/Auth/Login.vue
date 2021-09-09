@@ -53,8 +53,11 @@ export default {
     handleLogin(loginForm) {
       return this.$store.dispatch("auth/login",loginForm)
       .then(
-        response =>{
+        async response =>{
         if (Object.keys(response)[0]==="access_token"){
+         await this.$store.dispatch('userData/retrieveClickData')
+         await this.$store.dispatch('currentMoodColors/createInitialState')
+         await this.$store.dispatch('currentMoodColors/getListOfChoices')
          this.$router.push('/home')
         }
         else {

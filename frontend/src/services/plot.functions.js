@@ -9,25 +9,11 @@ class PlotFunctions extends FetchFunctions{
         }
         transformedCoordinates.happinessVal=(coordinates.happinessVal-300)*(7/300) 
         transformedCoordinates.calmVal=(coordinates.calmVal-300)*(-7/300) 
-
-          // if ((coordinates.happinessVal)<10){
-          //   transformedCoordinates.happinessVal=0
-          // }
-          // else {
-          //   transformedCoordinates.happinessVal=(coordinates.happinessVal-300)*(7/300) 
-          // }
-          // if (coordinates.calmVal<10){
-          //   transformedCoordinates.calmVal=0
-    
-          // }
-          // else {
-          //   transformedCoordinates.calmVal=(coordinates.calmVal-300)*(-7/300) 
-          // }
         return transformedCoordinates
     }
     classifyMoodValues(coordinates){
         const transformedCoordinates=this.transformCoordinates(coordinates)
-
+        
         const coordinatePair=
         {
           x:{magnitude:0,sign:0},

@@ -2,16 +2,19 @@ import PlotFunctions from '@/services/plot.functions.js'
 
 const initialState={
     colorProfile: {
-        happyColor:"",
-        calmColor:"",
-        anxiousColor:"",
-        sadColor:"",
+        happy:"",
+        calm:"",
+        anxious:"",
+        sad:"",
         },
     panelVisibility:false,
+    readyForCommit:false,
     colorSelection:"",
     variableSelection:"",
     showDemoColor:false,
     demoColor:"",
+    previousColor:"",
+    listOfOptions:"",
 }
 export const currentMoodColors = {
     namespaced: true,
@@ -21,11 +24,6 @@ export const currentMoodColors = {
             return {
                 newColor:state.colorSelection,
                 variable:state.variableSelection
-            }
-        },
-        changePendingCommit(state){
-            if(state.colorSelection!=""){
-                return true
             }
         },
         initialColorData(state,variable){
@@ -43,40 +41,49 @@ export const currentMoodColors = {
                 commit('createState',data)
             })
         },
+        async getListOfChoices( {commit} ){
+            await PlotFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList',data))
+            }
     },
     mutations: {
+        togglePanel(state,variable){
+            if (state.panelVisibility === false){
+                state.variableSelection=variable;
+                state.previousColor=state.colorProfile[variable]
+                state.panelVisibility=true;
+            }
+            else{
+                state.colorProfile[state.variableSelection]=state.previousColor;
+                state.panelVisibility=false;
+                state.previousColor="";
+                state.variableSelection="";
+                state.readyForCommit=false;
+            }
+        },
+        setColorList(state,listData){
+            state.listOfColors=listData
+        },
         showColorDemonstration(state, demonstrationData){
             state.demoColor=demonstrationData
             state.showDemoColor=true;
-        },
-        clearSelection(state){
-            state.colorSelection="";
-            state.panelVisibility=false;
-            state.variableSelection="";
-        },
-        showPanel(state,showOrHide){
-            state.panelVisiblity=showOrHide;
-        },
-        setColorToChange(state,chosenColor){
-            state.colorSelection=chosenColor;
         },
         setVariableToChange(state,variableName){
             state.variableSelection=variableName;
         },
         createState(state,stateData) {
-            state.user=stateData.uid;
-            state.colorProfile.happyColor=stateData.happyColor;
-            state.colorProfile.calmColor=stateData.calmColor;
-            state.colorProfile.anxiousColor=stateData.anxiousColor;
-            state.colorProfile.sadColor=stateData.sadColor;
+            state.colorProfile.happy=stateData.happy;
+            state.colorProfile.calm=stateData.calm;
+            state.colorProfile.anxious=stateData.anxious;
+            state.colorProfile.sad=stateData.sad;
             },
         changeColor(state,colorChoice) {
+            state.previousColor=state.colorProfile[colorChoice.variableName]
             state.colorProfile[colorChoice.variableName]=colorChoice.selectedColor;
+            if(state.readyForCommit === false) {state.readyForCommit=true;}
         },
         wipeColorState(state){
-            console.log(state)
+            localStorage.removeItem('listOfColors')
             Object.keys(initialState).forEach(key => { state[key]=initialState[key]})
-            console.log(state)
         }
     },
 

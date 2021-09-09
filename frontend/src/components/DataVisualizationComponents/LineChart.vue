@@ -48,10 +48,9 @@ export default{
             }}
     }
   },
-  async mounted() {
+  mounted() {
 
-        await this.$store.dispatch('userData/retrieveClickData')
-        this.chartDataObj= await this.$store.getters['userData/returnChartData']   
+        this.chartDataObj=this.$store.getters['userData/returnChartData']   
         this.renderChart(this.chartDataObj,this.optionsObj)
   }
 }

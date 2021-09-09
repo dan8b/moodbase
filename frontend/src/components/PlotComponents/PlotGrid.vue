@@ -1,6 +1,6 @@
 <template>
 <div class="flex flex-col w-max " >
-    <div class="flex flex-row" @mousemove="getAndClassifyCoordinates">
+    <div class="flex flex-row" @click="collectPlotData" @mousemove="getAndClassifyCoordinates">
       <div>
         <Plotbox :quadrant=1 /> 
         <Plotbox :quadrant=3 />
@@ -10,12 +10,25 @@
         <Plotbox :quadrant=4 />
       </div>
     </div>
-    
+  <div v-if="classifying===true" class="text-2xl">
+    Looks like you're feeling 
+        <ClassificationText 
+          :emotionSeverity="coordinateClassification.calm.severity"
+          :emotionStatus="coordinateClassification.calm.mood"
+        />
+        and
+        <ClassificationText 
+          :emotionSeverity="coordinateClassification.happiness.severity"
+          :emotionStatus="coordinateClassification.happiness.mood"
+        />
+   
+  </div>
  </div>
 </template>
 
 <script>
 import Plotbox from './Plotbox.vue'
+import ClassificationText from './ClassificationText.vue'
 import PlotFunctions from '@/services/plot.functions.js'
 import _ from 'lodash'
 
@@ -24,11 +37,7 @@ export default {
      data() {
       return {
         coordinateClassification:{},
-        boxConfig:
-        {
-          horizontal:"",
-          vertical: "",
-        }
+        classifying:false,
       }
     },
     computed: {
@@ -41,46 +50,32 @@ export default {
     },
     components: {
       Plotbox,
+      ClassificationText
     },
-    emits: ['classified-coordinates'],
+    // emits: ['classified-coordinates'],
     methods: {
       shiftCoordinates(e){
-
-        if(e.target.getBoundingClientRect().height===0){
-          return {
-            happinessVal:e.clientX-e.target.getBoundingClientRect().x,
-            calmVal:0
-          }
-        }
-        else if (e.target.getBoundingClientRect().width===0){
-          return {
-            happinessVal:0,
-            calmVal:e.clientY-e.target.getBoundingClientRect().y
-          }
-        }
-        else{
+        this.classifying=true
+    
         return {
-            happinessVal:e.clientX-e.target.getBoundingClientRect().x,
-            calmVal:e.clientY-e.target.getBoundingClientRect().y
+            happinessVal:e.clientX-((e.target.getBoundingClientRect().x)%300),
+            calmVal:e.clientY-((e.target.getBoundingClientRect().y)%300)
           }
-        }
       },
        getAndClassifyCoordinates(e){
-        console.log(e.target.getBoundingClientRect())
         this.coordinateClassification=PlotFunctions.classifyMoodValues(this.shiftCoordinates(e))
-        this.$emit('classified-coordinates',this.coordinateClassification)
-              },
+          },
       collectPlotData(e) {
         const shifted = this.shiftCoordinates(e)
         const transformedCoords=PlotFunctions.transformCoordinates(shifted)
         const lineChartData={'happinessVal':transformedCoords.happinessVal,'calmVal':transformedCoords.calmVal}
         const clickMapData={'happinessVal':shifted.happinessVal,'calmVal':shifted.calmVal}
         const payload={'lineChart':lineChartData,'clickMap':clickMapData}
+        this.$store.commit('userData/addNewClick',payload)
         PlotFunctions.post(payload,'plot/getplotclick')
-        this.$store.dispatch('userData/retrieveClickData')
         },
       throttleClick:_.throttle(function(e)
-      {this.collectPlotData(e);},480000)
+      {this.collectPlotData(e);},1000)
       }
   }
 

@@ -4,8 +4,9 @@
 
 <div  class=" flex justify-between">
 
-    <DashboardComponent componentToShow="LineChart"/>
+    <DashboardComponent/>
 
+    <ClickMap />
 </div>
 
   
@@ -14,10 +15,10 @@
 
 <script>
 import DashboardComponent from '@/components/DataVisualizationComponents/DashboardComponent.vue'
-
+import ClickMap from './ClickMap.vue'
 export default {
     name: 'VisualizationDashboard',
-    components: { DashboardComponent},
+    components: { DashboardComponent, ClickMap},
     computed: {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']

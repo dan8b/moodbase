@@ -1,6 +1,7 @@
 <template>
 <div :style="classVar">
-  <button  @mouseover="showColorDemonstration" @click="changeColor"  class="m-1">{{colorName}}</button>
+  <button   @mouseover="showColorDemonstration" @click="changeColor"  class="m-1">
+      <span :style="{'color':colorHex}"> {{colorName}}</span></button>
 </div>
 
 </template> 
@@ -25,7 +26,6 @@ export default {
         {
             const colorChoice={variableName:this.variableName,selectedColor:this.colorHex}
             this.$store.commit('currentMoodColors/changeColor',colorChoice);   
-            this.$store.commit('currentMoodColors/setColorToChange',this.colorHex);   
         },
         showColorDemonstration(){
             this.$store.commit('currentMoodColors/showColorDemonstration',this.colorHex)

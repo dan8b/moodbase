@@ -26,8 +26,7 @@ export const auth = {
         )
     },
     logout({ commit }) {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
+      localStorage.clear()
       commit('logoutSuccess');
 
     },
@@ -41,8 +40,7 @@ export const auth = {
   mutations: {
     loginSuccess(state, tokenData) {
       state.loggedIn = true;
-      // state.accessToken = token.access_token;
-      // state.refreshToken=token.refresh_token
+
       window.localStorage.setItem('accessToken', tokenData.access_token);
       window.localStorage.setItem('refreshToken', tokenData.refresh_token);
     },
