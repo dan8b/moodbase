@@ -1,6 +1,6 @@
 <template>
 <div :style="classVar">
-  <button   @mouseover="showColorDemonstration" @click="changeColor"  class="m-1">
+  <button  @mouseover="showColorDemonstration" @click="changeColor"  class="m-1">
       <span :style="{'color':colorHex}"> {{colorName}}</span></button>
 </div>
 

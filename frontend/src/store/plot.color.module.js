@@ -14,7 +14,9 @@ const initialState={
     showDemoColor:false,
     demoColor:"",
     previousColor:"",
-    listOfOptions:"",
+    listOfColors:{},
+    listLayer:0,
+    currentSubset:"",
 }
 export const currentMoodColors = {
     namespaced: true,
@@ -46,6 +48,12 @@ export const currentMoodColors = {
             }
     },
     mutations: {
+        setSubset(state,subsetChoice){
+            state.currentSubset=subsetChoice
+        },
+        changeLayer(state){
+            state.listLayer = (state.listLayer+1)%2
+        },
         togglePanel(state,variable){
             if (state.panelVisibility === false){
                 state.variableSelection=variable;
@@ -56,6 +64,7 @@ export const currentMoodColors = {
                 state.colorProfile[state.variableSelection]=state.previousColor;
                 state.panelVisibility=false;
                 state.previousColor="";
+                state.demoColor=null;
                 state.variableSelection="";
                 state.readyForCommit=false;
             }

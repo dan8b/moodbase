@@ -4,7 +4,7 @@
 <div class="container flex flex-row">
 
 <ListOfColors />
-<svg>
+<svg v-if="colorDemonstration!=null">
   <rect  width="200" height="200" :fill="colorDemonstration"/>
 </svg>
 
