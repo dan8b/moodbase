@@ -1,13 +1,13 @@
-from db import aggregateData
+from db import userData
 
 def updateUserCountOnActivation():
     try:
-        aggregateData.update_one({'aggType':'users'}, {'$inc':{'count':1} })
+        userData.update_one({'isUserCount':True}, {'$inc':{'count':1} })
     except:
-        aggregateData.insert_one({'aggType':'users','count':1,'plotClicks':0})
+        userData.insert_one({'isUserCount':True,'count':1})
 
 def getNumberOfUsers():
     try:
-        return aggregateData.find_one({'aggType':'users'})['count']
+        return userData.find_one({'isUserCount':True})['count']
     except:
         return False

@@ -1,3 +1,4 @@
+from typing import ValuesView
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 
@@ -15,6 +16,19 @@ class PlotDataSubmission(BaseModel):
             self.clickMap[key]=int(value)
         return True 
     
+    def returnList(self):
+        listOfValues = []
+        for key,value in self.clickMap.items():
+            listOfValues.append(value)
+        for key,value in self.lineChart.items():
+            listOfValues.append(value)
+        return listOfValues
+
+    def prepareForCommunityData(self,key):
+        communityEntry=getattr(self,key)
+        communityEntry['day']=datetime.today()
+        return communityEntry
+        
 class UserPlotData(BaseModel):
     user:str
     dictWithLists:dict

@@ -1,42 +1,16 @@
-from db import plotData, colorData, aggregateData
+from db import plotData, colorData
 import models.plotModel as plotModels
 from datetime import datetime, timezone
-import schemas.PlotAggregationSchema as aggSchema
+import schemas.PlotSchema as schema
 import os
 
 def filePlotClick(user:str,data:plotModels.PlotDataSubmission):
     data.truncateCoordinates()
     if plotData.find({'user':user}).limit(1).count()<1:
-        plotDataObj = { 
-        'user':user,
-        'totalHappiness':data.lineChart['happinessVal'],
-        'totalCalm':data.lineChart['calmVal'],
-        'lineChartHappinessVals':[data.lineChart['happinessVal']],
-        'lineChartCalmVals':[data.lineChart['calmVal']],
-        'clickMapVals':[data.clickMap],
-        'timestamp':[data.timestamp]
-        }
-        plotData.insert_one(plotDataObj)
+        schema.createPlotDataDocument(user,data)
     else:
-        plotData.update_one(
-            {'user':user},
-            
-                {
-                '$push':
-                    {
-                    'lineChartHappinessVals':data.lineChart['happinessVal'] ,
-                    'lineChartCalmVals':data.lineChart['calmVal'],
-                    'clickMapVals':data.clickMap,
-                    'timestamp':data.timestamp
-                    },
-                '$inc':
-                    {
-                        'totalHappiness':data.lineChart['happinessVal'],
-                        'totalCalm':data.lineChart['calmVal']
-                    }    
-                }                    
-        )
-    aggSchema.updateAggregatePlotData(data)
+        schema.updatePlotDataDocument(user,data)
+    schema.updateCommunityPlotData(data)
     return True
 
 def getUserColors(user:str):
