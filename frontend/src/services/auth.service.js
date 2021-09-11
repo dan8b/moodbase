@@ -1,5 +1,4 @@
 // const API_URL = 'http://localhost:8000/api/auth/';
-import store from '@/store/index.js'
 import FetchFunctions from './fetch.service.js'
 
 class AuthService extends FetchFunctions{
@@ -26,23 +25,8 @@ class AuthService extends FetchFunctions{
     }
     reset(newPasswordAndToken){
         console.log("Resetting password")
-        return this.genericFetch(newPasswordAndToken,'auth/reset')
+        return this.post(newPasswordAndToken,'auth/reset')
     }
-    refresh(token){
-        console.log("Checking refresh token")
-        return this.genericFetch(token,'auth/refresh')
-        .then(
-            response =>{
-            if (Object.keys(response)[0]==="access_token"){
-                store.dispatch('refresh',{refreshToken:response.access_token})
-            }
-            else {
-              alert(new Error(response.detail))
-            }
-            
-        })
-    }
-
 }
 
 export default new AuthService();

@@ -1,19 +1,20 @@
 # database stuff
-from db import userData,bannedKeys
-
-
+from db import userData,bannedKeys,aggregateData
 from models.userModel import User
+from modules.UserAggregationUtilities import updateUserCountOnActivation
 
 # email stuff
 import modules.EmailModule as email
 
 # dependency injection stuff
 from fastapi import HTTPException, Depends,BackgroundTasks, Security, Header
+
 # jwt and password stuff
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime,timedelta,timezone
 
+# environment variable and bearer stuff
 from config import Secret
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from dotenv import load_dotenv
@@ -54,7 +55,6 @@ def createAccessToken(subName: str,*args) -> dict():
     )
 
 def getUserFromToken(checkToken:str)-> str:
-    # print(checkToken)
     decoded = jwt.decode(checkToken, secret, 'HS256')
     userStr=decoded['sub']
     return userStr
@@ -65,13 +65,10 @@ def checkToken(tokenToCheck:str)->str:
          return tokenToCheck
     except:
         raise HTTPException(status_code=401,detail='invalid token')
-
    
 def addUserToDatabase(user:User) -> dict:
     checkUsername={'username':user.username}
     # checkEmail={'email':user.email}
-    # use find.limit instead of find_one because find will return whether or not doc exists
-    # and find_one will return the whole doc
     if userData.find(checkUsername).limit(1).count()>0:
         raise HTTPException(status_code=404,detail="User already exists with this ID or email address")
     else: 
@@ -89,17 +86,21 @@ def createUrlForEmail(route: str,token:str) -> str:
 
 def activateUser(tokenDict: dict) -> dict:
     user=getUserFromToken(tokenDict.token)
-    userData.update_one(user,{'$set':{'active':True}})
-    returnToken=createAccessToken(user['username'],0,0,30)
-    return returnToken
+    userData.update_one({'username':user},{'$set':{'active':True}})
+    updateUserCountOnActivation()
+    activationToken=createAccessToken(user,0,0,30)
+    return activationToken
 
 def sendResetEmail(emailObj):
     lookupEmail={'email':emailObj.email}
     user=userData.find_one(lookupEmail)
-    forgotToken=createAccessToken(user['username'],0,0,60)
+    forgotToken=createAccessToken(user,0,0,60)
     url=createUrlForEmail("reset",forgotToken)
-    emailSpecifications={'recipient':emailObj.email,'urlDict': {'url':url},'subject':"Reset password email",
-    'template':'ResetEmail.html'}
+    emailSpecifications={
+        'recipient':emailObj.email,
+        'urlDict': {'url':url},
+        'subject':"Reset password email",
+        'template':'ResetEmail.html'}
     return emailSpecifications
 
 
@@ -107,11 +108,10 @@ def resetPassword(newPassword):
     resetToken=newPassword.token
     user=getUserFromToken(resetToken)
     if not user: raise HTTPException(status_code=404,detail='Did not work') 
-    userData.update_one(user,{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
+    userData.update_one({'username':user},{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
     return {'message':'password reset successfully'}
 
 def attemptRefresh(refreshToken):
-    # print(refreshToken)
     user=getUserFromToken(refreshToken)
     if user:
         return {'access_token':createAccessToken(user,0,0,1),'token_type':'bearer'}

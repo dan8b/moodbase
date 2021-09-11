@@ -7,7 +7,7 @@
     <DashboardComponent/>
 
     <div width="50%" @wheel.prevent="isWheelLocked===true" >
-           <ClickMap @unlock-wheel="unlockWheel($event)" @lock-wheel="lockWheel($event)" /> 
+           <ClickMap @unlock-wheel="unlockWheel($event)" /> 
     </div>
 
 </div>

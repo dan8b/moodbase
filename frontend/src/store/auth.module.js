@@ -30,8 +30,8 @@ export const auth = {
       commit('logoutSuccess');
 
     },
-    activate({commit}){
-      commit('loginSuccess')
+    activate({commit},token){
+      commit('loginSuccess',token)
     },
     refresh({commit}){
       commit('loginSuccess')
@@ -40,7 +40,7 @@ export const auth = {
   mutations: {
     loginSuccess(state, tokenData) {
       state.loggedIn = true;
-
+      console.log(tokenData)
       window.localStorage.setItem('accessToken', tokenData.access_token);
       window.localStorage.setItem('refreshToken', tokenData.refresh_token);
     },

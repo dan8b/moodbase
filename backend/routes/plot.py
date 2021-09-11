@@ -22,6 +22,7 @@ def getInitialColors(user:str=Depends(gate)):
 
 @plotRoute.post('/changecolors')
 def changeColor(colorChange:UserColorChange,user:str = Depends(gate)):
+    print(colorChange)
     return plot.changeUserColor(user,colorChange)
 
 @plotRoute.get('/getclickdata')

@@ -1,12 +1,16 @@
-from db import plotData, colorData
-from models.plotModel import PlotDataSubmission, UserPlotData,UserColorChange
+from db import plotData, colorData, aggregateData
+import models.plotModel as plotModels
+from datetime import datetime, timezone
+import schemas.PlotAggregationSchema as aggSchema
 import os
 
-def filePlotClick(user:str,data:PlotDataSubmission):
+def filePlotClick(user:str,data:plotModels.PlotDataSubmission):
     data.truncateCoordinates()
     if plotData.find({'user':user}).limit(1).count()<1:
         plotDataObj = { 
         'user':user,
+        'totalHappiness':data.lineChart['happinessVal'],
+        'totalCalm':data.lineChart['calmVal'],
         'lineChartHappinessVals':[data.lineChart['happinessVal']],
         'lineChartCalmVals':[data.lineChart['calmVal']],
         'clickMapVals':[data.clickMap],
@@ -17,17 +21,23 @@ def filePlotClick(user:str,data:PlotDataSubmission):
         plotData.update_one(
             {'user':user},
             
-                {'$push':
+                {
+                '$push':
                     {
                     'lineChartHappinessVals':data.lineChart['happinessVal'] ,
                     'lineChartCalmVals':data.lineChart['calmVal'],
                     'clickMapVals':data.clickMap,
                     'timestamp':data.timestamp
-                    }
-                }      
+                    },
+                '$inc':
+                    {
+                        'totalHappiness':data.lineChart['happinessVal'],
+                        'totalCalm':data.lineChart['calmVal']
+                    }    
+                }                    
         )
-    return {"Works":'works'}
-
+    aggSchema.updateAggregatePlotData(data)
+    return True
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
@@ -38,7 +48,7 @@ def getUserColors(user:str):
         colorProfile = colorData.find_one({'user':user})
         return colorProfile['colors']
 
-def changeUserColor(user:str,changeData:UserColorChange):
+def changeUserColor(user:str,changeData:plotModels.UserColorChange):
     variableName=changeData.variable
     updatedColor=changeData.newColor
     colorData.update_one({'user':user},[{'$set':{'colors':{variableName:updatedColor}}}])

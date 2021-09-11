@@ -24,16 +24,13 @@ export const currentMoodColors = {
     getters: {
         packageChangeData(state){
             return {
-                newColor:state.colorSelection,
+                newColor:state.colorProfile[state.variableSelection],
                 variable:state.variableSelection
             }
         },
         initialColorData(state,variable){
             return state.colorProfile[variable]
         },
-        preparePlotBoxes(state){
-            return state.colorProfile
-        }
     },
     actions: {
         async createInitialState( {commit} ) {
@@ -61,7 +58,6 @@ export const currentMoodColors = {
                 state.panelVisibility=true;
             }
             else{
-                state.colorProfile[state.variableSelection]=state.previousColor;
                 state.panelVisibility=false;
                 state.previousColor="";
                 state.demoColor=null;

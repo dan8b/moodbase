@@ -119,7 +119,7 @@ export default {
   },
   computed: {
     boxColors() {
-      return this.$store.getters['currentMoodColors/preparePlotBoxes']
+      return this.$store.state.currentMoodColors.colorProfile
     }
   }
 

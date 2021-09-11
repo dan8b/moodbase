@@ -1,41 +1,52 @@
 <template>
+    <div class="flex w-max h-max gap-4">
+        <div @click="togglePanel('happy')">
+        <span :style="{'color':currentColors.happy}"> Happiness </span>
+        </div>
+        <div @click="togglePanel('sad')">
+        <span :style="{'color':currentColors.sad}"> Sadness </span>
+        </div>
+        <div @click="togglePanel('calm')">
+        <span :style="{'color':currentColors.calm}"> Calm </span>
+        </div>
+        <div @click="togglePanel('anxious')">
+        <span :style="{'color':currentColors.anxious}"> Anxiety </span>
+        </div>
 
-<div class="w-max flex flex-col">
-  <div> <ColorPickerButton/> </div>
+    </div>
 
-</div>
+
 </template>
 
 <script>
-import ColorPickerButton from './ColorPickerButton.vue'
 export default {
-    name: 'PlotColorPicker',
-    components: {
-      ColorPickerButton
+    name:'PlotColorPicker',
+    data() {
+        return {
+            currentVariable:""
+        }
     },
     computed:{
-      classVar() {
-            return { '--color':this.boxColor}
-        },
-
-
+        currentColors() {
+        return this.$store.state.currentMoodColors.colorProfile
+      }
     },
     methods: {
-    },
+        togglePanel(variable){
+            if (this.currentVariable===variable) {
+                this.$store.commit('currentMoodColors/togglePanel',variable)
+            }
+            else{
+                this.$store.commit('currentMoodColors/togglePanel',variable)
+                this.currentVariable=variable
+            }
+        }
+    }
+
 
 }
 </script>
 
-<style scoped>
-#nameBox{
-  width:80px;
-}
-#colorbox{
-    display:flex;
-    justify-content:center;
-    width:80px;
-    background-color:var(--color);
-}
-
+<style>
 
 </style>

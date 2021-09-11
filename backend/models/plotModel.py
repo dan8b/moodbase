@@ -9,12 +9,12 @@ class PlotDataSubmission(BaseModel):
     timestamp = datetime.now(timezone.utc)
 
     def truncateCoordinates(self):
-        dictArr=[self.lineChart,self.clickMap]
-        for member in dictArr:
-            for key in member:
-                member[key]=float(f"{member[key]:.2f}")
-        return True
-
+        for key, value in self.lineChart.items():
+            self.lineChart[key] = round(value,1)
+        for key,value in self.clickMap.items():
+            self.clickMap[key]=int(value)
+        return True 
+    
 class UserPlotData(BaseModel):
     user:str
     dictWithLists:dict

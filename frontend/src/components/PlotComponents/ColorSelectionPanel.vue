@@ -37,13 +37,14 @@ export default {
     methods: {
       hidePanel(){
         this.$store.commit('currentMoodColors/togglePanel')
-        // this.$store.commit('currentMoodColors/clearSelection')
       },
       postColorChange(){
         const changeDataInfo=this.$store.getters['currentMoodColors/packageChangeData']
+        console.log(changeDataInfo)
         PlotFunctions.post(changeDataInfo,'plot/changecolors')
-        // this.$store.commit('currentMoodColors/clearSelection')
-      }
+        this.$store.commit('currentMoodColors/togglePanel')
+        this.$store.commit('currentMoodColors/changeLayer')
+        }
     },
 
 }

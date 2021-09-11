@@ -21,6 +21,11 @@
 <script>
 export default {
     name:'ColorPickerButton',
+    data() {
+        return {
+            currentVariable:""
+        }
+    },
     computed:{
         currentColors() {
         return this.$store.state.currentMoodColors.colorProfile
@@ -28,7 +33,13 @@ export default {
     },
     methods: {
         togglePanel(variable){
-            this.$store.commit('currentMoodColors/togglePanel',variable)
+            if (this.currentVariable===variable) {
+                this.$store.commit('currentMoodColors/togglePanel',variable)
+            }
+            else{
+                this.$store.commit('currentMoodColors/setVariableToChange',variable)
+                this.currentVariable=variable
+            }
         }
     }
 
