@@ -18,9 +18,9 @@ class PlotDataSubmission(BaseModel):
     
     def returnList(self):
         listOfValues = []
-        for key,value in self.clickMap.items():
+        for value in self.clickMap.values():
             listOfValues.append(value)
-        for key,value in self.lineChart.items():
+        for value in self.lineChart.values():
             listOfValues.append(value)
         return listOfValues
 

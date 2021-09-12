@@ -1,32 +1,31 @@
+from backend.schemas.ColorSchema import createUserColorProfile, updateUserColorProfile
 from db import plotData, colorData
-import models.plotModel as plotModels
-from datetime import datetime, timezone
-import schemas.PlotSchema as schema
+from models.plotModel import PlotDataSubmission, UserColorChange
+from schemas import PlotSchema, ColorSchema
 import os
 
-def filePlotClick(user:str,data:plotModels.PlotDataSubmission):
+def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
     if plotData.find({'user':user}).limit(1).count()<1:
-        schema.createPlotDataDocument(user,data)
+        PlotSchema.createUserPlotDataDocument(user,data)
     else:
-        schema.updatePlotDataDocument(user,data)
-    schema.updateCommunityPlotData(data)
+        PlotSchema.updateUserPlotDataDocument(user,data)
+    PlotSchema.updateCommunityPlotData(data)
     return True
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
-        newColorProfile = {'user':user,'colors':{'happy':'#0AB83E','sad':'#25067B','calm':'#73ECF0','anxious':'#D33800'}}
-        colorData.insert_one(newColorProfile)
-        return newColorProfile['colors']
+        return ColorSchema.createUserColorProfile(user)
     else:
         colorProfile = colorData.find_one({'user':user})
         return colorProfile['colors']
 
-def changeUserColor(user:str,changeData:plotModels.UserColorChange):
-    variableName=changeData.variable
-    updatedColor=changeData.newColor
-    colorData.update_one({'user':user},[{'$set':{'colors':{variableName:updatedColor}}}])
-    return {'message':'color change successful'}
+def changeUserColor(user:str,changeData:UserColorChange):
+    try:
+        updateUserColorProfile(user,changeData)
+        return {'Message':'Color change successful'}
+    except:
+        return {'beavis':'buttheads'}
 
 def getColorList():
     currentCategory='blacks'

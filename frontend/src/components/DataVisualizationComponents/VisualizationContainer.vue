@@ -26,11 +26,8 @@ export default {
           if(currentState.vars.plot.show===true){ 
             console.log("show the plot")
             store.commit('visToShow/hideNotPlot')
-            // const map=VisualizationService.invertCoords(visData)
-            // visualizationType=map
           }
           else {
-        //  visualizationType="MoodLineGraph";
          return visData    
         }
       })}
