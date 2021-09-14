@@ -42,3 +42,6 @@ class UserColorChoices(BaseModel):
 class UserColorChange(BaseModel):
     newColor:str
     variable:str
+
+class GenericBoolean(BaseModel):
+    tf:bool

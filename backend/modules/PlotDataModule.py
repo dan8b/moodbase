@@ -5,18 +5,25 @@ import os
 
 def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
+    if plotData.find({'community':True}).limit(1).count()<1:
+        PlotSchema.createCommunityDocument(data)
     PlotSchema.updateUserPlotDataDocument(user,data)
     PlotSchema.updateCommunityPlotData(data)
     ColorSchema.getPopularColors()
     return True
 
-def getClickData(user:str):
+def getUserClickData(user:str):
     if plotData.find({'user':user}).limit(1).count()<1:
         clickData=PlotSchema.createUserPlotDataDocument(user)
     else:
         clickData=plotData.find_one({'user':user})
     del clickData['_id']
     return clickData
+
+def getCommunityClickData():
+    communityData = plotData.find_one({'community':True})
+    del communityData['_id']
+    return communityData
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:

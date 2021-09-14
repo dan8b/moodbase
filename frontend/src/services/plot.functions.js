@@ -26,8 +26,11 @@ class PlotFunctions extends FetchFunctions{
         
         coordinatePair.x={magnitude:Math.round(Math.abs(transformedCoordinates.happinessVal)),sign:signX}
         coordinatePair.y={magnitude:Math.round(Math.abs(transformedCoordinates.calmVal)),sign:signY}
-    
-        const bucketMagnitude={
+      return this.bucketMood(coordinatePair)
+      }
+
+    bucketMood(coordinatePair){
+      const bucketMagnitude={
           0:"barely",
           1:"slightly",
           2:"somewhat",
@@ -58,18 +61,7 @@ class PlotFunctions extends FetchFunctions{
           },
         }
         return classificationInformation
-      }
-      getData(){
-        return this.get('plot/getclickdata')
-        .then(res=>res.json())
-        .then(data => {
-
-          return data
-        }
-          )
-      }
-    
-    
+      }   
 }
 
 export default new PlotFunctions

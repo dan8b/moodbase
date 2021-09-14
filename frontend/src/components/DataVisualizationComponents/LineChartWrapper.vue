@@ -1,7 +1,7 @@
 <template>
     <div class="border-2 border-gray-400 border-dashed hover:border-transparent hover:bg-white hover:shadow-xl rounded " 
-    width="1000px" height="1000px">                           
-        <LineChart :width="700" :height="700" />
+    width="600" height="600">                           
+        <LineChart :width="600" :height="600" />
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 import LineChart from '@/components/DataVisualizationComponents/LineChart.vue'
 // import ClickMap from '@/components/DataVisualizationComponents/ClickMap.vue'
 export default {
-    name: 'DashboardComponent',
+    name: 'LineChartWrapper',
     components: { LineChart},
     props: ['componentToShow']
 }

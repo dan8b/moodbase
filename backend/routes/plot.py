@@ -1,7 +1,7 @@
 # from routes.auth import gate
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Security
 from pydantic import BaseModel
-from models.plotModel import PlotDataSubmission, UserPlotData,UserColorChange
+from models.plotModel import PlotDataSubmission, UserPlotData,UserColorChange,GenericBoolean
 from modules.AuthenticationModule import getUserFromToken, gate
 import modules.PlotDataModule as plot
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -24,10 +24,14 @@ def getInitialColors(user:str=Depends(gate)):
 def changeColor(colorChange:UserColorChange,user:str = Depends(gate)):
     return plot.changeUserColor(user,colorChange)
 
-@plotRoute.get('/getclickdata')
-def getClickData(user:str = Depends(gate)):
-    return plot.getClickData(user)
+@plotRoute.get('/retrieveclickdata/{kind}')
+def getClickData(kind:bool,user:str = Depends(gate)):
+    if kind==True:
+        return plot.getCommunityClickData()
+    else:
+        return plot.getUserClickData(user)
 
 @plotRoute.get('/listofcolors')
 def sendColorList():
     return plot.getColorList()
+

@@ -1,13 +1,13 @@
 <template>
  <p>
-     <span :style="{'color':emotionColor}"> {{emotionSeverity}} {{emotionStatus}} </span>
+     <span :style="{'color':emotionColor.color}"> {{emotionSeverity}} {{emotionStatus}} </span>
      
 </p>
 </template>
 
 <script>
-
-
+import {useStore} from 'vuex'
+import {onUpdated, reactive} from 'vue'
 export default {
     name: 'ClassificationText',
     props:
@@ -15,10 +15,10 @@ export default {
         emotionStatus:String,
         emotionSeverity:String,
     },
-    data(){
-        return{
-            emotionColor:"",
-            severityMapping: {
+    setup(props) {
+        const store = useStore()
+        var emotionColor=reactive({color:""})
+        const severityMapping= {
                 barely:.07,
                 slightly:.14,
                 somewhat:.28,
@@ -27,10 +27,7 @@ export default {
                 very:.70,
                 extremely:.84,
                 incredibly:.98,
-            }
-        }
-    },
-    updated(){
+            }       
         function hexToRgbA(hex,opacity){
             var c;
             if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
@@ -43,11 +40,16 @@ export default {
             }
             throw new Error('Bad Hex');
         }
+        const emotionColorHex=store.state.currentMoodColors.colorProfile[props.emotionStatus]
+        const opacityLevel=severityMapping[props.emotionSeverity]
+        emotionColor.color=hexToRgbA(emotionColorHex,opacityLevel)
 
-        
-        const emotionColorHex=this.$store.state.currentMoodColors.colorProfile[this.emotionStatus]
-        const opacityLevel=this.severityMapping[this.emotionSeverity]
-        this.emotionColor=hexToRgbA(emotionColorHex,opacityLevel)
+        onUpdated(() =>{
+            const emotionColorHex=store.state.currentMoodColors.colorProfile[props.emotionStatus]
+            const opacityLevel=severityMapping[props.emotionSeverity]
+            emotionColor.color=hexToRgbA(emotionColorHex,opacityLevel)
+        })
+        return {emotionColor}
     }
 
 }

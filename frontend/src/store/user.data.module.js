@@ -14,6 +14,23 @@ export const userData = {
     namespaced:true,
     state:initialState,
     getters: {
+        returnMostRecent(state){
+            const recentHappy = state.lineChartArrays.happinessVals.pop()
+            state.lineChartArrays.happinessVals.push(recentHappy)
+            const recentCalm = state.lineChartArrays.calmVals.pop()
+            state.lineChartArrays.happinessVals.push(recentCalm)
+            const toBucket = {
+                x:{
+                    magnitude:Math.round(Math.abs(recentHappy)),
+                    sign:Math.sign(recentHappy)
+                },
+                y:{
+                    magnitude:Math.round(Math.abs(recentCalm)),
+                    sign:Math.sign(recentCalm)
+                }
+            }
+            return PlotFunctions.bucketMood(toBucket)
+        },
         returnChartData(state){
             const dataObj=
             {
@@ -25,7 +42,8 @@ export const userData = {
                     borderColor: "#3e95cd",
                     fill: false
                 },
-                { 
+
+                 { 
                     data: state.lineChartArrays.calmVals.map(val=> Number(val)),
                     label: "Calm/anxiety",
                     borderColor: "#FF5733",
@@ -39,7 +57,7 @@ export const userData = {
     actions: {
         
         async retrieveClickData( { commit }){
-            const dataToCommit = await PlotFunctions.getData()
+            const dataToCommit = await PlotFunctions.get('plot/retrieveclickdata/false').then(response=>response.json())
             commit('createClickArray', dataToCommit)
         }
     },
@@ -52,9 +70,10 @@ export const userData = {
         },
         
         addNewClick(state,clickData){
+            console.log(clickData)
             state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
             state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
-            state.clickMapArray.push(clickData.clickMapVals)    
+            state.clickMapArray.push(clickData.clickMap)    
        },
         
         wipeDataState(state){

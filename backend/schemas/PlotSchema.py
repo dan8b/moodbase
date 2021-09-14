@@ -7,8 +7,7 @@ def createCommunityDocument(initialData:PlotDataSubmission):
         {
             'community':True,
             'dayList':[datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)],
-            'averageClickMapHappiness':[initialData.clickMap['happinessVal']],
-            'averageClickMapCalm':[initialData.clickMap['calmVal']],
+            'clickMap':[{'happinessVal':initialData.clickMap['happinessVal'], 'calmVal':initialData.clickMap['calmVal']}],
             'averageLineChartHappiness':[initialData.lineChart['happinessVal']],
             'averageLineChartCalm':[initialData.lineChart['calmVal']],
             'totalHappinessByDay':[initialData.lineChart['happinessVal']],    
@@ -59,16 +58,26 @@ def updateCommunityPlotData(newData:PlotDataSubmission):
     i=0
     currentCommunityData = plotData.find_one({'community':True})
     clickCount=currentCommunityData['clickCount']+1
-    if currentCommunityData['dayList'][-1] != datetime.now().replace(hour=0,minute=0,second=0,microsecond=0):
+    if currentCommunityData['dayList'][-1].day != datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).day:
             createNewDay(listOfValues)
     else:
         index=len(currentCommunityData['dayList'])-1
+        del currentCommunityData['_id']
         for key,value in currentCommunityData.items():
+            if key[5]=="M":
+                for innerKey,innerValue in value[index].items():                
+                    plotData.update_one(
+                        {'community':True},
+                        {'$set':
+                                {key+'.'+str(index)+'.'+innerKey:(innerValue+listOfValues[i])/clickCount}
+                        }
+                    )
+                i+=1
             if key[0]=="a":
                 plotData.update_one(
                     {'community':True},
                     {'$set':
-                        {key+"."+str(index):((value[-1]+listOfValues[i])/clickCount)}
+                        {key+"."+str(index):((value[index]+listOfValues[i])/clickCount)}
                     }
                 )
                 i+=1
@@ -99,10 +108,9 @@ def createNewDay(listOfValues:list):
         {'$push':
             {
             'dayList':datetime.now().replace(hour=0,minute=0,second=0),
-            'averages.clickMapHappinessAverage':listOfValues[0],
-            'averages.clickMapCalmAverage':listOfValues[1],
-            'averages.lineChartHappinessAverage':listOfValues[2],
-            'averages.lineChartCalmAverage':listOfValues[3],
+            'clickMap':{'happinessVal':listOfValues[0],'calmVal':listOfValues[1]},
+            'averageLineChartHappiness':listOfValues[2],
+            'averageLineChartCalm':listOfValues[3],
             'totalHappinessByDay':listOfValues[2],
             'totalCalmByDay':listOfValues[3],
             }
