@@ -40,7 +40,6 @@ export default {
       },
       postColorChange(){
         const changeDataInfo=this.$store.getters['currentMoodColors/packageChangeData']
-        console.log(changeDataInfo)
         PlotFunctions.post(changeDataInfo,'plot/changecolors')
         this.$store.commit('currentMoodColors/togglePanel')
         this.$store.commit('currentMoodColors/changeLayer')

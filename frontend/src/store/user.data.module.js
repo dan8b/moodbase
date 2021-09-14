@@ -45,8 +45,8 @@ export const userData = {
     },
     mutations:{
         createClickArray(state,arrayData) {
-            state.lineChartArrays.happinessVals=arrayData.lineChartHappinessVals;
-            state.lineChartArrays.calmVals=arrayData.lineChartCalmVals;
+            state.lineChartArrays.happinessVals=arrayData.lineChart.lineChartHappinessVals;
+            state.lineChartArrays.calmVals=arrayData.lineChart.lineChartCalmVals;
             state.clickMapArray=arrayData.clickMapVals
             state.timestamps=arrayData.timestamp
         },
@@ -54,7 +54,7 @@ export const userData = {
         addNewClick(state,clickData){
             state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
             state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
-            state.clickMapArray.push(clickData.clickMap)    
+            state.clickMapArray.push(clickData.clickMapVals)    
        },
         
         wipeDataState(state){

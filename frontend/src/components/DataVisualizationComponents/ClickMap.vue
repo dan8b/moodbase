@@ -48,9 +48,9 @@ export default {
     },
     computed: {
       coordinateArray() {
-        return this.$store.state.userData .clickMapArray
+        return this.$store.state.userData.clickMapArray
       }
-    }
+    },
 }
 
 </script>

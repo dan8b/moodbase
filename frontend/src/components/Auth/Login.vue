@@ -19,7 +19,6 @@
 
 <script>
 import { Form, Field } from "vee-validate";
-// import {authHeader} from '@/services/auth-header';
 import * as yup from "yup";
 export default {
   name: "Login",
@@ -55,13 +54,13 @@ export default {
       .then(
         async response =>{
         if (Object.keys(response)[0]==="access_token"){
-         await this.$store.dispatch('userData/retrieveClickData')
-         await this.$store.dispatch('currentMoodColors/createInitialState')
-         await this.$store.dispatch('currentMoodColors/getListOfChoices')
-         this.$router.push('/home')
+          await this.$store.dispatch('userData/retrieveClickData')
+          await this.$store.dispatch('currentMoodColors/createInitialState')
+          await this.$store.dispatch('currentMoodColors/getListOfChoices')
+          this.$router.push('/home')
         }
         else {
-          alert(new Error(response.detail))
+          alert(new Error('Login failed'))
         }
         })
     }

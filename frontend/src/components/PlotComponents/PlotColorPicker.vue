@@ -33,13 +33,10 @@ export default {
     },
     methods: {
         togglePanel(variable){
-            if (this.currentVariable===variable) {
-                this.$store.commit('currentMoodColors/togglePanel',variable)
-            }
-            else{
-                this.$store.commit('currentMoodColors/togglePanel',variable)
+            if (this.currentVariable!=variable) {
                 this.currentVariable=variable
             }
+            this.$store.commit('currentMoodColors/togglePanel',variable)
         }
     }
 

@@ -14,9 +14,12 @@ export default {
     const router=useRouter()
     await AuthService.activate(props.token)
     .then(res=>res.json())
-    .then(data=>
+    .then(async data=>
       {
         store.dispatch('auth/activate',data)
+        store.dispatch('userData/retrieveClickData')
+        store.dispatch('currentMoodColors/createInitialState')
+        store.dispatch('currentMoodColors/getListOfChoices')
         router.push('/home')
       })
   }

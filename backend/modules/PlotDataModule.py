@@ -1,4 +1,3 @@
-from backend.schemas.ColorSchema import createUserColorProfile, updateUserColorProfile
 from db import plotData, colorData
 from models.plotModel import PlotDataSubmission, UserColorChange
 from schemas import PlotSchema, ColorSchema
@@ -6,23 +5,30 @@ import os
 
 def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
-    if plotData.find({'user':user}).limit(1).count()<1:
-        PlotSchema.createUserPlotDataDocument(user,data)
-    else:
-        PlotSchema.updateUserPlotDataDocument(user,data)
+    PlotSchema.updateUserPlotDataDocument(user,data)
     PlotSchema.updateCommunityPlotData(data)
+    ColorSchema.getPopularColors()
     return True
+
+def getClickData(user:str):
+    if plotData.find({'user':user}).limit(1).count()<1:
+        clickData=PlotSchema.createUserPlotDataDocument(user)
+    else:
+        clickData=plotData.find_one({'user':user})
+    del clickData['_id']
+    return clickData
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
         return ColorSchema.createUserColorProfile(user)
     else:
         colorProfile = colorData.find_one({'user':user})
-        return colorProfile['colors']
+        del colorProfile['_id']
+        return colorProfile
 
 def changeUserColor(user:str,changeData:UserColorChange):
     try:
-        updateUserColorProfile(user,changeData)
+        ColorSchema.updateUserColorProfile(user,changeData)
         return {'Message':'Color change successful'}
     except:
         return {'beavis':'buttheads'}

@@ -14,6 +14,9 @@ export const auth = {
         response=>response.json())
       .then(
         data => {
+          if ('detail' in data){
+            return "Failed"
+          }
           commit('loginSuccess',data)
           return data
                   }
@@ -40,7 +43,6 @@ export const auth = {
   mutations: {
     loginSuccess(state, tokenData) {
       state.loggedIn = true;
-      console.log(tokenData)
       window.localStorage.setItem('accessToken', tokenData.access_token);
       window.localStorage.setItem('refreshToken', tokenData.refresh_token);
     },

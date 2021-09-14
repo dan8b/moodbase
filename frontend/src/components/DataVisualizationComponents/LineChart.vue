@@ -38,9 +38,8 @@ export default{
                 }}
     }
   },
-  mounted() {
-
-        this.chartDataObj=this.$store.getters['userData/returnChartData']   
+  async mounted() {
+        this.chartDataObj=await this.$store.getters['userData/returnChartData']   
         this.renderChart(this.chartDataObj,this.optionsObj)
   }
 }

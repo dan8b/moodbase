@@ -1,7 +1,7 @@
 <template>
     <div class="border-2 border-gray-400 border-dashed hover:border-transparent hover:bg-white hover:shadow-xl rounded " 
     width="1000px" height="1000px">                           
-        <LineChart :width="1000" :height="1000" />
+        <LineChart :width="700" :height="700" />
     </div>
 </template>
 

@@ -22,18 +22,11 @@ def getInitialColors(user:str=Depends(gate)):
 
 @plotRoute.post('/changecolors')
 def changeColor(colorChange:UserColorChange,user:str = Depends(gate)):
-    print(colorChange)
     return plot.changeUserColor(user,colorChange)
 
 @plotRoute.get('/getclickdata')
 def getClickData(user:str = Depends(gate)):
-    try:
-        dataDict = plotData.find_one({'user':user})
-        del dataDict['_id']
-        return dataDict
-    except:
-        return HTTPException(status_code=404,detail="No plot data exists for this user")
-
+    return plot.getClickData(user)
 
 @plotRoute.get('/listofcolors')
 def sendColorList():

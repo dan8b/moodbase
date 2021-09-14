@@ -63,6 +63,7 @@ class PlotFunctions extends FetchFunctions{
         return this.get('plot/getclickdata')
         .then(res=>res.json())
         .then(data => {
+
           return data
         }
           )

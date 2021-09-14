@@ -52,7 +52,7 @@ export const currentMoodColors = {
             state.listLayer = (state.listLayer+1)%2
         },
         togglePanel(state,variable){
-            if (state.panelVisibility === false){
+            if (variable!=null && (state.panelVisibility === false || state.variableSelection!=variable)){
                 state.variableSelection=variable;
                 state.previousColor=state.colorProfile[variable]
                 state.panelVisibility=true;
