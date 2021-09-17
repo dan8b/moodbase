@@ -24,7 +24,6 @@ export default {
     methods: {
         changeColor()
         {
-            console.log("butt")
             const colorChoice={variableName:this.variableName,selectedColor:this.colorHex}
             this.$store.commit('currentMoodColors/changeColor',colorChoice);   
         },

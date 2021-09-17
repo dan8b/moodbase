@@ -18,15 +18,16 @@ const initialState={
     listLayer:0,
     currentSubset:"",
 }
+
 export const currentMoodColors = {
     namespaced: true,
     state: initialState,
     getters: {
         packageChangeData(state){
             return {
-                newColor:state.colorProfile[state.variableSelection],
-                variable:state.variableSelection
-            }
+                variable:state.variableSelection,
+                colorChange:{family:state.currentSubset,hex:state.colorProfile[state.variableSelection]}
+           }
         },
         initialColorData(state,variable){
             return state.colorProfile[variable]
@@ -56,11 +57,13 @@ export const currentMoodColors = {
                 state.variableSelection=variable;
                 state.previousColor=state.colorProfile[variable]
                 state.panelVisibility=true;
+                state.currentColorFamily=null
             }
             else{
                 state.panelVisibility=false;
                 state.previousColor="";
                 state.demoColor=null;
+                state.currentColorFamily=null;
                 state.variableSelection="";
                 state.readyForCommit=false;
             }
@@ -76,10 +79,10 @@ export const currentMoodColors = {
             state.variableSelection=variableName;
         },
         createState(state,stateData) {
-            state.colorProfile.happy=stateData.happy;
-            state.colorProfile.calm=stateData.calm;
-            state.colorProfile.anxious=stateData.anxious;
-            state.colorProfile.sad=stateData.sad;
+            state.colorProfile.happy=stateData.happy.hex;
+            state.colorProfile.calm=stateData.calm.hex;
+            state.colorProfile.anxious=stateData.anxious.hex;
+            state.colorProfile.sad=stateData.sad.hex;
             },
         changeColor(state,colorChoice) {
             state.previousColor=state.colorProfile[colorChoice.variableName]

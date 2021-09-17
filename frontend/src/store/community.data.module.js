@@ -1,15 +1,14 @@
-import FetchFunctions from '@/services/fetch.service.js'
+import PlotFunctions from '@/services/plot.functions.js'
 
 const initialState = {
-    lineChartArrays:
-        {
-            averageDailyHappiness:[],
-            averageDailyCalm:[],
-            totalDailyHappiness:[],
-            totalDailyCalm:[]
-        },
-    clickMapArray:[],
-    days:[]
+    dayList:[],
+    clickMap:[],
+    averageLineChartHappiness:[],
+    averageLineChartCalm:[],
+    totalHappinessByDay:[],
+    totalCalmByDay:[],
+    clickCount:0
+
 }
 
 export const communityData = {
@@ -19,21 +18,33 @@ export const communityData = {
         returnChartData(state){
             const dataObj=
             {
-                labels: state.timestamps.map(date => Date.parse(date)),
+                labels: state.dayList.map(date => Date.parse(date)),
                 datasets: [
                 { 
-                    data: state.lineChartArrays.happinessVals.map(val => Number(val)),
-                    label: "Happiness",
+                    data: state.averageLineChartHappiness.map(val => Number(val)),
+                    label: "Average happiness/sadness",
                     borderColor: "#3e95cd",
                     fill: false
                 },
 
-                 { 
-                    data: state.lineChartArrays.calmVals.map(val=> Number(val)),
-                    label: "Calm/anxiety",
+                { 
+                    data: state.averageLineChartCalm.map(val=> Number(val)),
+                    label: "average calm/anxiety",
                     borderColor: "#FF5733",
                     fill: false
-                }
+                },
+                { 
+                    data: state.totalHappinessByDay.map(val=> Number(val)),
+                    label: "total happiness/sadness",
+                    borderColor: "#25BD65",
+                    fill: false
+                },
+                { 
+                    data: state.totalCalmByDay.map(val=> Number(val)),
+                    label: "total calm/anxiety",
+                    borderColor: "#904985",
+                    fill: false
+                },
             ]
             }
             return dataObj
@@ -41,29 +52,28 @@ export const communityData = {
     },
     actions: {
         
-        async retrieveClickData( { commit }){
-            const dataToCommit = await FetchFunctions.post(true,'/retrieveclickdata')
+        async communityClickData( { commit }){
+            const dataToCommit = await PlotFunctions.get('plot/communityclickdata').then(response=>response.json())
             commit('createClickArray', dataToCommit)
         }
     },
     mutations:{
         createClickArray(state,arrayData) {
-            state.lineChartArrays.happinessVals=arrayData.lineChart.lineChartHappinessVals;
-            state.lineChartArrays.calmVals=arrayData.lineChart.lineChartCalmVals;
-            state.clickMapArray=arrayData.clickMapVals
-            state.timestamps=arrayData.timestamp
+            Object.keys(arrayData).forEach(key =>{
+                state[key]=arrayData[key]
+            })
         },
         
         addNewClick(state,clickData){
-            console.log(clickData)
             state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
             state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
             state.clickMapArray.push(clickData.clickMap)    
        },
         
         wipeDataState(state){
-            Object.keys(initialState).forEach(key => { state[key]=initialState[key]})
-
+            Object.keys(initialState).forEach(key => {
+                state[key]=initialState[key]
+            })
         }
 
     }

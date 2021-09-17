@@ -72,7 +72,7 @@ def updateCommunityPlotData(newData:PlotDataSubmission):
                                 {key+'.'+str(index)+'.'+innerKey:(innerValue+listOfValues[i])/clickCount}
                         }
                     )
-                i+=1
+                    i+=1
             if key[0]=="a":
                 plotData.update_one(
                     {'community':True},

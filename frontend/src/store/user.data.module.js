@@ -14,6 +14,7 @@ export const userData = {
     namespaced:true,
     state:initialState,
     getters: {
+        // refactoring possible here
         returnMostRecent(state){
             const recentHappy = state.lineChartArrays.happinessVals.pop()
             state.lineChartArrays.happinessVals.push(recentHappy)
@@ -57,7 +58,7 @@ export const userData = {
     actions: {
         
         async retrieveClickData( { commit }){
-            const dataToCommit = await PlotFunctions.get('plot/retrieveclickdata/false').then(response=>response.json())
+            const dataToCommit = await PlotFunctions.get('plot/userclickdata').then(response=>response.json())
             commit('createClickArray', dataToCommit)
         }
     },
@@ -70,7 +71,6 @@ export const userData = {
         },
         
         addNewClick(state,clickData){
-            console.log(clickData)
             state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
             state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
             state.clickMapArray.push(clickData.clickMap)    

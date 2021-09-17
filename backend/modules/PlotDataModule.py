@@ -23,6 +23,7 @@ def getUserClickData(user:str):
 def getCommunityClickData():
     communityData = plotData.find_one({'community':True})
     del communityData['_id']
+    del communityData['community']
     return communityData
 
 def getUserColors(user:str):
@@ -41,10 +42,10 @@ def changeUserColor(user:str,changeData:UserColorChange):
         return {'beavis':'buttheads'}
 
 def getColorList():
-    currentCategory='blacks'
-    colors={'blacks':[],'grays':[],'blues':[],'greens':[],
-            'yellows':[],'browns':[],'oranges':[],'reds':[],
-            'pinks':[],'purples':[],'whites':[]}
+    currentCategory='black'
+    colors={'black':[],'gray':[],'blue':[],'green':[],
+            'yellow':[],'brown':[],'orange':[],'red':[],
+            'pink':[],'purple':[],'white':[]}
     with open(os.path.join(os.path.dirname(__file__),"ColorCombinations.csv")) as colorList:
         for color in colorList:
             readCSV=color.split(',')
@@ -53,3 +54,9 @@ def getColorList():
             else:
                 colors[currentCategory].append({'colorHex':readCSV[0],'colorName':readCSV[1].strip()})
     return colors
+
+def getPopularColors():
+    return ColorSchema.getPopularColors()
+
+def getCommunityColors():
+    return ColorSchema.getColorAggregates()

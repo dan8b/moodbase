@@ -1,8 +1,9 @@
 <template>
- <p>
-     <span :style="{'color':emotionColor.color}"> {{emotionSeverity}} {{emotionStatus}} </span>
+     <div :style="{'background-color':backgroundColor.bg}">
+          <span :style="{'color':emotionColor.color}"> {{emotionSeverity}} {{emotionStatus}} </span> 
+    </div>
      
-</p>
+
 </template>
 
 <script>
@@ -14,10 +15,12 @@ export default {
     {
         emotionStatus:String,
         emotionSeverity:String,
+        readable:Boolean
     },
     setup(props) {
         const store = useStore()
         var emotionColor=reactive({color:""})
+        var backgroundColor=reactive({bg:""})
         const severityMapping= {
                 barely:.07,
                 slightly:.14,
@@ -28,7 +31,9 @@ export default {
                 extremely:.84,
                 incredibly:.98,
             }       
+        // todo: make sense of
         function hexToRgbA(hex,opacity){
+            if (props.readable ===true){ opacity=1}
             var c;
             if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
                 c= hex.substring(1).split('');
@@ -36,20 +41,35 @@ export default {
                     c= [c[0], c[0], c[1], c[1], c[2], c[2]];
                 }
                 c= '0x'+c.join('');
+                 
                 return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
             }
             throw new Error('Bad Hex');
         }
+        function invertColor(rgbColor){
+            var invertedString='rgba('
+            rgbColor.forEach(colorValue =>
+            {
+                colorValue=255-colorValue
+                invertedString=invertedString+colorValue+','
+            })
+            invertedString=invertedString.slice(0,-1)
+            invertedString=invertedString+')'
+            return invertedString
+        }
+        
         const emotionColorHex=store.state.currentMoodColors.colorProfile[props.emotionStatus]
         const opacityLevel=severityMapping[props.emotionSeverity]
         emotionColor.color=hexToRgbA(emotionColorHex,opacityLevel)
+        backgroundColor.bg=invertColor(emotionColor.color.split(/[(|,|)]/g).slice(1,4))
 
         onUpdated(() =>{
             const emotionColorHex=store.state.currentMoodColors.colorProfile[props.emotionStatus]
             const opacityLevel=severityMapping[props.emotionSeverity]
             emotionColor.color=hexToRgbA(emotionColorHex,opacityLevel)
+            backgroundColor.bg=invertColor(emotionColor.color.split(/[(|,|)]/g).slice(1,4))
         })
-        return {emotionColor}
+        return {backgroundColor, emotionColor}
     }
 
 }

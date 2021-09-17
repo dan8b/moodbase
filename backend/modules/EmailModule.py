@@ -26,7 +26,7 @@ mailer = ConnectionConfig(
     MAIL_TLS=True,
     MAIL_SSL=False,
     USE_CREDENTIALS=True,
-    # TEMPLATE_FOLDER=Path(__file__).parent.parent / "templates"
+    TEMPLATE_FOLDER=Path(__file__).parent.parent / "templates"
 )
 
 # mail functions

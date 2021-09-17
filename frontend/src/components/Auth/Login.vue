@@ -55,8 +55,10 @@ export default {
         async response =>{
         if (Object.keys(response)[0]==="access_token"){
           await this.$store.dispatch('userData/retrieveClickData')
+          await this.$store.dispatch('communityData/communityClickData')
           await this.$store.dispatch('currentMoodColors/createInitialState')
           await this.$store.dispatch('currentMoodColors/getListOfChoices')
+          await this.$store.dispatch('communityColors/getPopularityData')
           this.$router.push('/home')
         }
         else {

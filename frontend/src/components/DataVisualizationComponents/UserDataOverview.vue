@@ -1,11 +1,17 @@
 <template>
-  <div> Last I heard, you were feeling <ClassificationText 
+  <div class="flex flex-row space-x-2"> 
+    <p> Last I heard, you were feeling </p>
+    <ClassificationText 
+          :readable="true"
           :emotionSeverity="currentMood.calm.severity"
           :emotionStatus="currentMood.calm.mood"
-        /> and <ClassificationText 
+        /> 
+        <p>        and </p>
+        <ClassificationText 
+          :readable="true"
           :emotionSeverity="currentMood.happiness.severity"
           :emotionStatus="currentMood.happiness.mood"
-        />.
+        />
   </div>
 </template>
 
@@ -18,7 +24,7 @@ export default {
         currentMood()
         {
             return this.$store.getters['userData/returnMostRecent'];
-        }
+        },
     },
 }
 </script>

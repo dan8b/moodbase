@@ -5,8 +5,8 @@
 
   <defs>
     <linearGradient id="linear-gradientAnxious" x1="0.5" y1="1" x2="0.5" y2="-0.045" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#d33800"/>
-      <stop offset="1" stop-color="#d33800" stop-opacity="0.051"/>
+      <stop offset="0" :stop-color="boxColors.anxious"/>
+      <stop offset="1" :stop-color="boxColors.anxious" stop-opacity="0.051"/>
     </linearGradient>
     <linearGradient id="linear-gradientSad" y1="0.517" x2="1.071" y2="0.53" gradientUnits="objectBoundingBox">
       <stop offset="0" :stop-color="boxColors.sad"/>
@@ -59,14 +59,15 @@
 
 
 <svg v-else-if="quadrant===3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
-  <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientSad)" style="mix-blend-mode: color;isolation: isolate">
-    <rect width="300" height="300" stroke="none"/>
-    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
-  </g>
   <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientAnxious)" style="mix-blend-mode: darken;isolation: isolate">
     <rect width="300" height="300" stroke="none"/>
     <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
   </g>
+  <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientSad)" style="mix-blend-mode: color;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
+
 
 </svg>
 
@@ -75,14 +76,15 @@
 <!-- quadrant 4 -->
 
 <svg v-else-if="quadrant===4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 300 300">
+  <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientAnxious)" style="mix-blend-mode: color;isolation: isolate">
+    <rect width="300" height="300" stroke="none"/>
+    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
+  </g>
   <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientHappy)" style="mix-blend-mode: darken;isolation: isolate">
     <rect width="300" height="300" stroke="none"/>
     <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
   </g>
-  <g id="Rectangle_14" data-name="Rectangle 14" stroke="#707070" stroke-width="1" fill="url(#linear-gradientAnxious)" style="mix-blend-mode: darken;isolation: isolate">
-    <rect width="300" height="300" stroke="none"/>
-    <rect x="0.5" y="0.5" width="299" height="299" fill="none"/>
-  </g>
+
 </svg>
 </svg>
 </template>

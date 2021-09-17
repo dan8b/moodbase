@@ -1,9 +1,10 @@
 <template>
 <div class="m-4 text-xl" id="panel">
+        <div v-if="listLayer===0" @click="exitPanel"> Back </div>
 
     <ul  v-for="(colorCategory,i) in listOptions" :key="i" >
-        <div :style="{'color':nameToColor(i)}" @click="enterSubsetLayer(i)" v-if="listLayer===0">  {{ i }} </div>
-        <ColorPanelSubset v-if="listLayer===1 && currentSubset===i" :subset="colorCategory" />
+        <div :style="{'color':i}" @click="enterSubsetLayer(i)" v-if="listLayer===0">  {{ i }} </div>
+        <ColorPanelSubset @click="setColorFamily(colorCategory)" v-if="listLayer===1 && currentSubset===i" :subset="colorCategory" />
     </ul>
  </div>
 </template>
@@ -26,13 +27,13 @@ export default {
 
     },
     methods: {
+        exitPanel(){
+            this.$store.commit('currentMoodColors/togglePanel')
+        },
         enterSubsetLayer(subsetName){
             this.$store.commit('currentMoodColors/setSubset',subsetName)
             this.$store.commit('currentMoodColors/changeLayer')
         },
-        nameToColor(categoryName){
-            return categoryName.slice(0,-1)
-        }
     }
 
 }

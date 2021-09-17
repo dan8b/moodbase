@@ -34,14 +34,11 @@ class UserPlotData(BaseModel):
     dictWithLists:dict
 
 class UserColorChoices(BaseModel):
-    happyColor:str
-    calmColor:str
-    sadColor:str
-    anxiousColor:str
+    happyColor:dict
+    calmColor:dict
+    sadColor:dict
+    anxiousColor:dict
 
 class UserColorChange(BaseModel):
-    newColor:str
+    colorChange:dict
     variable:str
-
-class GenericBoolean(BaseModel):
-    tf:bool

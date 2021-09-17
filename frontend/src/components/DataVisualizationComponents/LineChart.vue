@@ -3,9 +3,11 @@ import { Line } from 'vue3-chart-v2'
 
 export default{
     extends: Line,
+    props:{
+        chartDataObj:Object
+    },
     data() {
         return { 
-        chartDataObj:{},
         optionsObj:{
                 responsive:false,
     
@@ -16,8 +18,9 @@ export default{
 
                 scales: {
                     yAxes: [{
+                        gridLines: {display: false},
                         scaleLabel: {
-                            display:true,
+                            display:false,
                             labelString: "variable recorded",
                         },
                         ticks: {
@@ -28,8 +31,10 @@ export default{
                         }
                     }],
                     xAxes: [{
+                        display:false,
+                        gridLines: { display: false},
                         scaleLabel:{ 
-                            display:true,
+                            display:false,
                             labelString: "time recorded",
                         },
                         type: 'time',
@@ -39,8 +44,7 @@ export default{
     }
   },
   async mounted() {
-        this.chartDataObj=await this.$store.getters['userData/returnChartData']   
-        this.renderChart(this.chartDataObj,this.optionsObj)
+    this.renderChart(this.chartDataObj,this.optionsObj)
   }
 }
 </script>

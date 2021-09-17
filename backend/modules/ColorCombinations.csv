@@ -1,4 +1,4 @@
-Category,blacks
+Category,black
 #000000,Black (W3C)
 #0C090A,Night
 #34282C,Charcoal
@@ -8,7 +8,7 @@ Category,blacks
 #3D3C3A,Iridium
 #463E3F,Black Eel
 #4C4646,Black Cow
-Category,grays
+Category,gray
 #504A4B,Gray Wolf
 #565051,Vampire Gray
 #52595D,Iron Gray
@@ -34,7 +34,7 @@ Category,grays
 #DCDCDC,Gainsboro (W3C)
 #E5E4E2,Platinum
 #BCC6CC,Metallic Silver
-Category,blues
+Category,blue
 #98AFC7,Blue Gray
 #838996,Roman Silver
 #778899,LightSlateGray or LightSlateGrey (W3C)
@@ -131,7 +131,7 @@ Category,blues
 #77BFC7,Blue Hosta
 #92C7C7,Cyan Opaque
 #78C7C7,Northern Lights Blue
-Category,greens
+Category,green
 #7BCCB5,Blue Green
 #66CDAA,MediumAquaMarine (W3C)
 #AAF0D1,Magic Mint
@@ -244,7 +244,7 @@ Category,greens
 #DBF9DB,Light Rose Green
 #F0FFF0,HoneyDew (W3C)
 #F5FFFA,MintCream (W3C)
-Category,yellows
+Category,yellow
 #FFFACD,LemonChiffon (W3C)
 #FFFFC2,Parchment
 #FFFFCC,Cream
@@ -312,7 +312,7 @@ Category,yellows
 #E8A317,School Bus Yellow
 #DAA520,GoldenRod (W3C)
 #D4A017,Orange Gold
-Category,browns
+Category,brown
 #B8860B,DarkGoldenRod (W3C)
 #C58917,Cinnamon
 #CD853F,Peru (W3C)
@@ -348,7 +348,7 @@ Category,browns
 #954535,Chestnut
 #C34A2C,Chestnut Red
 #C04000,Mahogany
-Category,oranges
+Category,orange
 #C35817,Red Fox
 #B86500,Dark Bisque
 #B5651D,Light Brown
@@ -384,7 +384,7 @@ Category,oranges
 #FF6347,Tomato (W3C)
 #E55B3C,Shocking Orange
 #FF4500,OrangeRed (W3C)
-Category,reds
+Category,red
 #FF0000,Red (W3C)
 #FF2400,Scarlet
 #F62217,Ruby Red
@@ -430,7 +430,7 @@ Category,reds
 #F8B88B,Pastel Orange
 #EDC9AF,Desert Sand
 #FFDDCA,Unbleached Silk
-Category,pinks
+Category,pink
 #FDD7E4,Pig Pink
 #FFDFDD,Pink Bubble Gum
 #FFE4E1,MistyRose (W3C)
@@ -477,7 +477,7 @@ Category,pinks
 #EE82EE,Violet (W3C)
 #F433FF,Bright Neon Pink
 #FF00FF,Fuchsia or Magenta (W3C)
-Category,purples
+Category,purple
 #E238EC,Crimson Purple
 #D462FF,Heliotrope Purple
 #C45AEC,Tyrian Purple
@@ -542,7 +542,7 @@ Category,purples
 #E9CFEC,Periwinkle
 #FCDFFF,Cotton Candy
 #EBDDE2,Lavender Pinocchio
-Category,whites
+Category,white
 #F8F0E3,Off White
 #FFF0F5,LavenderBlush (W3C)
 #FDEEF4,Pearl
