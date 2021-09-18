@@ -1,4 +1,4 @@
-import PlotFunctions from '@/services/plot.functions.js'
+import ColorFunctions from '@/services/color.functions.js'
 
 const initialState={
     colorProfile: {
@@ -35,14 +35,14 @@ export const currentMoodColors = {
     },
     actions: {
         async createInitialState( {commit} ) {
-            await PlotFunctions.post({},'plot/usercolorchoice')
+            await ColorFunctions.post({},'plot/usercolorchoice')
             .then(res=>res.json())
             .then(data => {
                 commit('createState',data)
             })
         },
         async getListOfChoices( {commit} ){
-            await PlotFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList',data))
+            await ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList',data))
             }
     },
     mutations: {

@@ -53,9 +53,6 @@ export default {
       togglePanel(variableToChange){
         this.$store.commit('currentMoodColors/togglePanel',variableToChange)
         this.$store.commit('currentMoodColors/setVariableToChange',variableToChange);
-        if (this.showPanel===false) {
-          this.$store.state.currentMoodColors.panelVisibility=true
-        }
       },
     },
 

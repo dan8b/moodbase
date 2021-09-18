@@ -1,11 +1,9 @@
 # from routes.auth import gate
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Security
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 from models.plotModel import PlotDataSubmission,UserPlotData,UserColorChange
-from modules.AuthenticationModule import getUserFromToken, gate
+from modules.AuthenticationModule import gate
 import modules.PlotDataModule as plot
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from db import plotData
 
 plotRoute=APIRouter(
     prefix="/api/plot",
@@ -40,6 +38,6 @@ def sendColorList():
 def getPopularColors():
     return plot.getPopularColors()
 
-@plotRoute.get('/communitycolors')
-def getCommunityColors():
-    return plot.getCommunityColors()
+@plotRoute.get('/communitycolors/{variable}')
+def getCommunityColors(variable:str):
+    return plot.getCommunityColors(variable)

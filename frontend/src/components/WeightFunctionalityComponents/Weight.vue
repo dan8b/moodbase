@@ -19,7 +19,7 @@ export default {
 .btn{
   display: inline-block;
   text-decoration: none;
-  background: #87befd;
+  background: black;
   color: #FFF;
   width: 120px;
   height: 120px;
@@ -32,6 +32,6 @@ export default {
 }
 
 .btn:hover{
-    background: #668ad8;
+    background: black;
 }
 </style>

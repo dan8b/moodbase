@@ -16,8 +16,7 @@ def getUserClickData(user:str):
     if plotData.find({'user':user}).limit(1).count()<1:
         clickData=PlotSchema.createUserPlotDataDocument(user)
     else:
-        clickData=plotData.find_one({'user':user})
-    del clickData['_id']
+        clickData=plotData.find_one({'user':user},{'_id':0})
     return clickData
 
 def getCommunityClickData():
@@ -30,8 +29,7 @@ def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
         return ColorSchema.createUserColorProfile(user)
     else:
-        colorProfile = colorData.find_one({'user':user})
-        del colorProfile['_id']
+        colorProfile = colorData.find_one({'user':user},{'_id':0})
         return colorProfile
 
 def changeUserColor(user:str,changeData:UserColorChange):
@@ -58,5 +56,5 @@ def getColorList():
 def getPopularColors():
     return ColorSchema.getPopularColors()
 
-def getCommunityColors():
-    return ColorSchema.getColorAggregates()
+def getCommunityColors(emotionVar:str):
+    return ColorSchema.getColorAggregates(emotionVar)

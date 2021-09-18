@@ -24,7 +24,6 @@ export default {
         })
         watch(() => _.cloneDeep(currentState.vars),() => {
           if(currentState.vars.plot.show===true){ 
-            console.log("show the plot")
             store.commit('visToShow/hideNotPlot')
           }
           else {

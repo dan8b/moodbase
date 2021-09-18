@@ -1,11 +1,10 @@
 <template>
-<div>
+<div class="flex flex-row space-x-4">
 
-<ul id="array-with-index">
-  <li v-for="(weight, name) in weightButtons" :key="name">
-      <Weight @mousedown="getStartTime" @mouseup="updateWeight(weight)" :buttonName=weight.name  :buttonValue=weight.value />
-  </li>
-</ul>
+  <ul v-for="(weight, name) in weightButtons" :key="name">
+      <Weight @mousedown="getStartTime($event,weight)" @contextmenu.prevent @mouseup="updateWeight(weight)" :buttonName=weight.name  :buttonValue=weight.value />
+  </ul>
+
 
 </div>
 
@@ -13,8 +12,8 @@
 </template>
 
 <script>
+import WeightFunctions from '@/services/weight.functions.js'
 import Weight from '@/components/WeightFunctionalityComponents/Weight.vue'
-import { useStore } from 'vuex'
 import { reactive } from 'vue'
 export default {
     name:'Weights',
@@ -22,49 +21,32 @@ export default {
     data () {
         return {
             start:0,
-            end:0,
-            delta:0
+            interval:null
         }
     },
     methods: {
-        getStartTime() {
-            this.start=new Date();
+        getStartTime(e,weight) {
+            this.start=weight.value
+            if (e.button===0){ this.interval=window.setInterval(function() {weight.value+=1},1000) }
+            else { this.interval=window.setInterval(function() {weight.value-=1},1000) }
         },
         updateWeight(weight) {
-            this.end=new Date();
-            this.delta=this.end-this.start;
-            weight.value+=this.delta;
-            console.log(this.uid)
-            fetch('http://localhost:5000/api/fileweight', {
-            method: 'POST',  
-            mode: 'cors',  
-            headers: { 'Content-Type': 'application/json', }, 
-            body:JSON.stringify({"uid":this.uid,'updateVal':this.delta,'weight':weight.name})
-        })
-        },
-        },
+            window.clearInterval(this.interval)
+            WeightFunctions.post({delta:(weight.value-this.start),name:weight.name,value:weight.value},'allot/updateweightdata')
+        }
+    },
     setup() {
-        const store=useStore();
-        const token=store.state.auth.user.accessToken;
-        const uid=store.state.auth.user.id;
         const weightButtons=reactive( [] );
-        fetch('http://localhost:5000/api/weightdata', {
-            method: 'POST',  
-            mode: 'cors',  
-            headers: { 'Authorization': 'Basic '+token, 'Content-Type': 'application/json', }, 
-        body:JSON.stringify({"uid":uid},)})
+        WeightFunctions.get('allot/retrieveweightdata')
         .then(res=>res.json())
         .then(data => {
-            for (let weight of data){
-                weightButtons.push(reactive({'name':weight.name,'value':weight.value}))
-            }
-         })
-            return {weightButtons, uid}
-
-       },
-}
-    // // },   
-    // },
+            for (let [key,value] of Object.entries(data)){
+                weightButtons.push(reactive({'name':key,'value':value}))
+                }
+            })
+        return {weightButtons}
+       }
+    }
 </script>
 
 <style>
