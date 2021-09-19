@@ -16,7 +16,6 @@ export default class FetchFunctions {
         })
     }
     async post(payload, route){
-        console.log(payload)
         if (unprotectedRoutes.includes(route)===false){
             await this.updateToken();
         }

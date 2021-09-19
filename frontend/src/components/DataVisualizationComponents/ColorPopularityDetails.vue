@@ -1,13 +1,13 @@
 <template>
     <div class="py-4" >        
         <ul  v-for="(variable,i) in popularityDetails" :key="i" >
+            <div class="border-black border-4 border-solid">{{i}}</div>  
+            <div :style="{'color':variable}" class="border-black border-4 border-solid">{{variable}}</div>
             <div class="border-black border-4 border-solid flex flex-row w-128  justify-between ">
                 <ul v-for="(subVariable,j) in variable" :key="j">
-                    <div class="border-black border-4 border-solid">{{subVariable}}</div>
-                    <div class="border-black border-4 border-solid">{{j}}</div>  
-                    
-                <!-- <div class="w-32" :style="{'background-color':popularityDetails._id}"> </div> -->
-                <!-- <div class="w-32">{{dataPair.popularityCount}}</div> -->
+                    <div :style="{'color':subVariable.value}" class="border-black border-4 border-solid">
+                        {{subVariable.value}}
+                    </div>
                 </ul>
             </div>
         </ul> 
@@ -23,10 +23,19 @@ export default {
             popularityDetails:[]
         }
     },
+    computed: {
+        currentVariable() {
+            return this.$store.state.currentMoodColors.variableSelection
+        }
+    },
     async beforeCreate(){
         this.popularityDetails = 
         await ColorFunctions.get('plot/communitycolors/'+this.$store.state.currentMoodColors.variableSelection).then(r=>r.json())
-}
+    },
+    async updated(){
+        this.popularityDetails = 
+        await ColorFunctions.get('plot/communitycolors/'+this.$store.state.currentMoodColors.variableSelection).then(r=>r.json())
+    }
 }
 </script>
 

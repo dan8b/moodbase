@@ -17,37 +17,31 @@ def updateUserColorProfile(user:str,newColor:UserColorChange):
     return True
 
 def getColorAggregates(*args):
-    colorAggData={'happy':{'family':[],'hex':[]},'sad':{'family':[],'hex':[]},
-                 'calm':{'family':[],'hex':[]},'anxious':{'family':[],'hex':[]}}
+    colorAggData={}
     for variable in ['family','hex']:
         if args:
-            popularColorPipeline =[
-                    {
-                        '$sortByCount':'$'+args[0]+"."+variable
-                    },
-                    {
-                        '$project':{'_id':0,'value':'$_id','count':1}
-                    },
-                ]
-            colorAggData[args[0]][variable]=list(colorData.aggregate(popularColorPipeline))
+            colorAggData.setdefault(variable,list(colorData.aggregate(createPopularityPipeline(args[0],variable))))
         else:
             for emotion in ['happy','sad','calm','anxious']:
-                popularColorPipeline = [
-                        {
-                            '$sortByCount':'$'+emotion+"."+variable
-                        },
-                        {
-                            '$project':{'_id':0,'value':'$_id','count':1}
-                        },
-                    ]
-                colorAggData[emotion][variable]=list(colorData.aggregate(popularColorPipeline))
+                colorAggData.setdefault(emotion,{}).setdefault(variable,list(colorData.aggregate(createPopularityPipeline(emotion,variable))))
     return colorAggData
+
+def createPopularityPipeline(emotion:str,variable:str):
+    pipeline=[
+                {
+                    '$sortByCount':'$'+emotion+"."+variable
+                },
+                {
+                    '$project':{'_id':0,'value':'$_id','count':1}
+                },
+        ]
+    return pipeline
 
 def getPopularColors():
     popularDict={'happy':{},'sad':{},'calm':{},'anxious':{}}
     for emotion, value in getColorAggregates().items():
         popularDict[emotion]['mostPopularFamily']=value['family'][0]['value']
         popularDict[emotion]['popularityCount']=value['family'][0]['count']
-        if 'hex' in value.keys() and value['hex'][0]['count']>2:
+        if value['hex'][0]['count']>2:
             popularDict[emotion]['mostPopularHex']=value['hex'][0]
     return popularDict

@@ -1,8 +1,11 @@
 <template>
 
-    <ColorPopularityDetails v-if="panelVisibility===true" />
 
 <div class="px-16 flex flex-col ">
+    <div v-if="popularityPanel===true" class=" py-16 flex flex-row space-x-24">
+        <ColorPopularityDetails  />
+        <div @click="togglePopularityPanel">Hide </div>
+    </div>
     <div  class=" py-16 flex flex-row space-x-24">
         <UserDataOverview />
         <CommunityDataOverview />
@@ -35,14 +38,17 @@ export default {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']
         },
-        panelVisibility() {
-            return this.$store.state.currentMoodColors.panelVisibility
+        popularityPanel() {
+            return this.$store.state.currentMoodColors.popularityPanel
         }
     },
     methods: {
         unlockWheel(){
             this.$store.commit('wheelLock/unlockWheel')
-            }
+            },
+        togglePopularityPanel(){
+            this.$store.commit('currentMoodColors/toggleDetailPanel',null)
+        }
         },   
 
 }

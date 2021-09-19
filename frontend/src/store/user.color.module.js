@@ -17,6 +17,7 @@ const initialState={
     listOfColors:{},
     listLayer:0,
     currentSubset:"",
+    popularityPanel:false
 }
 
 export const currentMoodColors = {
@@ -46,6 +47,16 @@ export const currentMoodColors = {
             }
     },
     mutations: {
+        toggleDetailPanel(state,variable){
+            if (variable!=null && (state.popularityPanel === false || state.variableSelection!=variable)){
+                    state.variableSelection=variable
+                    state.popularityPanel=true
+                }
+            else{
+                state.variableSelection=null,
+                state.popularityPanel=false
+            }
+        },
         setSubset(state,subsetChoice){
             state.currentSubset=subsetChoice
         },

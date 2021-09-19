@@ -10,10 +10,6 @@
         
     </Form>
     <router-link to="/forgot">Forgot my password</router-link>
-
-        <!-- <div v-if="message">
-            {{ message }}
-        </div> -->
 </div>
 </template>
 
@@ -26,18 +22,7 @@ export default {
     Form,
     Field,
   },
-  data() {
-    const schema = yup.object().shape({
-      username: yup.string().required("Username is required!"),
-      password: yup.string().required("Password is required!"),
-    });
 
-    return {
-      loading: false,
-      message: "",
-      schema,
-    };
-  },
   computed: {
     loggedIn() {
       return this.$store.state.auth.loggedIn;
@@ -66,6 +51,13 @@ export default {
         })
     }
     },
+  setup() {
+    const schema = yup.object().shape({
+      username: yup.string().required("Username is required!"),
+      password: yup.string().required("Password is required!"),
+    });
+    return {schema}
+  }
 };
 </script>
 

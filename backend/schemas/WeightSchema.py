@@ -9,6 +9,7 @@ def createWeightData(user:str):
         'health':{'totals':0,'daily':[0],'withinDay':[[0]]},
         'work/school':{'totals':0,'daily':[0],'withinDay':[[0]]},
         'relationships':{'totals':0,'daily':[0],'withinDay':[[0]]},
+        'spirituality/faith':{'totals':0,'daily':[0],'withinDay':[[0]]},        
         'days':[datetime.today()]
     }
     weightData.insert_one(newWeightData)
@@ -51,7 +52,7 @@ def createNewDay(user:str,buttonNames:list):
                     '$push':
                         {
                             name+'.withinDay':[0],
-                            name+'.daily.':0
+                            name+'.daily':0
                         }
                 }
             )
@@ -65,3 +66,16 @@ def createNewDay(user:str,buttonNames:list):
                 }
             )
     return newDayNewButtons
+
+def createNewButton(name:str,user:str):
+    weightData.update_one({'user':user},
+        { 
+        '$set':
+            {
+                name+'.totals':0,
+                name+'.daily':[0],
+                name+'.withinDay':[[0]]
+            }
+        },
+    )    
+    return True

@@ -1,6 +1,10 @@
 <template>
-  <button @mousedown="startTime" @mouseup="endTime" class="btn">{{buttonName}} : {{buttonValue}}</button>
-
+<div class="bg-black hover:bg-red-700 text-white text-xl px-4 py-8  border rounded-full">
+  <button @mousedown="startTime" @mouseup="endTime"
+     >
+     {{buttonName}} : {{buttonValue}}
+  </button>
+</div>
 </template>
 
 <script>
@@ -16,22 +20,5 @@ export default {
 </script>
 
 <style>
-.btn{
-  display: inline-block;
-  text-decoration: none;
-  background: black;
-  color: #FFF;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  border-radius: 50%;
-  text-align: center;
-  vertical-align: middle;
-  overflow: hidden;
-  transition: .4s;
-}
 
-.btn:hover{
-    background: black;
-}
 </style>

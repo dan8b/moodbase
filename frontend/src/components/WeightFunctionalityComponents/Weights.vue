@@ -1,12 +1,18 @@
 <template>
-<div class="flex flex-row space-x-4">
+<div class="grid grid-cols-5 gap-y-10 ">
 
   <ul v-for="(weight, name) in weightButtons" :key="name">
       <Weight @mousedown="getStartTime($event,weight)" @contextmenu.prevent @mouseup="updateWeight(weight)" :buttonName=weight.name  :buttonValue=weight.value />
   </ul>
 
-
 </div>
+<br>
+    <Form :rules="newButtonRules" id="NewButton" @submit="createNewWeight">
+        <label for="newbutton"> What is weighing on you? </label>
+        <Field class="field" name="name" type="text" /><br><br>
+        <button class="border-solid border-black border-2" type="submit"> Create button </button>
+        <ErrorMessage name="Butt" />
+    </Form>
 
 
 </template>
@@ -15,13 +21,20 @@
 import WeightFunctions from '@/services/weight.functions.js'
 import Weight from '@/components/WeightFunctionalityComponents/Weight.vue'
 import { reactive } from 'vue'
+import { Form, Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
 export default {
     name:'Weights',
-    components:{Weight},
+    components:{
+        Form,
+        Field,
+        Weight,
+        ErrorMessage
+        },
     data () {
         return {
             start:0,
-            interval:null
+            interval:null,
         }
     },
     methods: {
@@ -33,9 +46,11 @@ export default {
         updateWeight(weight) {
             window.clearInterval(this.interval)
             WeightFunctions.post({delta:(weight.value-this.start),name:weight.name,value:weight.value},'allot/updateweightdata')
-        }
+        },
     },
     setup() {
+        const newButtonRules= yup.string().required("Give your weight a name!")
+
         const weightButtons=reactive( [] );
         WeightFunctions.get('allot/retrieveweightdata')
         .then(res=>res.json())
@@ -44,8 +59,13 @@ export default {
                 weightButtons.push(reactive({'name':key,'value':value}))
                 }
             })
-        return {weightButtons}
-       }
+        
+        
+        function createNewWeight(NewButton){
+            weightButtons.push(reactive({'name':NewButton.name,'value':0}))
+        }
+        return {weightButtons, newButtonRules,createNewWeight}
+    }
     }
 </script>
 

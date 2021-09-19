@@ -2,7 +2,7 @@
     <div class="py-4" > 
         <h1 class="w-52"> Right now, the community's emotions look like... </h1>
         <ul  v-for="(dataPair,emotion) in popularColorData" :key="emotion" >
-            <div @mouseover="showDetails(emotion)" class="border-black border-4 border-solid flex flex-row w-52  justify-between ">
+            <div @click="showDetails(emotion)" class="border-black border-4 border-solid flex flex-row w-52  justify-between ">
                 <div class="w-32">{{emotion}}</div>
                 <div class="w-32" :style="{'background-color':dataPair.mostPopularFamily}"> </div>
                 <div class="w-32">{{dataPair.popularityCount}}</div>
@@ -24,7 +24,7 @@ export default {
     },
       methods:{
         showDetails(emotion){
-        this.$store.commit('currentMoodColors/togglePanel',emotion)
+        this.$store.commit('currentMoodColors/toggleDetailPanel',emotion)
     }
     },
     async beforeCreate(){
