@@ -1,13 +1,14 @@
 <template>
 <div class="grid grid-cols-5 gap-y-10 ">
 
-  <ul v-for="(weight, name) in weightButtons" :key="name">
-      <Weight @mousedown="getStartTime($event,weight)" @contextmenu.prevent @mouseup="updateWeight(weight)" :buttonName=weight.name  :buttonValue=weight.value />
+  <ul v-for="(weight, i) in weightButtons" :key="i">
+      <Weight @mousedown="getStartTime($event,weight)" @contextmenu.prevent 
+      @mouseup="updateWeight(weight)" :buttonName=weight.name  :buttonValue=weight.value />
   </ul>
 
 </div>
 <br>
-    <Form :rules="newButtonRules" id="NewButton" @submit="createNewWeight">
+    <Form v-if="weightButtons.length<10" :rules="newButtonRules" id="NewButton" @submit="createNewWeight">
         <label for="newbutton"> What is weighing on you? </label>
         <Field class="field" name="name" type="text" /><br><br>
         <button class="border-solid border-black border-2" type="submit"> Create button </button>
@@ -62,7 +63,9 @@ export default {
         
         
         function createNewWeight(NewButton){
+            if (NewButton.name in weightButtons){console.log("Here")}
             weightButtons.push(reactive({'name':NewButton.name,'value':0}))
+            // WeightFunctions.post(null,'allot/createnewbutton/'+NewButton.name)
         }
         return {weightButtons, newButtonRules,createNewWeight}
     }

@@ -17,3 +17,7 @@ def updateWeightData(data:WeightData,user:str=Depends(gate)):
 def retrieveWeightData(user:str=Depends(gate)):
     return weight.retrieveWeightData(user)
     
+@weightRoute.post('/createnewbutton/{name}')
+def createNewWeight(name:str,user:str=Depends(gate)):
+    weight.createNewButton(name,user)
+    return True
