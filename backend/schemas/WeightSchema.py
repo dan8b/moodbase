@@ -80,3 +80,9 @@ def createNewButton(name:str,user:str):
     )    
     return True
 
+def wipeButt(name:str,user:str):
+    weightData.update_one(
+        {'user':user},
+        { '$unset': {name:""}}
+    )
+    return True

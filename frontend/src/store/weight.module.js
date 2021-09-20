@@ -17,9 +17,24 @@ export const butts = {
             .then(data => {
                 commit('loadInitialButts',data)
             })
+        },
+        newButt( {commit}, butt){
+            WeightFunctions.post({},'allot/createnewbutton/'+butt);
+            commit('brandNewButt',butt)
+        },
+        deleteButt( { commit }, butt){
+            WeightFunctions.post({},'allot/deletebutt/'+butt)
+            commit('deleteButt',butt)
         }
     },
     mutations:{
+        deleteButt(state,toDelete){
+            console.log(toDelete)
+            delete state.myButts[toDelete]
+        },
+        brandNewButt(state,newButt){
+            state.myButts[newButt]=0
+        },
         loadInitialButts(state,buttsToLoad){
             state.myButts=buttsToLoad
             state.numButts=Object.keys(buttsToLoad).length

@@ -22,9 +22,17 @@ export default {
             popularityDetails:{}
         }
     },
-      methods:{
+    computed:{
+        currentVariable() {
+            return this.$store.state.currentMoodColors.variableSelection
+        }
+    },
+    methods:{
         showDetails(emotion){
-        this.$store.commit('currentMoodColors/toggleDetailPanel',emotion)
+            if(this.currentVariable!=emotion){
+                this.$store.dispatch('currentMoodColors/getPopularityData',emotion)
+            }
+            this.$store.commit('currentMoodColors/toggleDetailPanel',emotion)
     }
     },
     async beforeCreate(){

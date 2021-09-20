@@ -21,3 +21,7 @@ def retrieveWeightData(user:str=Depends(gate)):
 def createNewWeight(name:str,user:str=Depends(gate)):
     weight.createNewButton(name,user)
     return True
+
+@weightRoute.post('/deletebutt/{name}')
+def wipeButt(name:str,user:str=Depends(gate)):
+    return weight.wipeButt(name,user)

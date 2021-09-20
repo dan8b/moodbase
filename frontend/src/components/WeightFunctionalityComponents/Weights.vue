@@ -4,14 +4,15 @@
   <ul v-for="(buttValue, buttName) in loadButts" :key="buttName">
       <Weight @mousedown="getStartTime($event,buttValue,buttName)" @contextmenu.prevent 
       @mouseup="updateWeight(buttValue,buttName)" :buttonName=buttName  :buttonValue=buttValue />
+      <button @click="deleteButt(buttName)"> remove </button>
   </ul>
 
 </div>
 <br>
     <Form v-if="numButts<10" :rules="newButtonRules" id="NewButton" @submit="createNewWeight">
-        <label for="newbutton"> What is weighing on you? </label>
+        <label for="newbutton"> what's weighing on you? </label>
         <Field class="field" name="name" type="text" /><br><br>
-        <button class="border-solid border-black border-2" type="submit"> Create button </button>
+        <button class="border-solid border-black border-2 px-4" type="submit"> create button </button>
         <ErrorMessage name="Butt" />
     </Form>
 
@@ -52,31 +53,19 @@ export default {
         },
         updateWeight(buttVal,buttName) {
             this.$store.commit('butts/wipeButts',{value:buttVal,name:buttName})
+        },
+        createNewWeight(NewButton){
+            if (this.loadButts[NewButton.name]!=null){
+                alert("You've already got a button by this name")
+            }
+            else{
+                this.$store.dispatch('butts/newButt',NewButton.name)
+            }
+        },
+        deleteButt(toDelete){
+            this.$store.dispatch('butts/deleteButt',toDelete)
         }
     },
-    // setup() {
-    //     const newButtonRules= yup.string().required("Give your weight a name!")
-
-    //     const weightButtons=reactive( []);
-    //     WeightFunctions.get('allot/retrieveweightdata')
-    //     .then(res=>res.json())
-    //     .then(data => {
-    //         for (let [key,value] of Object.entries(data)){
-    //             weightButtons.push(reactive({'name':key,'value':value}))
-    //             }
-    //         }
-    //         )
-        
-        
-    //     function createNewWeight(NewButton){
-    //         if (NewButton.name in weightButtons === false){
-    //             console.log("Here")
-    //         }
-    //         weightButtons.push(reactive({'name':NewButton.name,'value':0}))
-    //         // WeightFunctions.post(null,'allot/createnewbutton/'+NewButton.name)
-    //     }
-    //     return {weightButtons, newButtonRules,createNewWeight}
-    // }
     }
 </script>
 
