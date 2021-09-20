@@ -71,11 +71,12 @@ def createNewButton(name:str,user:str):
     weightData.update_one({'user':user},
         { 
         '$set':
-            {
-                name+'.totals':0,
-                name+'.daily':[0],
-                name+'.withinDay':[[0]]
-            }
-        },
+        {
+        name+'.totals':0,
+        name+'.daily':[0],
+        name+'.withinDay':[[0]]
+        }
+    },
     )    
     return True
+

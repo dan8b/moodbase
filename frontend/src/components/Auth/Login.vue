@@ -43,6 +43,7 @@ export default {
           await this.$store.dispatch('communityData/communityClickData')
           await this.$store.dispatch('currentMoodColors/createInitialState')
           await this.$store.dispatch('currentMoodColors/getListOfChoices')
+          await this.$store.dispatch('butts/createButts')
           this.$router.push('/home')
         }
         else {

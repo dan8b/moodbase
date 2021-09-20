@@ -44,7 +44,7 @@ export default class FetchFunctions {
               'Authorization':'Bearer '+ localStorage.getItem('accessToken'),
               'Content-Type': 'application/json', 
             },
-        })       
+        })     
       }
 }
 

@@ -4,6 +4,7 @@ import { wheelLock  } from "./visualization.module";
 import { currentMoodColors } from "./user.color.module";
 import { moodClassification } from "./classification.module";
 import { userData } from './user.data.module'
+import { butts } from './weight.module'
 import { communityData } from "./community.data.module";
 import createPersistedState from "vuex-persistedstate";
 
@@ -15,10 +16,10 @@ const store = createStore({
     moodClassification,
     userData,
     communityData,
-    
+    butts
   },
   plugins: [createPersistedState({
-    paths:['auth','currentMoodColors','userData','communityData',]
+    paths:['auth','currentMoodColors','userData','communityData','butts']
   })],
 
 });
