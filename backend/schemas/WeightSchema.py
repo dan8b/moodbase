@@ -15,6 +15,32 @@ def createWeightData(user:str):
     weightData.insert_one(newWeightData)
     return True
 
+def createWeightByPopularity():
+    weightData.insert_one(
+        {
+        'popularity':True,
+        'family':{'value':1},
+        'health':{'value':1},
+        'work/school':{'value':1},
+        'relationships':{'value':1},
+        'spirituality/faith':{'value':1}
+        }
+    )
+    return True
+
+def updateWeightPopularity(name:str):
+    weightData.update_one(
+        {'popularity':True},
+        {
+            '$inc':
+            {
+                name:1
+            }
+        }
+    )
+    return True
+
+
 def updateWeightData(user:str,newData:WeightData):
     index=len(weightData.find_one({'user':user})['days'])-1
     weightData.update_one({'user':user},
@@ -77,6 +103,16 @@ def createNewButton(name:str,user:str):
         name+'.withinDay':[[0]]
         }
     },
-    )    
+    ),
+    if weightData.find({'popularity':True}
     return True
 
+def getPopularWeights():
+    return weightData.aggregate([
+        {
+            '$match':{'popularity':True}
+        },
+        {
+            
+        }
+    ])
