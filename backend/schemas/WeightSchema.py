@@ -107,6 +107,7 @@ def createNewButton(name:str,user:str):
     if weightData.find({'popularity':True}
     return True
 
+<<<<<<< HEAD
 def getPopularWeights():
     return weightData.aggregate([
         {
@@ -116,3 +117,11 @@ def getPopularWeights():
             
         }
     ])
+=======
+def wipeButt(name:str,user:str):
+    weightData.update_one(
+        {'user':user},
+        { '$unset': {name:""}}
+    )
+    return True
+>>>>>>> d018429bfd75fb1bef99d756b17f78f64afd9e51

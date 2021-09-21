@@ -17,7 +17,8 @@ const initialState={
     listOfColors:{},
     listLayer:0,
     currentSubset:"",
-    popularityPanel:false
+    popularityPanel:false,
+    popularityData:[],
 }
 
 export const currentMoodColors = {
@@ -44,9 +45,15 @@ export const currentMoodColors = {
         },
         async getListOfChoices( {commit} ){
             await ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList',data))
-            }
+        },
+        getPopularityData( {commit }, newVariable){
+            ColorFunctions.get('plot/communitycolors/'+newVariable).then(r=>r.json()).then(data => commit('setPopularityData',data))
+        }
     },
     mutations: {
+        setPopularityData(state, data){
+            state.popularityData=data
+        },
         toggleDetailPanel(state,variable){
             if (variable!=null && (state.popularityPanel === false || state.variableSelection!=variable)){
                     state.variableSelection=variable

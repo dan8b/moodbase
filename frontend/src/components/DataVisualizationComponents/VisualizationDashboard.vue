@@ -3,7 +3,7 @@
 
 <div class="px-16 flex flex-col ">
     <div v-if="popularityPanel===true" class=" py-16 flex flex-row space-x-24">
-        <ColorPopularityDetails  />
+        <ColorPopularityDetails :popularityData="currentPopularityData" />
         <div @click="togglePopularityPanel">Hide </div>
     </div>
     <div  class=" py-16 flex flex-row space-x-24">
@@ -40,6 +40,9 @@ export default {
         },
         popularityPanel() {
             return this.$store.state.currentMoodColors.popularityPanel
+        },
+        currentPopularityData() {
+            return this.$store.state.currentMoodColors.popularityData
         }
     },
     methods: {
