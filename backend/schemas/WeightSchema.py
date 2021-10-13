@@ -1,4 +1,4 @@
-from db import weightData
+from db import weightData, weightPopularityData
 from models.weightModel import WeightData
 from datetime import datetime
 
@@ -7,39 +7,28 @@ def createWeightData(user:str):
         'user':user,
         'family':{'totals':0,'daily':[0],'withinDay':[[0]]},
         'health':{'totals':0,'daily':[0],'withinDay':[[0]]},
-        'work/school':{'totals':0,'daily':[0],'withinDay':[[0]]},
+        'work or school':{'totals':0,'daily':[0],'withinDay':[[0]]},
         'relationships':{'totals':0,'daily':[0],'withinDay':[[0]]},
-        'spirituality/faith':{'totals':0,'daily':[0],'withinDay':[[0]]},        
+        'spirituality or faith':{'totals':0,'daily':[0],'withinDay':[[0]]},        
         'days':[datetime.today()]
     }
     weightData.insert_one(newWeightData)
-    return True
-
-def createWeightByPopularity():
-    weightData.insert_one(
-        {
-        'popularity':True,
-        'family':{'value':1},
-        'health':{'value':1},
-        'work/school':{'value':1},
-        'relationships':{'value':1},
-        'spirituality/faith':{'value':1}
-        }
-    )
+    for key in newWeightData.keys():
+        if key!='user' and key!='days':
+            updateWeightPopularity(key)
     return True
 
 def updateWeightPopularity(name:str):
-    weightData.update_one(
-        {'popularity':True},
+    weightPopularityData.update_one(
+        {'name':name},
         {
             '$inc':
             {
-                name:1
+                'value':1
             }
         }
     )
     return True
-
 
 def updateWeightData(user:str,newData:WeightData):
     index=len(weightData.find_one({'user':user})['days'])-1
@@ -104,24 +93,39 @@ def createNewButton(name:str,user:str):
         }
     },
     ),
-    if weightData.find({'popularity':True}
+    if weightPopularityData.find({'name':name}).limit(1).count()<1:
+        weightPopularityData.insert_one({'name':name,'value':1,'custom':True})
+    else:
+        weightPopularityData.update_one(
+            {'name':name},
+            {
+                '$inc':
+                {
+                    'value':1
+                }
+            }
+        )
     return True
 
-<<<<<<< HEAD
-def getPopularWeights():
-    return weightData.aggregate([
-        {
-            '$match':{'popularity':True}
-        },
-        {
-            
-        }
-    ])
-=======
 def wipeButt(name:str,user:str):
     weightData.update_one(
         {'user':user},
         { '$unset': {name:""}}
     )
+    weightPopularityData.update_one(
+        {'name':name},
+        {
+            '$inc':
+            {
+                'value':-1
+            }
+        }
+    )
     return True
->>>>>>> d018429bfd75fb1bef99d756b17f78f64afd9e51
+
+def getPopularWeights():
+    return weightPopularityData.aggregate(
+    [
+     { '$sort' : { 'name' : 1 } }
+    ]
+    )

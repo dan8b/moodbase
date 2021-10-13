@@ -52,7 +52,7 @@ export default {
             this.$store.commit('butts/incrementButt',{initialValue:buttVal,name:buttName,type:e.button})
         },
         updateWeight(buttVal,buttName) {
-            this.$store.commit('butts/wipeButts',{value:buttVal,name:buttName})
+            this.$store.commit('butts/updateButt',{value:buttVal,name:buttName})
         },
         createNewWeight(NewButton){
             if (this.loadButts[NewButton.name]!=null){

@@ -29,7 +29,6 @@ export const butts = {
     },
     mutations:{
         deleteButt(state,toDelete){
-            console.log(toDelete)
             delete state.myButts[toDelete]
         },
         brandNewButt(state,newButt){
@@ -49,12 +48,18 @@ export const butts = {
                 state.interval=window.setInterval(function() {state.myButts[buttclick.name]--},1000)
             }
         },
-        wipeButts(state,buttClickRelease){
+        updateButt(state,buttClickRelease){
             window.clearInterval(state.interval);
             state.interval=null;
             WeightFunctions.post({delta:(buttClickRelease.value-state.start)
                 ,name:buttClickRelease.name,value:buttClickRelease.value},'allot/updateweightdata')
 
+        },
+        wipeButts(state){
+            state.interval=null;
+            state.start=null;
+            state.delta=null;
+            Object.keys(state.myButts).forEach( key => delete state.myButts[key] )
         }
     }
 }

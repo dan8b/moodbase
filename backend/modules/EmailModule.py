@@ -44,16 +44,6 @@ async def send_email_async(emailSpecs):
     fm = FastMail(mailer)
     await fm.send_message(message,template_name=emailSpecs['template'])
 
-async def testing():
-    fm=FastMail(mailer)
-    print(BackgroundTasks)
-    message = MessageSchema(
-        subject="Fastapi mail module",
-        recipients=['danbidikov@gmail.com'],
-        body="Simple background task",
-        )
-    await fm.send_message(message)
-
 async def sendEmailBackground(emailSpecs:dict):
     recipient="danbidikov@gmail.com"
     message = MessageSchema(

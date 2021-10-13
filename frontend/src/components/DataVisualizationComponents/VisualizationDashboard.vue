@@ -10,7 +10,7 @@
         <UserDataOverview />
         <CommunityDataOverview />
     </div>
-    <div  class=" py-16 flex flex-row space-x-24">
+    <div  class="py-16 flex flex-row space-x-24">
         <LineChartWrapper :isCommunityData="false"/>
         <LineChartWrapper :isCommunityData="true" />
     </div>
@@ -51,7 +51,7 @@ export default {
             },
         togglePopularityPanel(){
             this.$store.commit('currentMoodColors/toggleDetailPanel',null)
-        }
+            }
         },   
 
 }

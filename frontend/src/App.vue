@@ -47,14 +47,6 @@ methods:{
     this.$store.dispatch('auth/logout');
     this.$router.push('/');
     }
-  // ...mapActions({logout:'/auth/logout'})
-  
-  // logOut() {
-  //     this.$store.commit('currentMoodColors/wipeColorState')
-  //     this.$store.dispatch('auth/logout');
-  //     this.$router.push('/login');
-  //   // }
-  //   }
 }
 
 }

@@ -18,23 +18,19 @@ export default{
 
                 scales: {
                     yAxes: [{
-                        gridLines: {display: false},
                         scaleLabel: {
-                            display:false,
                             labelString: "variable recorded",
                         },
                         ticks: {
                             min: -7,
                             max: +7,
-                            stepSize: 1
+                            stepSize: .5
                             
                         }
                     }],
                     xAxes: [{
                         display:false,
-                        gridLines: { display: false},
                         scaleLabel:{ 
-                            display:false,
                             labelString: "time recorded",
                         },
                         type: 'time',

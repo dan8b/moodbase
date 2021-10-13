@@ -41,14 +41,15 @@ export const userData = {
                     data: state.lineChartArrays.happinessVals.map(val => Number(val)),
                     label: "Happiness",
                     borderColor: "#3e95cd",
-                    fill: false
+                    backgroundColor: '#2554FF',
+
                 },
 
                  { 
                     data: state.lineChartArrays.calmVals.map(val=> Number(val)),
                     label: "Calm/anxiety",
                     borderColor: "#FF5733",
-                    fill: false
+                    backgroundColor:"#90ee90"
                 }
             ]
             }

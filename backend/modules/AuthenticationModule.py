@@ -77,7 +77,8 @@ def addUserToDatabase(user:User) -> dict:
         userData.insert_one(userToDB)
         activationToken=createAccessToken(user.username,2,0,0)
         url=createUrlForEmail("activate",activationToken)
-        activationSpecs={'urlDict':{'url':url},'subject':'Activation email','recipient':user.email,'template':'ActivationEmail.html'}
+        activationSpecs={'urlDict':{'url':url},'subject':'Activation email',
+                        'recipient':user.email,'template':'ActivationEmail.html'}
         return activationSpecs
 
 def createUrlForEmail(route: str,token:str) -> str:
@@ -103,12 +104,12 @@ def sendResetEmail(emailObj):
         'template':'ResetEmail.html'}
     return emailSpecifications
 
-
 def resetPassword(newPassword):
     resetToken=newPassword.token
     user=getUserFromToken(resetToken)
     if not user: raise HTTPException(status_code=404,detail='Did not work') 
-    userData.update_one({'username':user},{'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
+    userData.update_one({'username':user},
+            {'$set':{'password':pwd_context.hash(newPassword.newPassword)}})
     return {'message':'password reset successfully'}
 
 def attemptRefresh(refreshToken):
@@ -132,3 +133,16 @@ def createTTL(token:str):
     return expDT
     # timeToExpire = (expDT - datetime.now(timezone.utc)).total_seconds()
     # return timeToExpire
+
+def sendGroupInvitations(groupName:str,membersToInvite:list):
+    for member in membersToInvite:
+        email.sendEmailBackground({
+            'recipient':userData.find_one({'user':member})['email'],
+            'urlDict':{
+                'url':createUrlForEmail("groups/"+groupName,member),
+                'groupName':groupName
+                },
+            'subject':'Your invitation to a moodgroup',
+            'template':'GroupInvitation.html'
+        })
+    return True
