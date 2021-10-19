@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Plotbox from './Plotbox.vue'
+import Plotbox from './PlotBoxData.vue'
 import ClassificationText from './ClassificationText.vue'
 import PlotFunctions from '@/services/plot.functions.js'
 import _ from 'lodash'

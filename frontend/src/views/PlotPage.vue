@@ -1,5 +1,5 @@
 <template>
-
+<!-- 
                  <PlotColorPicker />
 
        <div  class="container flex flex-row space-x-5">
@@ -8,8 +8,10 @@
       
       <div v-if="showPanel===true" class="flex px-32 py-16 ">
           <ColorSelectionPanel />
+      </div> -->
+      <div class="md:flex md:justify-center mb-6">
+        <plot-grid-2 />
       </div>
-
         
               
     <!-- </div>
@@ -18,14 +20,15 @@
 </template>
 
 <script>
-import PlotGrid from '@/components/PlotComponents/PlotGrid.vue'
-import PlotColorPicker from '@/components/PlotComponents/PlotColorPicker.vue'
-import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionPanel.vue'
+import PlotGrid2 from '@/components/PlotComponents/PlotGrid2.vue'
+// import PlotGrid from '@/components/PlotComponents/PlotGrid.vue'
+// import PlotColorPicker from '@/components/PlotComponents/PlotColorPicker.vue'
+// import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionPanel.vue'
 // import RecentClickHistory from '@/components/RecentClickHistory.vue'
 
 export default {
     name:'PlotPage',
-    components: {PlotGrid, PlotColorPicker, ColorSelectionPanel},
+    components: {PlotGrid2},
     data() {
       return {
         isWheelLocked:false,
@@ -61,5 +64,10 @@ export default {
 </script>
 
 <style>
-
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
 </style>

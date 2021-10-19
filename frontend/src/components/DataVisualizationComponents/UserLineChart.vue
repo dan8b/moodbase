@@ -33,9 +33,6 @@ export default {
   setup(props){
   const svgRef=ref()
 
-      // this creates another ref to observe resizing, 
-    // which we will attach to a DIV,
-    // since observing SVGs with the ResizeObserver API doesn't work properly
   onMounted( () => {
     const svg = select(svgRef.value);
 

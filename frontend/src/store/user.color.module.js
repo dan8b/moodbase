@@ -7,6 +7,7 @@ const initialState={
         anxious:"",
         sad:"",
         },
+    gridVisibility:true,
     panelVisibility:false,
     readyForCommit:false,
     colorSelection:"",
@@ -51,6 +52,9 @@ export const currentMoodColors = {
         }
     },
     mutations: {
+        toggleGridVisibility(state){
+            state.gridVisibility=!state.gridVisibility
+        },
         setPopularityData(state, data){
             state.popularityData=data
         },
