@@ -1,18 +1,18 @@
 <template>
-  <div class="flex flex-row space-x-2"> 
-    <p> Last I heard, you were feeling </p>
+<h1>
+Last I heard, you were feeling 
     <ClassificationText 
           :readable="true"
           :emotionSeverity="currentMood.calm.severity"
           :emotionStatus="currentMood.calm.mood"
         /> 
-        <p>        and </p>
+           and 
         <ClassificationText 
           :readable="true"
           :emotionSeverity="currentMood.happiness.severity"
           :emotionStatus="currentMood.happiness.mood"
         />
-  </div>
+</h1>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div  class="px-8 border-solid border-4  border-black"  tabindex="0" ref="refMap" @mouseleave="unlockWheel" @mouseover="lockWheel">
-      <svg @wheel="scrollPoints" width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+      <svg @wheel="scrollPoints" width="700" height="700" xmlns="http://www.w3.org/2000/svg">
         <circle v-for="(point,i) in coordinateArray" :key="i" :cx="point.happinessVal" :cy="point.calmVal" r="1%"/>
       </svg>
     </div>

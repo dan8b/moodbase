@@ -18,6 +18,7 @@ def createWeightData(user:str):
             updateWeightPopularity(key)
     return True
 
+# increment the count of users with a given weight button by 1 when assigning user default weight buttons
 def updateWeightPopularity(name:str):
     weightPopularityData.update_one(
         {'name':name},

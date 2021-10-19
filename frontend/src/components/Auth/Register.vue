@@ -15,7 +15,7 @@
               </div>
               <div class="flex flex-row justify-evenly">
                 <div><label for="password">password </label></div>
-                <div><Field class="field" name="password" type="text" /></div>
+                <div><Field class="field" name="password" type="password" /></div>
               </div>
               <div class="flex flex-row justify-evenly">
                 <div><label for = 'confirm password'> confirm password </label></div>

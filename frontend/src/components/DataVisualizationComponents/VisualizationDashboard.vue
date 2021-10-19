@@ -11,13 +11,14 @@
         <CommunityDataOverview />
     </div>
     <div  class="py-16 flex flex-row space-x-24">
-        <LineChartWrapper :isCommunityData="false"/>
-        <LineChartWrapper :isCommunityData="true" />
+        <!-- <LineChartWrapper :isCommunityData="false"/> -->
+        <!-- <LineChartWrapper :isCommunityData="true" /> -->
     </div>
     <div class="py-16 flex flex-row w-max space-x-24"  >
         <ClickMap :isCommunityData="false" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
         <ClickMap :isCommunityData="true" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
     </div>
+    <UserLineChart :data="chartData" />
 </div>
 
   
@@ -25,15 +26,16 @@
 </template>
 
 <script>
+import UserLineChart from '@/components/DataVisualizationComponents/UserLineChart.vue'
 import CommunityDataOverview from './CommunityDataOverview.vue'
-import LineChartWrapper from '@/components/DataVisualizationComponents/LineChartWrapper.vue'
+// import LineChartWrapper from '@/components/DataVisualizationComponents/LineChartWrapper.vue'
 import UserDataOverview from '@/components/DataVisualizationComponents/UserDataOverview.vue'
 import ColorPopularityDetails from './ColorPopularityDetails.vue'
 import ClickMap from './ClickMap.vue'
 
 export default {
     name: 'VisualizationDashboard',
-    components: { LineChartWrapper, ClickMap,UserDataOverview,CommunityDataOverview, ColorPopularityDetails},
+    components: { UserLineChart, ClickMap,UserDataOverview,CommunityDataOverview, ColorPopularityDetails},
     computed: {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']
@@ -43,6 +45,9 @@ export default {
         },
         currentPopularityData() {
             return this.$store.state.currentMoodColors.popularityData
+        },
+        chartData() {
+            return this.$store.getters['userData/packageChartData']
         }
     },
     methods: {

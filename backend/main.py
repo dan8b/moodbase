@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-from routes import auth, plot,allot
+from routes import auth, plot,allot,groups
 
 
 app=FastAPI()
@@ -23,4 +23,4 @@ app.add_middleware(
 app.include_router(auth.authRoute)
 app.include_router(plot.plotRoute)
 app.include_router(allot.weightRoute)
-
+app.include_router(groups.groupRoute)

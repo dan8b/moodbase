@@ -1,7 +1,10 @@
 <template>
-     <div :style="{'background-color':backgroundColor.bg}">
-          <span :style="{'color':emotionColor.color}"> {{emotionSeverity}} {{emotionStatus}} </span> 
+     <div>
+          <span> {{emotionSeverity}} {{emotionStatus}} </span> 
     </div>
+    <svg width=250 height=50> 
+        <rect :fill="emotionColor.color" width=250 height=50 />
+    </svg>
      
 
 </template>

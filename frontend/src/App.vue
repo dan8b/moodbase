@@ -12,17 +12,14 @@
       <router-link to="/allot">Allot</router-link>
   </li>
   <li class="mr-6">
+      <router-link to="/groups">Groups</router-link>
+  </li>
+  <li class="mr-6">
     <a id="logoutButton" @click="logout">Logout</a>
   </li>  
   </ul>
-      <ul v-else class="flex">
-  <li class="mr-6">
-    <router-link to="/login">Login</router-link> 
-  </li>
-  <li class="mr-6">
-    <router-link to="/register">Register</router-link> 
-  </li>
-    </ul>
+
+
 
   <br>
     <router-view :key="$route.fullPath"></router-view>
@@ -34,10 +31,12 @@
 <script>
 // import {mapActions} from 'vuex'
 export default {
+ 
   computed: { 
     checkLogin() {
       return this.$store.state.auth.loggedIn;
-      }
+      },
+
   },
 
 methods:{ 

@@ -1,4 +1,5 @@
 import PlotFunctions from '@/services/plot.functions.js'
+// import { timeParse, extent} from 'd3'
 
 const initialState = {
     lineChartArrays:
@@ -16,21 +17,29 @@ export const userData = {
     getters: {
         // refactoring possible here
         returnMostRecent(state){
-            const recentHappy = state.lineChartArrays.happinessVals.pop()
-            state.lineChartArrays.happinessVals.push(recentHappy)
-            const recentCalm = state.lineChartArrays.calmVals.pop()
-            state.lineChartArrays.happinessVals.push(recentCalm)
+            const i = state.lineChartArrays.happinessVals.length-1
             const toBucket = {
                 x:{
-                    magnitude:Math.round(Math.abs(recentHappy)),
-                    sign:Math.sign(recentHappy)
+                    magnitude:Math.round(Math.abs(state.lineChartArrays.happinessVals[i])),
+                    sign:Math.sign(state.lineChartArrays.happinessVals[i])
                 },
                 y:{
-                    magnitude:Math.round(Math.abs(recentCalm)),
-                    sign:Math.sign(recentCalm)
+                    magnitude:Math.round(Math.abs(state.lineChartArrays.calmVals[i])),
+                    sign:Math.sign(state.lineChartArrays.calmVals[i])
                 }
             }
             return PlotFunctions.bucketMood(toBucket)
+        },
+        packageChartData(state){
+            // const vals=state.timestamps.map(date => Date.parse(date))
+            // const parseDate = timeParse("%Y-%m-%d")
+            // const dates=extent(vals, val => parseDate(val))
+            console.log(state.lineChartArrays.happinessVals)
+            return state.lineChartArrays.happinessVals
+            // return {
+            //     happiness:state.lineChartArrays.happinessVals,
+            //     calm: state.lineChartArrays.calmVals
+            //     }
         },
         returnChartData(state){
             const dataObj=

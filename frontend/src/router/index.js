@@ -8,11 +8,12 @@ import WeightPage from '../views/WeightPage.vue'
 import ForgotEmailPage from '../views/ForgotEmailPage.vue'
 import ResetPasswordPage from '../views/ResetPasswordPage.vue'
 import ActivatePage from '../views/ActivatePage.vue'
+import GroupPage from '../views/GroupPage.vue'
 const routes = [
 
 
   {
-    path:'/:token',
+    path:'/',
     name:'PublicHomePage',
     props: true,
     component:PublicHomePage,
@@ -58,6 +59,11 @@ const routes = [
     props:true,
     name:'ActivatePage',
     component:ActivatePage
+  },
+  {
+    path:'/groups',
+    name:'GroupPage',
+    component:GroupPage
   }
 
 ]

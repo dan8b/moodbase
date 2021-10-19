@@ -1,5 +1,5 @@
 # database stuff
-from db import userData,bannedKeys,aggregateData
+from db import userData,bannedKeys,aggregateData, groupData
 from models.userModel import User
 from modules.UserAggregationUtilities import updateUserCountOnActivation
 
@@ -54,8 +54,8 @@ def createAccessToken(subName: str,*args) -> dict():
         algorithm='HS256'
     )
 
-def getUserFromToken(checkToken:str)-> str:
-    decoded = jwt.decode(checkToken, secret, 'HS256')
+def getUserFromToken(tokenToUser:str)-> str:
+    decoded = jwt.decode(tokenToUser, secret, 'HS256')
     userStr=decoded['sub']
     return userStr
 
@@ -73,6 +73,7 @@ def addUserToDatabase(user:User) -> dict:
         raise HTTPException(status_code=404,detail="User already exists with this ID or email address")
     else: 
         userToDB=user.dict()
+        userToDB['groupMemberships']={}
         userToDB['password']=pwd_context.hash(user.password)
         userData.insert_one(userToDB)
         activationToken=createAccessToken(user.username,2,0,0)
@@ -134,15 +135,26 @@ def createTTL(token:str):
     # timeToExpire = (expDT - datetime.now(timezone.utc)).total_seconds()
     # return timeToExpire
 
-def sendGroupInvitations(groupName:str,membersToInvite:list):
-    for member in membersToInvite:
+def sendGroupInvitations(groupName:str,membersToInvite:dict):
+    for member in membersToInvite.keys():
         email.sendEmailBackground({
             'recipient':userData.find_one({'user':member})['email'],
             'urlDict':{
-                'url':createUrlForEmail("groups/"+groupName,member),
+                'url':createUrlForEmail("groups/"+groupName,createAccessToken(member)),
                 'groupName':groupName
                 },
             'subject':'Your invitation to a moodgroup',
             'template':'GroupInvitation.html'
         })
     return True
+
+def handleGroupLogin(userToken:str,groupName:str):
+    userToCheck= userData.find_one (
+        {'username': getUserFromToken(userToken)}
+    )
+    groupToCheck = groupData.find_one(
+        {'name':groupName})
+    if 'groupName' in userToCheck['groupMemberships'] and + userToCheck['username'] in groupToCheck['memberDict' ]:
+        return True
+    else:
+        raise HTTPException(status_code=404,detail='You are not currently a member of this group. Speak to the group administrator to regain access.')  

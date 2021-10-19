@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
 class GroupData(BaseModel):
-    name:str 
-    members:list
+    name:str
+    memberDict:dict
     colors:dict
-    weightButtons:list
+    weightButtons:dict
     adminUser:str
+    timeInterval:int
+    password:str

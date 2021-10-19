@@ -1,15 +1,17 @@
 <template>
-<div>
-    <Form :validation-schema="schema" id="LoginForm" @submit="handleLogin">
+<div class="flex flex-col">
+    <Form class="text-2xl flex flex-row h-min gap-x-2 w-max justify-center" :validation-schema="schema" id="LoginForm" @submit="handleLogin">
         <br>
         <label for="username">username </label>
-        <Field class="field" name="username" type="text" /><br><br>
+        <Field class="field h-8" name="username" type="text" /><br><br>
         <label for="password">password </label>
-        <Field class="field" name="password" type="text" /><br><br>
-        <button type="submit">Submit</button>
-        
+        <Field class="field h-8" name="password" type="password" /><br><br>
+        <button class="rounded-b-md h-8 px-2 font-bold" type="submit">Log me in!</button>
+    
     </Form>
-    <router-link to="/forgot">Forgot my password</router-link>
+                <router-link class="bg-blue-200 w-max px-4 py-2 mt-8 text-2xl" to="/forgot">Click here if you forgot your password </router-link>
+
+
 </div>
 </template>
 
