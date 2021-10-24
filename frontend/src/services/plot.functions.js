@@ -1,33 +1,13 @@
 import FetchFunctions from "./fetch.service"
 
 class PlotFunctions extends FetchFunctions{
-    transformCoordinates(coordinates){
-        const transformedCoordinates=
-        {
-          happinessVal:0,
-          calmVal:0
-        }
-        transformedCoordinates.happinessVal=(coordinates.happinessVal-300)*(7/300) 
-        transformedCoordinates.calmVal=(coordinates.calmVal-300)*(-7/300) 
-        return transformedCoordinates
-    }
-    classifyMoodValues(coordinates){
-        const transformedCoordinates=this.transformCoordinates(coordinates)
-        
-        const coordinatePair=
-        {
-          x:{magnitude:0,sign:0},
-          y:{magnitude:0,sign:0}
-        }
-
-        const signX=Math.sign(transformedCoordinates.happinessVal)
     
-        const signY=Math.sign(transformedCoordinates.calmVal)
-        
-        coordinatePair.x={magnitude:Math.round(Math.abs(transformedCoordinates.happinessVal)),sign:signX}
-        coordinatePair.y={magnitude:Math.round(Math.abs(transformedCoordinates.calmVal)),sign:signY}
-      return this.bucketMood(coordinatePair)
-      }
+    classifyMoodValues(coordinates){
+      return this.bucketMood({
+        x: {magnitude:Math.round(Math.abs(coordinates.happinessVal)),sign:Math.sign(coordinates.happinessVal)},
+        y: {magnitude:Math.round(Math.abs(coordinates.calmVal)),sign:Math.sign(coordinates.happinessVal)}
+      })
+    }
 
     bucketMood(coordinatePair){
       const bucketMagnitude={
@@ -61,7 +41,46 @@ class PlotFunctions extends FetchFunctions{
           },
         }
         return classificationInformation
+      }
+//maybe redo below with a constructor
+      prepareQuadrants(colorDataObject){
+
+        const variablePairs={
+            one:{xVar:'sad',yVar:'calm',translateX:0,translateY:0},
+            two:{xVar:'happy',yVar:'calm', translateX:1,translateY:0},
+            three:{xVar:'sad',yVar:'anxious', translateX:0, translateY:1},
+            four:{xVar:'happy',yVar:'anxious', translateX:1, translateY:1},
+          }
+
+        const quadrantObject = {}
+
+        for (let num of Object.keys(variablePairs)){
+          quadrantObject[num] = 
+            {
+              data:{
+                xVar: variablePairs[num].xVar,
+                yVar: variablePairs[num].yVar,
+                xColor: colorDataObject[variablePairs[num].xVar],
+                yColor: colorDataObject[variablePairs[num].yVar]
+              },
+              visibility: {
+                showBox:true,
+                showText:true,
+                showClassifier:false,
+              },
+              moveText:false
+            }
+        }
+        return quadrantObject
       }   
+    returnGradient(request){
+      if (request.axis==="h"){
+          return {x1:1,x2:0,y1:0.5,y2:0.5}
+        }
+      else if (request.axis==="v"){
+          return {x1:0.5,x2:0.5,y1:0,y2:1}
+        }
+    }
 }
 
 export default new PlotFunctions

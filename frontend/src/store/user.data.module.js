@@ -34,7 +34,6 @@ export const userData = {
             // const vals=state.timestamps.map(date => Date.parse(date))
             // const parseDate = timeParse("%Y-%m-%d")
             // const dates=extent(vals, val => parseDate(val))
-            console.log(state.lineChartArrays.happinessVals)
             return state.lineChartArrays.happinessVals
             // return {
             //     happiness:state.lineChartArrays.happinessVals,

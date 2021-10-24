@@ -1,19 +1,12 @@
 <template>
-<body class="max-h-screen">
- <p class='text-6xl'>Hello, and welcome to the moodbase! </p>
+ <h1 >Hello, and welcome to the moodbase! </h1>
 
-<div class="py-8 text-4xl flex flex-col ">
+ <h2 > Confused? Check out the documentation.</h2>
 
- 
- <div>
- <p > Confused? Check out the documentation.</p>
- </div>
+ <h2> Got the idea? <router-link to="/register"> Sign up</router-link> to start showing and sharing how you feel.  </h2> 
 
- <p class="py-8"> Got the idea? <router-link to="/register"> Sign up </router-link> to start showing and sharing how you feel.  </p> 
+ <h2> If you've already made an account, <router-link to="/login"> sign in</router-link> to record your mood! </h2>
 
- <p> If you've already made an account, <router-link to="/login"> sign in </router-link> to record your mood! </p>
-</div>
-</body>
 </template>
 
 

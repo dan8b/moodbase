@@ -1,13 +1,17 @@
 <template>
-    <div v-if="gridVisible===true" class=" flex flex-col w-max" >
+    <div class=" flex flex-col w-max" >
         <div class="flex flex-row ">
-            <PlotBox2 
+            <PlotBoxText 
+                v-if="currentQuadrant===0 || currentQuadrant===1"
+                quadrant=1
                 emotion1="sad"
                 emotion2="calm"
                 :fill1="boxTextColors.sad"
                 :fill2="boxTextColors.calm"
             />
-            <PlotBox2 
+            <PlotBoxText 
+                v-if="currentQuadrant===0 || currentQuadrant===2"            
+                quadrant=2
                 emotion1="happy"
                 emotion2="calm"
                 :fill1="boxTextColors.happy"
@@ -16,13 +20,17 @@
         </div>
         <div class="flex flex-row">
 
-            <PlotBox2 
+            <PlotBoxText 
+                v-if="currentQuadrant===0 || currentQuadrant===3"
+                quadrant=3
                 emotion1="sad"
                 emotion2="anxious"
                 :fill1="boxTextColors.sad"
                 :fill2="boxTextColors.anxious"
             />
-            <PlotBox2 
+            <PlotBoxText
+                v-if="currentQuadrant===0 || currentQuadrant===4"            
+                quadrant=4
                 emotion1="happy"
                 emotion2="anxious"
                 :fill1="boxTextColors.happy"
@@ -30,15 +38,19 @@
             />            
         </div>
     </div>
-    <button v-else> back </button>
+
+        <!-- <PlotBoxData /> -->
+        <button @click="toggleGrid()"> back </button>
+
 
 </template>
 
 <script>
-import PlotBox2 from './PlotBoxText.vue'
+import PlotBoxText from './PlotBoxText.vue'
+// import PlotBoxData from './PlotBoxData.vue'
 export default {
     name:'PlotGrid2',
-    components: { PlotBox2 },
+    components: { PlotBoxText, },
     data() {
         return {
             showGrid:true
@@ -50,16 +62,21 @@ export default {
         },
         gridVisible() {
             return this.$store.state.currentMoodColors.gridVisibility
+        },
+        currentQuadrant() {
+            return this.$store.state.currentMoodColors.holdForBox.quadrant
         }
     },
     methods: {
         toggleGrid(){
+            this.$store.commit('currentMoodColors/toggleGridVisibility')
 
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
+
 
 </style>

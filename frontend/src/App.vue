@@ -1,31 +1,30 @@
 <template>
-  <div id="nav">
-  
-  <ul v-if="checkLogin" class="flex">
-    <li class="mr-6">
-    <router-link to="/home">Home</router-link> 
-  </li>
-  <li  class="mr-6">
-    <router-link to="/plot">Plot</router-link> 
-  </li>
-  <li class="mr-6">
-      <router-link to="/allot">Allot</router-link>
-  </li>
-  <li class="mr-6">
-      <router-link to="/groups">Groups</router-link>
-  </li>
-  <li class="mr-6">
-    <a id="logoutButton" @click="logout">Logout</a>
-  </li>  
-  </ul>
 
+<div>
+  <ul class="navbar" v-if="checkLogin" >
+    <li >
+        <router-link to="/home">Home</router-link> 
+    </li>
+    <li >
+      <router-link to="/plot">Plot</router-link> 
+    </li>
+    <li>
+      <router-link to="/allot">Allot</router-link>
+    </li>
+    <li >
+      <router-link to="/groups">Groups</router-link>
+    </li>
+    <li >
+      <a id="logoutButton" @click="logout">Logout</a>
+    </li>  
+  </ul>
+  <br>
 
 
   <br>
     <router-view :key="$route.fullPath"></router-view>
-</div>
 
-  
+</div> 
 </template>
 
 <script>
@@ -53,6 +52,7 @@ methods:{
 
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -61,16 +61,38 @@ methods:{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
+.navbar {
+  position:fixed;
+  display:flex;
+  padding-left:25%;
+  padding-top:1%;
+  margin-bottom:5%;
+  width:80%;
+  font-size:x-large;
   font-weight: bold;
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
+li {
+  list-style-type:none;
+  margin-left:5%;
+}
+
+a:visited{
+  color:black;
+}
+
+a {
+    text-decoration:none;
+    cursor:pointer;
+}
+ul a:hover{
+  color:#42b983
+}
+
+ul a.router-link-exact-active {
+  text-decoration:none;
   color: #42b983;
 }
+
 </style>

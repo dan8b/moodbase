@@ -1,20 +1,17 @@
 <template>
 
 
-<div class="px-16 flex flex-col ">
-    <div v-if="popularityPanel===true" class=" py-16 flex flex-row space-x-24">
+<div>
+    <div v-if="popularityPanel===true" >
         <ColorPopularityDetails :popularityData="currentPopularityData" />
         <div @click="togglePopularityPanel">Hide </div>
     </div>
-    <div  class=" py-16 flex flex-row space-x-24">
+    <div >
         <UserDataOverview />
         <CommunityDataOverview />
     </div>
-    <div  class="py-16 flex flex-row space-x-24">
-        <!-- <LineChartWrapper :isCommunityData="false"/> -->
-        <!-- <LineChartWrapper :isCommunityData="true" /> -->
-    </div>
-    <div class="py-16 flex flex-row w-max space-x-24"  >
+
+    <div  >
         <ClickMap :isCommunityData="false" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
         <ClickMap :isCommunityData="true" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
     </div>
@@ -28,7 +25,6 @@
 <script>
 import UserLineChart from '@/components/DataVisualizationComponents/UserLineChart.vue'
 import CommunityDataOverview from './CommunityDataOverview.vue'
-// import LineChartWrapper from '@/components/DataVisualizationComponents/LineChartWrapper.vue'
 import UserDataOverview from '@/components/DataVisualizationComponents/UserDataOverview.vue'
 import ColorPopularityDetails from './ColorPopularityDetails.vue'
 import ClickMap from './ClickMap.vue'

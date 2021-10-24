@@ -1,36 +1,16 @@
 <template>
-<div id="demo">
-  <button @click="show1 = !show1">
-    Toggle1
-  </button>
-  <button @click="show2 = !show2">
-    Toggle2
-  </button>
 
-  <transition name="fade">
-    <p v-if="show1">hello</p>
-  </transition>
 
-  <transition name="butt">
-    <p v-if="show2">Goodbye </p>
-  </transition>
-<SetNameAndMembers />
-</div>
-
+<div>asdfg</div>
 </template>
 
 <script>
-import SetNameAndMembers from './SetNameAndMembers.vue'
+// import {gsap} from 'gsap'
+// import Test from './Test.vue'
 export default {
   name:'CreateGroupForm',
-  components: {SetNameAndMembers},
-  data() {
-    return {
-      step:0,
-      show1:true,
-      show2:false
-    }
-  }
+  components: {},
+
 }
 </script>
 
@@ -48,19 +28,22 @@ body {
   animation: slidein 0.5s
 }
 
-.fade-enter-active {
-    animation: slideout 0.5s;
-}
+.fade-enter-active,
 .fade-leave-active {
-  animation: slidein 0.5s
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @keyframes slidein {
   from {
-    transform:translateX(0%);
+    transform:opacity(100%);
   }
   to {
-    transform:translateX(100%);
+    transform:opacity(0%);
   }
 }
 

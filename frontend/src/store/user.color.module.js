@@ -1,4 +1,5 @@
 import ColorFunctions from '@/services/color.functions.js'
+import PlotFunctions from '@/services/plot.functions.js'
 
 const initialState={
     colorProfile: {
@@ -7,7 +8,6 @@ const initialState={
         anxious:"",
         sad:"",
         },
-    gridVisibility:true,
     panelVisibility:false,
     readyForCommit:false,
     colorSelection:"",
@@ -20,6 +20,8 @@ const initialState={
     currentSubset:"",
     popularityPanel:false,
     popularityData:[],
+    quadrants:{},
+    activeQuadrant:null,
 }
 
 export const currentMoodColors = {
@@ -49,11 +51,28 @@ export const currentMoodColors = {
         },
         getPopularityData( {commit }, newVariable){
             ColorFunctions.get('plot/communitycolors/'+newVariable).then(r=>r.json()).then(data => commit('setPopularityData',data))
-        }
+        },
     },
     mutations: {
-        toggleGridVisibility(state){
-            state.gridVisibility=!state.gridVisibility
+        hideQuadrants(state,qId){
+            for (let quadrant of Object.keys(state.quadrants)){
+                if (quadrant != qId) {
+                    state.quadrants[quadrant].visibility.showBox=false;
+                    state.quadrants[quadrant].visibility.showText=false;
+                }
+                else {
+                    setTimeout( () => {
+                        state.quadrants[quadrant].moveText=true
+                        state.quadrants[quadrant].visibility.showBox=false
+                        state.quadrants[quadrant].moveText=true
+                        }
+                    ,500)
+                }
+            }
+            state.activeQuadrant=qId
+        },
+        initializeGridState(state){
+            state.quadrants = PlotFunctions.prepareQuadrants(state.colorProfile)
         },
         setPopularityData(state, data){
             state.popularityData=data
@@ -79,16 +98,16 @@ export const currentMoodColors = {
                 state.variableSelection=variable;
                 state.previousColor=state.colorProfile[variable]
                 state.panelVisibility=true;
-                state.currentColorFamily=null
             }
             else{
                 state.panelVisibility=false;
-                state.previousColor="";
+                state.previousColor=null;
                 state.demoColor=null;
-                state.currentColorFamily=null;
-                state.variableSelection="";
+                state.variableSelection=null;
                 state.readyForCommit=false;
             }
+            state.currentColorFamily=null
+
         },
         setColorList(state,listData){
             state.listOfColors=listData
@@ -116,6 +135,4 @@ export const currentMoodColors = {
             Object.keys(initialState).forEach(key => { state[key]=initialState[key]})
         }
     },
-
-
-}
+   }

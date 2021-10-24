@@ -16,8 +16,8 @@ const store = createStore({
     moodClassification,
     userData,
     communityData,
-    butts
-  },
+    butts,
+    },
   plugins: [createPersistedState({
     paths:['auth','currentMoodColors','userData','communityData','butts']
   })],

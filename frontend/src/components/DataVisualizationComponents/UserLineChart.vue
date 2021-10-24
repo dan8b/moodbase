@@ -36,7 +36,7 @@ export default {
   onMounted( () => {
     const svg = select(svgRef.value);
 
-        // scales: map index / data values to pixel values on x-axis / y-axis
+// scales: map index / data values to pixel values on x-axis / y-axis
 //range currently hardcoded, will address / make design responsive later
     const xScale = scaleLinear()
       .domain([0,props.data.length - 1])
