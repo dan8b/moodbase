@@ -1,58 +1,40 @@
 <template>
+ <div class="flexc">
+   <div class="flexr">
+    <colorful-box-2 quadrant="one"  />
+    <colorful-box-2 quadrant="two"  />
+    </div>
+    <div class="flexr">
+    <colorful-box-2 quadrant="three" />
+    <colorful-box-2 quadrant="four"  />
+    </div>
+</div>
 
-
-<div>asdfg</div>
 </template>
 
 <script>
-// import {gsap} from 'gsap'
-// import Test from './Test.vue'
+
+import ColorfulBox2 from '@/components/PlotComponents/GridComponents/ColorfulBox2.vue'
 export default {
   name:'CreateGroupForm',
-  components: {},
+  components: {ColorfulBox2},
+  computed: {
+  }
 
 }
 </script>
 
 <style scoped>
-
-
-body {
-  margin: 30px;
+.flexr{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:row;
 }
-
-.butt-enter-active {
-    animation: slideout 0.5s;
-}
-.butt-leave-active {
-  animation: slidein 0.5s
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@keyframes slidein {
-  from {
-    transform:opacity(100%);
-  }
-  to {
-    transform:opacity(0%);
-  }
-}
-
-@keyframes slideout {
-  from {
-    transform:translateX(-100%);
-  }
-  to {
-    transform:translateX(0%)
-  }
+.flexc{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:column;
 }
 </style>

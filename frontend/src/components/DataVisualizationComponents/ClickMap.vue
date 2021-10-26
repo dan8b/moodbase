@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <div  class="px-8 border-solid border-4  border-black"  tabindex="0" ref="refMap" @mouseleave="unlockWheel" @mouseover="lockWheel">
-      <svg @wheel="scrollPoints" width="700" height="700" xmlns="http://www.w3.org/2000/svg">
-        <circle v-for="(point,i) in coordinateArray" :key="i" :cx="point.happinessVal" :cy="point.calmVal" r="1%"/>
+      <svg width="70%" height="70%">
+        <g>
+          <rect width="30vw" height="30vw" stroke="gray" stroke-width="5" fill="none"/>
+
+          <circle cx="25%" cy="25%" r="5%"/>
+        </g>
       </svg>
-    </div>
-  </div> 
- 
 </template>
 
 <script>

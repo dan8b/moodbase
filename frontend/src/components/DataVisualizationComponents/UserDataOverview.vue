@@ -1,7 +1,7 @@
 <template>
 <h1>
 Last I heard, you were feeling 
-    <ClassificationText 
+    <!-- <ClassificationText 
           :readable="true"
           :emotionSeverity="currentMood.calm.severity"
           :emotionStatus="currentMood.calm.mood"
@@ -11,15 +11,15 @@ Last I heard, you were feeling
           :readable="true"
           :emotionSeverity="currentMood.happiness.severity"
           :emotionStatus="currentMood.happiness.mood"
-        />
+        /> -->
 </h1>
 </template>
 
 <script>
-import ClassificationText from '@/components/PlotComponents/ClassificationText.vue'
+// import ClassificationText from '@/components/PlotComponents/ClassificationText.vue'
 export default {
     name:'UserDataOverview',
-    components: {ClassificationText},
+    components: {},
     computed: {
         currentMood()
         {

@@ -14,7 +14,7 @@ name: 'UserHome',
 
 computed: {
     checkedLoggedIn() {
-      if (this.$store.state.auth.loggedIn===true && this.$store.state.userData.lineChartArrays.calmVals.length>0) { return true}
+      if (this.$store.state.auth.loggedIn===true) { return true}
       return false
    }
 },

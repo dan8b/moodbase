@@ -2,13 +2,11 @@ import PlotFunctions from '@/services/plot.functions.js'
 // import { timeParse, extent} from 'd3'
 
 const initialState = {
-    lineChartArrays:
-        {
-            happinessVals:[],
-            calmVals:[]
-        },
-    clickMapArray:[],
-    timestamps:[]
+    happiness:[],
+    calm:[],
+    mapX:[],
+    mapY:[],
+    timestamp:[]
 }
 
 export const userData = {
@@ -17,15 +15,15 @@ export const userData = {
     getters: {
         // refactoring possible here
         returnMostRecent(state){
-            const i = state.lineChartArrays.happinessVals.length-1
+            const i = state.happiness-1
             const toBucket = {
                 x:{
-                    magnitude:Math.round(Math.abs(state.lineChartArrays.happinessVals[i])),
-                    sign:Math.sign(state.lineChartArrays.happinessVals[i])
+                    magnitude:Math.round(Math.abs(state.happiness[i])),
+                    sign:Math.sign(state.happiness[i])
                 },
                 y:{
-                    magnitude:Math.round(Math.abs(state.lineChartArrays.calmVals[i])),
-                    sign:Math.sign(state.lineChartArrays.calmVals[i])
+                    magnitude:Math.round(Math.abs(state.happiness[i])),
+                    sign:Math.sign(state.happiness[i])
                 }
             }
             return PlotFunctions.bucketMood(toBucket)
@@ -34,7 +32,7 @@ export const userData = {
             // const vals=state.timestamps.map(date => Date.parse(date))
             // const parseDate = timeParse("%Y-%m-%d")
             // const dates=extent(vals, val => parseDate(val))
-            return state.lineChartArrays.happinessVals
+            return state.happiness
             // return {
             //     happiness:state.lineChartArrays.happinessVals,
             //     calm: state.lineChartArrays.calmVals
@@ -43,10 +41,10 @@ export const userData = {
         returnChartData(state){
             const dataObj=
             {
-                labels: state.timestamps.map(date => Date.parse(date)),
+                labels: state.timestamp.map(date => Date.parse(date)),
                 datasets: [
                 { 
-                    data: state.lineChartArrays.happinessVals.map(val => Number(val)),
+                    data: state.happiness.map(val => Number(val)),
                     label: "Happiness",
                     borderColor: "#3e95cd",
                     backgroundColor: '#2554FF',
@@ -54,7 +52,7 @@ export const userData = {
                 },
 
                  { 
-                    data: state.lineChartArrays.calmVals.map(val=> Number(val)),
+                    data: state.calm.map(val=> Number(val)),
                     label: "Calm/anxiety",
                     borderColor: "#FF5733",
                     backgroundColor:"#90ee90"
@@ -73,16 +71,17 @@ export const userData = {
     },
     mutations:{
         createClickArray(state,arrayData) {
-            state.lineChartArrays.happinessVals=arrayData.lineChart.lineChartHappinessVals;
-            state.lineChartArrays.calmVals=arrayData.lineChart.lineChartCalmVals;
-            state.clickMapArray=arrayData.clickMapVals
-            state.timestamps=arrayData.timestamp
+            state.happiness=arrayData.happiness;
+            state.calm=arrayData.calm;
+            state.mapX=arrayData.mapX
+            state.mapY=arrayData.mapY
+            state.timestamp=arrayData.timestamp
         },
         
         addNewClick(state,clickData){
-            state.lineChartArrays.happinessVals.push(clickData.lineChart.happinessVal)
-            state.lineChartArrays.calmVals.push(clickData.lineChart.calmVal)
-            state.clickMapArray.push(clickData.clickMap)    
+            state.happiness.push(clickData.happiness)
+            state.calm.push(clickData.calm)
+            // state.mapX.push(clickData.mapX)    
        },
         
         wipeDataState(state){

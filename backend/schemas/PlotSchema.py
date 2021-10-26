@@ -2,31 +2,29 @@ from db import plotData
 from datetime import datetime
 from models.plotModel import PlotDataSubmission
 
-def createCommunityDocument(initialData:PlotDataSubmission):
-    plotData.insert_one(
-        {
-            'community':True,
-            'dayList':[datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)],
-            'clickMap':[{'happinessVal':initialData.clickMap['happinessVal'], 'calmVal':initialData.clickMap['calmVal']}],
-            'averageLineChartHappiness':[initialData.lineChart['happinessVal']],
-            'averageLineChartCalm':[initialData.lineChart['calmVal']],
-            'totalHappinessByDay':[initialData.lineChart['happinessVal']],    
-            'totalCalmByDay':[initialData.lineChart['calmVal']],
-            'clickCount':0   
-        }
-    )
-    return True
+# def createCommunityDocument(initialData:PlotDataSubmission):
+#     plotData.insert_one(
+#         {
+#             'community':True,
+#             'dayList':[datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)],
+#             'mapX':[initialData.clickMap['happinessVal']],
+#             'mapY':[initialData.clickMap['calmVal']],
+#             'averageLineChartHappiness':[initialData.lineChart['happinessVal']],
+#             'averageLineChartCalm':[initialData.lineChart['calmVal']],
+#             'totalHappinessByDay':[initialData.lineChart['happinessVal']],    
+#             'totalCalmByDay':[initialData.lineChart['calmVal']],
+#             'clickCount':0   
+#         }
+#     )
+#     return True
 
 def createUserPlotDataDocument(user:str):
     clickData= { 
         'user':user,
-        'totalHappiness':0,
-        'totalCalm':0,
-        'lineChart': {
-            'lineChartHappinessVals':[],
-            'lineChartCalmVals':[],
-        },
-        'clickMapVals':[],
+        'happiness':[],
+        'calm':[],
+        'mapX':[],
+        'mapY':[],
         'timestamp':[]
         }
     plotData.insert_one(clickData)
@@ -38,9 +36,10 @@ def updateUserPlotDataDocument(user:str,newData:PlotDataSubmission):
             {
             '$push':
                 {
-                    'lineChart.lineChartHappinessVals':newData.lineChart['happinessVal'],
-                    'lineChart.lineChartCalmVals':newData.lineChart['calmVal'],
-                    'clickMapVals':{'happinessVal':newData.clickMap['happinessVal'],'calmVal':newData.clickMap['calmVal']},
+                    'happiness':newData.lineChart['happinessVal'],
+                    'calm':newData.lineChart['calmVal'],
+                    'mapX':newData.clickMap['happinessVal'],
+                    'mapY':newData.clickMap['calmVal'],
                     'timestamp':newData.timestamp
                 },
             '$inc':
@@ -108,7 +107,8 @@ def createNewDay(listOfValues:list):
         {'$push':
             {
             'dayList':datetime.now().replace(hour=0,minute=0,second=0),
-            'clickMap':{'happinessVal':listOfValues[0],'calmVal':listOfValues[1]},
+            'mapX':listOfValues[0],
+            'mapY':listOfValues[1],
             'averageLineChartHappiness':listOfValues[2],
             'averageLineChartCalm':listOfValues[3],
             'totalHappinessByDay':listOfValues[2],

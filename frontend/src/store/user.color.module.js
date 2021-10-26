@@ -21,7 +21,7 @@ const initialState={
     popularityPanel:false,
     popularityData:[],
     quadrants:{},
-    activeQuadrant:null,
+    activeQuadrant:"none",
 }
 
 export const currentMoodColors = {
@@ -47,13 +47,16 @@ export const currentMoodColors = {
             })
         },
         async getListOfChoices( {commit} ){
-            await ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList',data))
+            await ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList', data))
         },
         getPopularityData( {commit }, newVariable){
-            ColorFunctions.get('plot/communitycolors/'+newVariable).then(r=>r.json()).then(data => commit('setPopularityData',data))
+            ColorFunctions.get('plot/communitycolors/'+newVariable).then(r=>r.json()).then(data => commit('setPopularityData', data))
         },
     },
     mutations: {
+        animateText(state,qId){
+            state.quadrants[qId].moveText=!state.quadrants[qId].moveText;
+        },
         hideQuadrants(state,qId){
             for (let quadrant of Object.keys(state.quadrants)){
                 if (quadrant != qId) {

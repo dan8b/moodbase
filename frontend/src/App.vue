@@ -1,5 +1,7 @@
 <template>
 
+    
+    
 <div>
   <ul class="navbar" v-if="checkLogin" >
     <li >
@@ -17,6 +19,7 @@
     <li >
       <a id="logoutButton" @click="logout">Logout</a>
     </li>  
+
   </ul>
   <br>
 
@@ -30,7 +33,12 @@
 <script>
 // import {mapActions} from 'vuex'
 export default {
- 
+  data() {
+    return {
+      hide:false
+    }
+  },
+
   computed: { 
     checkLogin() {
       return this.$store.state.auth.loggedIn;
@@ -39,6 +47,9 @@ export default {
   },
 
 methods:{ 
+  toggleHide() {
+      this.hide=!this.hide;
+    },
   logout() { 
     this.$store.commit('currentMoodColors/wipeColorState')
     this.$store.commit('userData/wipeDataState')

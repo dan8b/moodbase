@@ -5,8 +5,8 @@ import os
 
 def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
-    if plotData.find({'community':True}).limit(1).count()<1:
-        PlotSchema.createCommunityDocument(data)
+    # if plotData.find({'community':True}).limit(1).countDocuments()<1:
+    #     PlotSchema.createCommunityDocument(data)
     PlotSchema.updateUserPlotDataDocument(user,data)
     PlotSchema.updateCommunityPlotData(data)
     ColorSchema.getPopularColors()

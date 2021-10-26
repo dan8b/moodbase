@@ -41,6 +41,7 @@ export default {
       .then(
         async response =>{
         if (Object.keys(response)[0]==="access_token"){
+          console.log("here")
           await this.$store.dispatch('userData/retrieveClickData')
           await this.$store.dispatch('communityData/communityClickData')
           await this.$store.dispatch('currentMoodColors/createInitialState')

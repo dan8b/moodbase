@@ -2,17 +2,17 @@
 <br>
 <br>
 <div class="center">
-        <PlotGrid3 />
+        <PlotGrid4 />
 </div>
 </template>
 
 <script>
-import PlotGrid3 from '@/components/PlotComponents/PlotGrid3.vue'
+import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
 
 
 export default {
     name:'PlotPage',
-    components: { PlotGrid3},
+    components: { PlotGrid4},
     data() {
       return {
         isWheelLocked:false,
@@ -50,8 +50,8 @@ export default {
 <style>
 
 .center {
-
-  position:relative;
+  transform: translate(50%, 0);
+  position:fixed;
   margin: auto;
   width: 50vw;
   height: 50vw;
