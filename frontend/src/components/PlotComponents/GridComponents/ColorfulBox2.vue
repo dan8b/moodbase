@@ -1,12 +1,12 @@
 <template>
 
-<!-- <transition leave-active-class="animate__animated animate__fadeOut" > -->
+<transition leave-active-class="animate__animated animate__fadeOut" >
 
     <div @click="triggerMove" @mouseenter="setHover" @mouseleave="setHover" :style="box">
-        <slot> </slot>
+        <slot  > </slot>
     </div>   
 
-<!-- </transition> -->
+</transition>
 
 </template>
 
@@ -34,12 +34,33 @@ export default {
     },
     data() {
         return {
-            toggleHover: false,
+            hoverOver:false,
         }
     },
     computed: {
+        lockHover() {
+            var lock=false;
+            if (this.quadrant===this.$store.state.currentMoodColors.activeQuadrant){
+                lock=true
+            }
+            return lock
+        },
+        allFill(){
+            return this.$store.state.currentMoodColors.variableSelection
+        },
+        toggleHover() {
+            if (this.boxVisibility === false || this.lockHover === true) {
+                return false
+            }
+            else if (this.hoverOver===true || (this.allFill!="" && this.allFill!="hide")){
+                return true
+            }
+            else {
+                return false
+            }
+        },
         box() {
-            if (this.toggleHover){
+            if (this.toggleHover === true){
                 return {
                     '--h':"linear-gradient(to "+this.xDir+this.xColor+", transparent)",
                     '--v':"linear-gradient(to "+this.yDir+this.yColor+", transparent)",
@@ -47,9 +68,9 @@ export default {
                     '--offsetX':this.x,
                     '--offsetY':this.y,
                     '--display':this.display
+                    }
                 }
-            }
-            else{
+            else {
                 return {
                     '--h':"linear-gradient(to right, white, transparent)",
                     '--v':"linear-gradient(to right, white, transparent)",
@@ -60,19 +81,25 @@ export default {
                 }
             }
         },
+        boxVisibility() {
+            return this.$store.state.currentMoodColors.quadrants[this.quadrant].visibility.showBox
+        },
         borderVisibility(){
-            if (this.$store.state.currentMoodColors.quadrants[this.quadrant].visibility.showBox===true){
+            if (this.boxVisibility===true){
                 return "1px solid black"
             }
             else {
                 return "none"
             }
         },
+        quadrantStateData(){
+            return this.$store.state.currentMoodColors.quadrants
+        },
         xColor() {
-            return this.$store.state.currentMoodColors.quadrants[this.quadrant].data.xColor;
+            return this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.xVar];
         },
         yColor() {
-            return this.$store.state.currentMoodColors.quadrants[this.quadrant].data.yColor;
+            return this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.yVar];
         },
         xDir() {
             if (this.quadrant === "one" || this.quadrant === "three") {
@@ -93,12 +120,14 @@ export default {
     },
         methods:{
             setHover() {
-                this.toggleHover=!this.toggleHover;
+                this.hoverOver=!this.hoverOver;
             },
             triggerMove() {
+                this.lockHover=true
                 this.$store.commit('currentMoodColors/animateText',this.quadrant);
+                this.$store.commit('currentMoodColors/hideQuadrants',this.quadrant);
             }
-          } 
+        } 
 }
 </script>
 

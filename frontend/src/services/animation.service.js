@@ -4,25 +4,53 @@ import {gsap} from 'gsap'
 class Animator{
     shiftX(passRef, quadrant) {
         if (quadrant === "two" || quadrant === "four"){
-                gsap.to(passRef,{x:"-35vw",duration:.5})       
+                gsap.to(passRef,{x:"-200%",duration:.5})       
             }
             else {
-                console.log(passRef)
-                gsap.to(passRef,{x:"-15vw",duration:.5})
+                gsap.to(passRef,{x:"-100%",duration:.5})
             }
     }
     shiftY(passRef, quadrant) {
         switch(quadrant){
             case "one":
-                gsap.to(passRef, {y:"38vw", duration:.5})
+                gsap.to(passRef, {y:"1450%", duration:.5})
                 gsap.to(passRef, {x:"10%", duration:.5})
                 break
             case "two":
-                gsap.to(passRef, {y:"38vw", duration:.5})
+                gsap.to(passRef, {y:"1500%", duration:.5})
                 break
             default:
-                gsap.to(passRef,{y:"18vw",duration:.5})
+                gsap.to(passRef,{y:"750%",duration:.5})
             }
+    }
+    revertX(passRef,quadrant){
+        if (quadrant === "two" || quadrant === "four"){
+            gsap.to(passRef,{x:"6%",duration:.5})      
+        } 
+        else{
+            gsap.to(passRef,{x:"3%",duration:.5})
+            }
+        }
+    revertY(passRef,quadrant){
+        switch(quadrant){
+            case "one":
+                gsap.to(passRef, {y:"-5%", duration:.5})
+                gsap.to(passRef, {x:"-10%", duration:.5})
+                break
+            case "two":
+                gsap.to(passRef, {y:"-3.5%", duration:.5})
+                break
+            default:
+                gsap.to(passRef,{y:"-2%",duration:.5})
+            }
+    }
+    moveGridAside(passRef,toTheRight){
+        if (toTheRight === true){
+            gsap.to(passRef, {x:"20%",duration:.5})
+        }
+        else if (toTheRight === false){
+            gsap.to(passRef, {x:"-3%",duration:.5})
+        }
     }
 }
 export default new Animator();

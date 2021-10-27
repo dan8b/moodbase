@@ -1,11 +1,46 @@
 import FetchFunctions from "./fetch.service"
 
 class PlotFunctions extends FetchFunctions{
-    
+    coordinateTransform(e,quadrant){
+      var xValue = 0;
+      var yValue= 0;
+      const xCoordinate = (e.clientX-e.target.getBoundingClientRect().x);
+      const yCoordinate = e.clientY-e.target.getBoundingClientRect().y;
+      switch(quadrant){
+        case "one":
+          xValue = -1*(7-xCoordinate*(7/(e.target.getBoundingClientRect().right-e.target.getBoundingClientRect().x)));
+          yValue = (7-yCoordinate*(7/(e.target.getBoundingClientRect().bottom-e.target.getBoundingClientRect().y)));
+          break; 
+        case "two":
+          xValue = xCoordinate*(7/(e.target.getBoundingClientRect().right-e.target.getBoundingClientRect().x));
+          yValue = 7-yCoordinate*(7/(e.target.getBoundingClientRect().bottom-e.target.getBoundingClientRect().y));
+          break;
+        case "three":
+          xValue = -1*(7-xCoordinate*(7/(e.target.getBoundingClientRect().right-e.target.getBoundingClientRect().x)));
+          yValue = -1*(yCoordinate*(7/(e.target.getBoundingClientRect().bottom-e.target.getBoundingClientRect().y)));
+          break;
+        case "four":
+          xValue = (xCoordinate*(7/(e.target.getBoundingClientRect().right-e.target.getBoundingClientRect().x)));
+          yValue = -1*(yCoordinate*(7/(e.target.getBoundingClientRect().bottom-e.target.getBoundingClientRect().y)));
+          break;
+      }
+      return {
+        happinessVal:xValue,
+        calmVal: yValue
+      }      
+    }
+    maplerize(val,axis){
+      if (axis === "x" ){
+          return (((val+7)*100)/14)
+        }
+        else {
+          return 100-(((val+7)*100)/14)
+        }
+    }
     classifyMoodValues(coordinates){
       return this.bucketMood({
         x: {magnitude:Math.round(Math.abs(coordinates.happinessVal)),sign:Math.sign(coordinates.happinessVal)},
-        y: {magnitude:Math.round(Math.abs(coordinates.calmVal)),sign:Math.sign(coordinates.happinessVal)}
+        y: {magnitude:Math.round(Math.abs(coordinates.calmVal)),sign:Math.sign(coordinates.calmVal)}
       })
     }
 
@@ -46,10 +81,10 @@ class PlotFunctions extends FetchFunctions{
       prepareQuadrants(colorDataObject){
 
         const variablePairs={
-            one:{xVar:'sad',yVar:'calm',translateX:0,translateY:0},
-            two:{xVar:'happy',yVar:'calm', translateX:1,translateY:0},
-            three:{xVar:'sad',yVar:'anxious', translateX:0, translateY:1},
-            four:{xVar:'happy',yVar:'anxious', translateX:1, translateY:1},
+            one:{xVar:'sadness',yVar:'calm',translateX:0,translateY:0},
+            two:{xVar:'happiness',yVar:'calm', translateX:1,translateY:0},
+            three:{xVar:'sadness',yVar:'anxiety', translateX:0, translateY:1},
+            four:{xVar:'happiness',yVar:'anxiety', translateX:1, translateY:1},
           }
 
         const quadrantObject = {}

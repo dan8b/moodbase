@@ -1,9 +1,7 @@
 <template>
-
-    
-    
+   
 <div>
-  <ul class="navbar" v-if="checkLogin" >
+   <ul class="navbar" v-if="checkLogin" >
     <li >
         <router-link to="/home">Home</router-link> 
     </li>
@@ -21,8 +19,10 @@
     </li>  
 
   </ul>
-  <br>
 
+
+  <br>
+  <br>
 
   <br>
     <router-view :key="$route.fullPath"></router-view>
@@ -76,7 +76,7 @@ methods:{
   position:fixed;
   display:flex;
   padding-left:25%;
-  padding-top:1%;
+  padding-top:0%;
   margin-bottom:5%;
   width:80%;
   font-size:x-large;
@@ -104,6 +104,20 @@ ul a:hover{
 ul a.router-link-exact-active {
   text-decoration:none;
   color: #42b983;
+}
+
+.flexc{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:column;
+}
+
+.flexr{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:row;
 }
 
 </style>

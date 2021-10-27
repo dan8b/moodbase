@@ -3,18 +3,16 @@ import PlotFunctions from '@/services/plot.functions.js'
 
 const initialState={
     colorProfile: {
-        happy:"",
+        happiness:"",
         calm:"",
-        anxious:"",
-        sad:"",
+        anxiety:"",
+        sadness:"",
         },
-    panelVisibility:false,
-    readyForCommit:false,
+    originalColor:"",
     colorSelection:"",
     variableSelection:"",
     showDemoColor:false,
     demoColor:"",
-    previousColor:"",
     listOfColors:{},
     listLayer:0,
     currentSubset:"",
@@ -28,17 +26,26 @@ export const currentMoodColors = {
     namespaced: true,
     state: initialState,
     getters: {
-        packageChangeData(state){
-            return {
+        sendColorChange( state){
+            console.log("beginning of module")
+            const colorChangeData={
                 variable:state.variableSelection,
                 colorChange:{family:state.currentSubset,hex:state.colorProfile[state.variableSelection]}
-           }
+            }
+            return ColorFunctions.post(colorChangeData,'plot/changecolors')
+            .then(res => res.json())
+            .then( data => {{
+                    console.log(data);
+                    return data;
+            }
+            })
         },
         initialColorData(state,variable){
             return state.colorProfile[variable]
         },
     },
     actions: {
+
         async createInitialState( {commit} ) {
             await ColorFunctions.post({},'plot/usercolorchoice')
             .then(res=>res.json())
@@ -54,6 +61,20 @@ export const currentMoodColors = {
         },
     },
     mutations: {
+        afterSendingChange(state){
+            state.originalColor="";
+            state.variableSelection="";
+        },
+        holdOriginalColor(state){
+            state.originalColor = state.colorProfile[state.variableSelection];
+        },
+        returnOriginalColor(state){
+            state.colorProfile[state.variableSelection] = state.originalColor;
+            state.originalColor="";
+        },
+        changeColor(state,color) {
+            state.colorProfile[state.variableSelection]=color;
+        },
         animateText(state,qId){
             state.quadrants[qId].moveText=!state.quadrants[qId].moveText;
         },
@@ -65,17 +86,28 @@ export const currentMoodColors = {
                 }
                 else {
                     setTimeout( () => {
-                        state.quadrants[quadrant].moveText=true
-                        state.quadrants[quadrant].visibility.showBox=false
-                        state.quadrants[quadrant].moveText=true
+                        state.quadrants[quadrant].moveText=true;
+                        state.quadrants[quadrant].visibility.showBox=false;
+                        state.quadrants[quadrant].moveText=true;
                         }
                     ,500)
                 }
             }
             state.activeQuadrant=qId
         },
+        unselectQuadrant(state){
+            state.quadrants[state.activeQuadrant].moveText=false;
+            state.activeQuadrant="none";
+            state.variableSelection="";
+        },
+        showQuadrants(state){
+            for (let quadrant of Object.keys(state.quadrants)){
+                state.quadrants[quadrant].visibility.showBox=true;
+                state.quadrants[quadrant].visibility.showText=true;
+            }
+        },
         initializeGridState(state){
-            state.quadrants = PlotFunctions.prepareQuadrants(state.colorProfile)
+            state.quadrants = PlotFunctions.prepareQuadrants(state.colorProfile);
         },
         setPopularityData(state, data){
             state.popularityData=data
@@ -91,48 +123,28 @@ export const currentMoodColors = {
             }
         },
         setSubset(state,subsetChoice){
-            state.currentSubset=subsetChoice
+            state.currentSubset=subsetChoice;
         },
         changeLayer(state){
-            state.listLayer = (state.listLayer+1)%2
-        },
-        togglePanel(state,variable){
-            if (variable!=null && (state.panelVisibility === false || state.variableSelection!=variable)){
-                state.variableSelection=variable;
-                state.previousColor=state.colorProfile[variable]
-                state.panelVisibility=true;
-            }
-            else{
-                state.panelVisibility=false;
-                state.previousColor=null;
-                state.demoColor=null;
-                state.variableSelection=null;
-                state.readyForCommit=false;
-            }
-            state.currentColorFamily=null
-
+            state.listLayer = (state.listLayer+1)%2;
         },
         setColorList(state,listData){
-            state.listOfColors=listData
+            state.listOfColors=listData;
         },
         showColorDemonstration(state, demonstrationData){
-            state.demoColor=demonstrationData
+            state.demoColor=demonstrationData;
             state.showDemoColor=true;
         },
         setVariableToChange(state,variableName){
             state.variableSelection=variableName;
         },
         createState(state,stateData) {
-            state.colorProfile.happy=stateData.happy.hex;
+            state.colorProfile.happiness=stateData.happiness.hex;
             state.colorProfile.calm=stateData.calm.hex;
-            state.colorProfile.anxious=stateData.anxious.hex;
-            state.colorProfile.sad=stateData.sad.hex;
+            state.colorProfile.anxiety=stateData.anxiety.hex;
+            state.colorProfile.sadness=stateData.sadness.hex;
             },
-        changeColor(state,colorChoice) {
-            state.previousColor=state.colorProfile[colorChoice.variableName]
-            state.colorProfile[colorChoice.variableName]=colorChoice.selectedColor;
-            if(state.readyForCommit === false) {state.readyForCommit=true;}
-        },
+
         wipeColorState(state){
             localStorage.removeItem('listOfColors')
             Object.keys(initialState).forEach(key => { state[key]=initialState[key]})

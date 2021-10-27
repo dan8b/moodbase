@@ -1,18 +1,30 @@
 <template >
-<br>
-<br>
-<div class="center">
-        <PlotGrid4 />
+<div class="flexr">
+  <transition enter-active-class="animate__animated animate__slideInUp fast">
+
+  <div class="flexc">
+    <PlotColorPicker  v-if="quadrantSelected==='none'" />
+
+    <color-selection-panel v-if="currentVariable!=''"  />
+
+    
+  </div>
+  </transition>
+
+  <div class="center">
+      <PlotGrid4 />
+  </div>
 </div>
 </template>
 
 <script>
+import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
 import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
-
+import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
 
 export default {
     name:'PlotPage',
-    components: { PlotGrid4},
+    components: { PlotGrid4, PlotColorPicker, ColorSelectionPanel},
     data() {
       return {
         isWheelLocked:false,
@@ -21,26 +33,15 @@ export default {
       }
     },
     computed: {
-      showPanel() {
-        return this.$store.state.currentMoodColors.panelVisibility
+      quadrantSelected(){
+        return this.$store.state.currentMoodColors.activeQuadrant
+      },
+      currentVariable(){
+        return this.$store.state.currentMoodColors.variableSelection
       }
-    },
-    methods:{
-      hideChangePanel() {
-        if (this.likeToChange===false){this.likeToChange=true}
-        else{this.likeToChange=false;}
-      },
-      unlockWheel(lockedStatus){
-        this.isWheelLocked=lockedStatus;
-      },
-      lockWheel(lockedStatus){
-        this.isWheelLocked=lockedStatus;
-      },
-        
-      togglePanel(variableToChange){
-        this.$store.commit('currentMoodColors/togglePanel',variableToChange)
-        this.$store.commit('currentMoodColors/setVariableToChange',variableToChange);
-      },
+       
+
+
     },
 
 
@@ -48,6 +49,13 @@ export default {
 </script>
 
 <style>
+
+/* .flexr{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:row;
+} */
 
 .center {
   transform: translate(50%, 0);
@@ -57,4 +65,11 @@ export default {
   height: 50vw;
   /* border: 3px solid gray; */
 }
+
+/* .flexc{
+  display:flex;
+  margin:0;
+  padding:0;
+  flex-direction:column;
+} */
 </style>

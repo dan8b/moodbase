@@ -1,10 +1,9 @@
 <template>    
 
-    <div @click="exitSubsetLayer"> Back </div>
 
-<div class="m-4 text-xl" id="panel">
+<div>
     <ul v-for="(color,i) in subset" :key="i">
-        <ColorPanelButton :colorName=color.colorName :colorHex=color.colorHex />
+        <ColorPanelButton :colorName=color :colorHex=i />
     </ul>
  </div>
 </template>
@@ -26,6 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 
 </style>

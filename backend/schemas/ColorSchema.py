@@ -3,10 +3,10 @@ from models.plotModel import UserColorChange
 
 def createUserColorProfile(user:str):
     newColorProfile = {'user':user,
-                        'happy':{'family':"green",'hex':"#0AB83E"},
-                        'sad':{'family':"purple",'hex':'#25067B'},
-                        'calm':{'family':"blue",'hex':'#73ECF0'},
-                        'anxious':{'family':"orange",'hex':'#D33800'},
+                        'happiness':{'family':"green",'hex':"#FBF6D9"},
+                        'sadness':{'family':"purple",'hex':'#2B1B17'},
+                        'calm':{'family':"blue",'hex':'#CFECEC'},
+                        'anxiety':{'family':"orange",'hex':'#C35817'},
     }
     colorData.insert_one(newColorProfile)
     del newColorProfile['_id']
@@ -22,7 +22,7 @@ def getColorAggregates(*args):
         if args:
             colorAggData.setdefault(variable,list(colorData.aggregate(createPopularityPipeline(args[0],variable))))
         else:
-            for emotion in ['happy','sad','calm','anxious']:
+            for emotion in ['happiness','sadness','calm','anxiety']:
                 colorAggData.setdefault(emotion,{}).setdefault(variable,list(colorData.aggregate(createPopularityPipeline(emotion,variable))))
     return colorAggData
 
@@ -38,7 +38,7 @@ def createPopularityPipeline(emotion:str,variable:str):
     return pipeline
 
 def getPopularColors():
-    popularDict={'happy':{},'sad':{},'calm':{},'anxious':{}}
+    popularDict={'happiness':{},'sadness':{},'calm':{},'anxiety':{}}
     for emotion, value in getColorAggregates().items():
         popularDict[emotion]['mostPopularFamily']=value['family'][0]['value']
         popularDict[emotion]['popularityCount']=value['family'][0]['count']

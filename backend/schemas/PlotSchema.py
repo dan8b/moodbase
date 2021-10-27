@@ -1,7 +1,7 @@
 from db import plotData
 from datetime import datetime
 from models.plotModel import PlotDataSubmission
-
+from bson import Decimal128
 # def createCommunityDocument(initialData:PlotDataSubmission):
 #     plotData.insert_one(
 #         {
@@ -42,41 +42,39 @@ def updateUserPlotDataDocument(user:str,newData:PlotDataSubmission):
                     'mapY':newData.clickMap['calmVal'],
                     'timestamp':newData.timestamp
                 },
-            '$inc':
-                {
-                    'totalHappiness':newData.lineChart['happinessVal'],
-                    'totalCalm':newData.lineChart['calmVal']
-                }    
             },
             upsert=True     
         )
     return True
+
+def dumbDecimalThing(floatVal,decimal128Val,countVal):
+    decimal2Float=float(str(decimal128Val))
+    return Decimal128(str((floatVal+decimal2Float)/countVal))
 
 def updateCommunityPlotData(newData:PlotDataSubmission):
     listOfValues=newData.returnList()
     i=0
     currentCommunityData = plotData.find_one({'community':True})
     clickCount=currentCommunityData['clickCount']+1
-    if currentCommunityData['dayList'][-1].day != datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).day:
-            createNewDay(listOfValues)
+    if len(currentCommunityData['dayList'])<1 or currentCommunityData['dayList'][-1].day != datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).day:
+        createNewDay(listOfValues)
     else:
         index=len(currentCommunityData['dayList'])-1
         del currentCommunityData['_id']
         for key,value in currentCommunityData.items():
-            if key[5]=="M":
-                for innerKey,innerValue in value[index].items():                
-                    plotData.update_one(
-                        {'community':True},
-                        {'$set':
-                                {key+'.'+str(index)+'.'+innerKey:(innerValue+listOfValues[i])/clickCount}
-                        }
-                    )
-                    i+=1
+            if key[0]=="m":
+                plotData.update_one(
+                    {'community':True},
+                    {'$set':
+                        {key+'.'+str(index):dumbDecimalThing(listOfValues[i],value[index],clickCount)}
+                    }
+                )
+                i+=1
             if key[0]=="a":
                 plotData.update_one(
                     {'community':True},
                     {'$set':
-                        {key+"."+str(index):((value[index]+listOfValues[i])/clickCount)}
+                        {key+"."+str(index):dumbDecimalThing(listOfValues[i],value[index],clickCount)}
                     }
                 )
                 i+=1
@@ -109,10 +107,12 @@ def createNewDay(listOfValues:list):
             'dayList':datetime.now().replace(hour=0,minute=0,second=0),
             'mapX':listOfValues[0],
             'mapY':listOfValues[1],
-            'averageLineChartHappiness':listOfValues[2],
-            'averageLineChartCalm':listOfValues[3],
+            'averageHappiness':listOfValues[2],
+            'averageCalm':listOfValues[3],
             'totalHappinessByDay':listOfValues[2],
             'totalCalmByDay':listOfValues[3],
-            }
+            },
+        '$update':
+            {'clickCount':1}
         })
     return True

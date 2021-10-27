@@ -38,29 +38,6 @@ export const userData = {
             //     calm: state.lineChartArrays.calmVals
             //     }
         },
-        returnChartData(state){
-            const dataObj=
-            {
-                labels: state.timestamp.map(date => Date.parse(date)),
-                datasets: [
-                { 
-                    data: state.happiness.map(val => Number(val)),
-                    label: "Happiness",
-                    borderColor: "#3e95cd",
-                    backgroundColor: '#2554FF',
-
-                },
-
-                 { 
-                    data: state.calm.map(val=> Number(val)),
-                    label: "Calm/anxiety",
-                    borderColor: "#FF5733",
-                    backgroundColor:"#90ee90"
-                }
-            ]
-            }
-            return dataObj
-        }
     },
     actions: {
         
@@ -73,15 +50,16 @@ export const userData = {
         createClickArray(state,arrayData) {
             state.happiness=arrayData.happiness;
             state.calm=arrayData.calm;
-            state.mapX=arrayData.mapX
-            state.mapY=arrayData.mapY
-            state.timestamp=arrayData.timestamp
+            state.mapX=arrayData.mapX;
+            state.mapY=arrayData.mapY;
+            state.timestamp=arrayData.timestamp;
         },
         
         addNewClick(state,clickData){
-            state.happiness.push(clickData.happiness)
-            state.calm.push(clickData.calm)
-            // state.mapX.push(clickData.mapX)    
+            state.happiness.push(clickData.lineChartData.happinessVal);
+            state.calm.push(clickData.lineChartData.calmVal);
+            state.mapX.push(clickData.clickMap.happinessVal);
+            state.mapY.push(clickData.clickMap.calmVal);    
        },
         
         wipeDataState(state){

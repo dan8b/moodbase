@@ -1,6 +1,6 @@
 <template>
 <transition leave-active-class="animate__animated animate__fadeOut" >
-    <div v-transition-grid="variable" :watch="animate" v-if="show" :style="tStyle" >{{ variable }}</div>
+    <div v-transition-grid="variable" :watch="animate" v-if="showText" :style="tStyle" >{{ variable }}</div>
 </transition>
 </template>
 
@@ -10,7 +10,8 @@ export default {
     name:'TextElement',
     data() {
         return {
-            watch:true
+            watch:true,
+            reverse:false,
         }
     },
     props:{
@@ -42,20 +43,36 @@ export default {
         tStyle() {
             return { '--yOffset':this.y}
         },
-        show() {
-            return this.$store.state.currentMoodColors.quadrants[this.quadrantNum].visibility.showText;
+        activeQuadrant(){
+            return this.$store.state.currentMoodColors.activeQuadrant
+        },
+        showText(){
+            var show = true;
+            if ( this.activeQuadrant!=this.quadrantNum && this.activeQuadrant!="none"){
+                show=false;
+            }
+            return show
         }
     },
     directives: {
         transitionGrid: {
             updated: (el, binding) => {
-                console.log(el)
                 const quad = binding.instance.$props.quadrantNum
-                if (binding.value==="calm" || binding.value==="anxious"){
-                    Animator.shiftX(el,quad)
+                if (binding.instance.animate){
+                    if (binding.value==="calm" || binding.value==="anxiety"){
+                        Animator.shiftX(el,quad)
+                    }
+                    else if (binding.value == "happiness" || binding.value === "sadness"){
+                        Animator.shiftY(el,quad)
+                    }
                 }
-                else if (binding.value == "happy" || binding.value === "sad"){
-                    Animator.shiftY(el,quad)
+                else{
+                    if (binding.value==="calm" || binding.value==="anxiety"){
+                        Animator.revertX(el,quad)
+                    }
+                    else if (binding.value == "happiness" || binding.value === "sadness"){
+                        Animator.revertY(el,quad)
+                    }                    
                 }
             }   
         }

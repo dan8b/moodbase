@@ -1,9 +1,11 @@
 <template>
-      <svg width="70%" height="70%">
-        <g>
-          <rect width="30vw" height="30vw" stroke="gray" stroke-width="5" fill="none"/>
 
-          <circle cx="25%" cy="25%" r="5%"/>
+      <svg width="80%" height="80%">
+        <g>
+        <rect width="100%" height="100%" stroke="gray" stroke-width="5" fill="none"/>
+
+          <circle v-for="(xCoord,index) in xVals" :key="index" :cx="String(xCoord)+'%'" :cy="String(yVals[index])+'%'" r="2%"/>
+        
         </g>
       </svg>
 </template>
@@ -16,6 +18,9 @@ export default {
       isCommunityData:Boolean
     },
     methods: {
+      buildCoordinate(coord) {
+        return String(coord)+"%"
+      },
       lockWheel(){
         this.isWheelLocked=true;
         this.$emit('lock-wheel',this.isWheelLocked)
@@ -48,11 +53,17 @@ export default {
         }
     },
     computed: {
-      coordinateArray() {
-        var coordinateArray=[]
-        if (this.isCommunityData === false){coordinateArray =  this.$store.state.userData.clickMapArray}
-        else { coordinateArray = this.$store.state.communityData.clickMap}
-        return coordinateArray
+      xVals() {
+        var coordinateArrayX=[]
+        if (this.isCommunityData === false){coordinateArrayX =  this.$store.state.userData.mapX}
+        else { coordinateArrayX = this.$store.state.communityData.clickMap}
+        return coordinateArrayX
+      },
+      yVals() {
+        var coordinateArrayY=[]
+        if (this.isCommunityData === false){coordinateArrayY =  this.$store.state.userData.mapY}
+        else { coordinateArrayY = this.$store.state.communityData.clickMap}
+        return coordinateArrayY
       }
     },
 }

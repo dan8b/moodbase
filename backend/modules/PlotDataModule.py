@@ -2,6 +2,8 @@ from db import plotData, colorData
 from models.plotModel import PlotDataSubmission, UserColorChange
 from schemas import PlotSchema, ColorSchema
 import os
+from bson import json_util
+import json
 
 def filePlotClick(user:str,data:PlotDataSubmission):
     data.truncateCoordinates()
@@ -23,7 +25,7 @@ def getCommunityClickData():
     communityData = plotData.find_one({'community':True})
     del communityData['_id']
     del communityData['community']
-    return communityData
+    return json.loads(json_util.dumps(communityData))
 
 def getUserColors(user:str):
     if colorData.find({'user':user}).limit(1).count()<1:
@@ -37,20 +39,20 @@ def changeUserColor(user:str,changeData:UserColorChange):
         ColorSchema.updateUserColorProfile(user,changeData)
         return {'Message':'Color change successful'}
     except:
-        return {'beavis':'buttheads'}
+        return {'something happened':'color change failed'}
 
 def getColorList():
     currentCategory='black'
-    colors={'black':[],'gray':[],'blue':[],'green':[],
-            'yellow':[],'brown':[],'orange':[],'red':[],
-            'pink':[],'purple':[],'white':[]}
+    colors={'black':{},'gray':{},'blue':{},'green':{},
+            'yellow':{},'brown':{},'orange':{},'red':{},
+            'pink':{},'purple':{},'white':{}}
     with open(os.path.join(os.path.dirname(__file__),"ColorCombinations.csv")) as colorList:
         for color in colorList:
             readCSV=color.split(',')
             if readCSV[0]=="Category":
                 currentCategory=readCSV[1].strip()
             else:
-                colors[currentCategory].append({'colorHex':readCSV[0],'colorName':readCSV[1].strip()})
+                colors[currentCategory][readCSV[0]]=readCSV[1].strip()
     return colors
 
 def getPopularColors():

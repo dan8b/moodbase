@@ -27,7 +27,7 @@ def getUserClickData(user:str = Depends(gate)):
     return plot.getUserClickData(user)
 
 @plotRoute.get('/communityclickdata')
-def getCommunityClickData(user: str = Depends(gate)):
+def getCommunityClickData():
     return plot.getCommunityClickData()
 
 @plotRoute.get('/listofcolors')

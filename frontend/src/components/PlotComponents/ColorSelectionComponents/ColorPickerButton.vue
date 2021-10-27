@@ -1,16 +1,16 @@
 <template>
     <div class="flex w-max h-max gap-4">
-        <div @click="togglePanel('happy')">
-        <span :style="{'color':currentColors.happy}"> Happiness </span>
+        <div @click="togglePanel('happiness')">
+        <span :style="{'color':currentColors.happiness}"> Happiness </span>
         </div>
         <div @click="togglePanel('sad')">
-        <span :style="{'color':currentColors.sad}"> Sadness </span>
+        <span :style="{'color':currentColors.sadness}"> Sadness </span>
         </div>
         <div @click="togglePanel('calm')">
         <span :style="{'color':currentColors.calm}"> Calm </span>
         </div>
         <div @click="togglePanel('anxious')">
-        <span :style="{'color':currentColors.anxious}"> Anxiety </span>
+        <span :style="{'color':currentColors.anxiety}"> Anxiety </span>
         </div>
 
     </div>
