@@ -1,12 +1,13 @@
 <template>
  <h1 >Hello, and welcome to the moodbase! </h1>
-
+<div>
  <h2 > Confused? Check out the documentation.</h2>
 
- <h2> Got the idea? <router-link to="/register"> Sign up</router-link> to start showing and sharing how you feel.  </h2> 
 
- <h2> If you've already made an account, <router-link to="/login"> sign in</router-link> to record your mood! </h2>
+<h2> <span> <router-link to="/register"> Sign up</router-link> </span> to start showing and sharing how you feel.  </h2> 
 
+ <h2> Or, <span> <router-link to="/login"> Sign in</router-link> </span> to record your mood! </h2>
+</div>
 </template>
 
 
@@ -16,7 +17,22 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+span {
+  font-size:140%;
+}
+
+.s1 {
+  margin-right:60%;
+}
+h1 {
+  font-size:400%;
+}
+
+h2 {
+  font-size:333%;
+}
 /* body, html {
   padding: 0;
   margin: 0;

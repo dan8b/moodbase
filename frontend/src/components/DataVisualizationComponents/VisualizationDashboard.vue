@@ -1,37 +1,35 @@
 <template>
+<div class="dashboard">
+        <UserDataOverview />
+        <div class="dashboardContainer"> 
+        <UserLineChart :data="chartData" />
+        </div>
 
-
-<div>
-    <div v-if="popularityPanel===true" >
+    <!-- <div v-if="popularityPanel===true" >
         <ColorPopularityDetails :popularityData="currentPopularityData" />
         <div @click="togglePopularityPanel">Hide </div>
-    </div>
-    <div >
-        <UserDataOverview />
-        <CommunityDataOverview />
-    </div>
+    </div> -->
+        <!-- <CommunityDataOverview /> -->
 
-    <div  >
+    <!-- <div  >
         <ClickMap :isCommunityData="false" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
         <ClickMap :isCommunityData="true" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
-    </div>
-    <UserLineChart :data="chartData" />
+    </div> -->
 </div>
-
   
                     
 </template>
 
 <script>
 import UserLineChart from '@/components/DataVisualizationComponents/UserLineChart.vue'
-import CommunityDataOverview from './CommunityDataOverview.vue'
+// import CommunityDataOverview from './CommunityDataOverview.vue'
 import UserDataOverview from '@/components/DataVisualizationComponents/UserDataOverview.vue'
-import ColorPopularityDetails from './ColorPopularityDetails.vue'
-import ClickMap from './ClickMap.vue'
+// import ColorPopularityDetails from './ColorPopularityDetails.vue'
+// import ClickMap from './ClickMap.vue'
 
 export default {
     name: 'VisualizationDashboard',
-    components: { UserLineChart, ClickMap,UserDataOverview,CommunityDataOverview, ColorPopularityDetails},
+    components: { UserLineChart, UserDataOverview},
     computed: {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']
@@ -58,6 +56,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+
+.dashboard{
+    width:100vw;
+    height:90vw;
+}
+
+
+div {
+    color:rgb(0, 0, 0);
+}
+
 
 </style>

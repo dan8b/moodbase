@@ -1,5 +1,7 @@
 <template >
-<div class="flexr">
+<br>
+<br>
+<div class="flexrp">
   <transition enter-active-class="animate__animated animate__slideInUp fast">
 
   <div class="flexc">
@@ -50,12 +52,15 @@ export default {
 
 <style>
 
-/* .flexr{
+.flexrp{
+  position:fixed;
+  transform: translate(30%, 0);  
   display:flex;
   margin:0;
   padding:0;
   flex-direction:row;
-} */
+  overflow:visible;
+}
 
 .center {
   transform: translate(50%, 0);

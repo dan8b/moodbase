@@ -15,7 +15,7 @@ export const userData = {
     getters: {
         // refactoring possible here
         returnMostRecent(state){
-            const i = state.happiness-1
+            const i = state.happiness.length-1
             const toBucket = {
                 x:{
                     magnitude:Math.round(Math.abs(state.happiness[i])),

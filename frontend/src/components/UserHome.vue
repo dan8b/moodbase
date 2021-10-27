@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-3xl"> Welcome to the moodbase. </h1>
+  <h1> Welcome to the moodbase! </h1>
 
           <VisualizationDashboard v-if="checkedLoggedIn===true" />
           <div v-else> Looks like you haven't collected any data yet </div>
@@ -18,14 +18,12 @@ computed: {
       return false
    }
 },
-
-
-
-
 }
 
 </script>
 
-<style>
-
+<style scoped>
+h1 {
+  color:black;
+}
 </style>

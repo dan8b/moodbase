@@ -1,15 +1,17 @@
 <template>
-<div class="flex flex-col">
-    <Form class="text-2xl flex flex-row h-min gap-x-2 w-max justify-center" :validation-schema="schema" id="LoginForm" @submit="handleLogin">
+<div >
+    <Form :validation-schema="schema" id="LoginForm" @submit="handleLogin">
         <br>
+
         <label for="username">username </label>
-        <Field class="field h-8" name="username" type="text" /><br><br>
+        <Field  name="username" type="text" /><br><br>
         <label for="password">password </label>
-        <Field class="field h-8" name="password" type="password" /><br><br>
-        <button class="rounded-b-md h-8 px-2 font-bold" type="submit">Log me in!</button>
-    
+        <Field  name="password" type="password" /><br><br>
+        <button  class="button2"  type="submit">Log me in!</button>
+
     </Form>
-                <router-link class="bg-blue-200 w-max px-4 py-2 mt-8 text-2xl" to="/forgot">Click here if you forgot your password </router-link>
+    <br>
+      <button class="button2"> <router-link to="/forgot"> Click on me if you forgot your password </router-link> </button>
 
 
 </div>
@@ -64,9 +66,38 @@ export default {
 };
 </script>
 
-<style>
-.field{
+<style scoped>
+.button2{
+  display:inline-block;
+  padding:0.5em 3em;
+  border:0.16em solid #FFFFFF;
+  margin:0 0.3em 0.3em 0;
+  box-sizing: border-box;
+  text-decoration:none;
+  /* text-transform:uppercase; */
+  font-family:'Roboto',sans-serif;
+  font-weight:400;
+  color:black;
+  text-align:center;
+  transition: all 0.15s;
+}
+.button2:hover{
+  /* color:#DDDDDD; */
+  border-color:#DDDDDD;
+}
+.button2:active{
+  color:#BBBBBB;
+  border-color:#BBBBBB;
+}
+
+
+label {
+  font-size:150%;
+}
+
+.field {
+  width:30%;
   border: 2px solid black;
-  border-radius: 4px;
+  border-radius: 7%;
 }
 </style>

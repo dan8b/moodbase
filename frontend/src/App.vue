@@ -1,33 +1,31 @@
 <template>
-   
-<div>
-   <ul class="navbar" v-if="checkLogin" >
-    <li >
-        <router-link to="/home">Home</router-link> 
-    </li>
-    <li >
-      <router-link to="/plot">Plot</router-link> 
-    </li>
-    <li>
-      <router-link to="/allot">Allot</router-link>
-    </li>
-    <li >
-      <router-link to="/groups">Groups</router-link>
-    </li>
-    <li >
-      <a id="logoutButton" @click="logout">Logout</a>
-    </li>  
+<body>
+<div  class="navbar" v-if="checkLogin">
 
-  </ul>
+  <div class="navitem">
+    <router-link to="/home">(moodbase)</router-link> 
+  </div>
+  <div class="navitem">
+    <router-link to="/plot">(plot my mood)</router-link> 
+  </div>
+  <div class="navitem">
+    <router-link to="/allot">(weigh my mood)</router-link>
+  </div>
+  <div class="navitem">
+    <router-link to="/groups">(check my groups)</router-link>
+  </div>
+  <div class="navitem">
+    <a id="logoutButton" @click="logout">(logout)</a>
+  </div>  
+</div> 
 
-
-  <br>
   <br>
 
   <br>
     <router-view :key="$route.fullPath"></router-view>
 
-</div> 
+
+</body>
 </template>
 
 <script>
@@ -64,6 +62,20 @@ methods:{
 
 <style>
 
+.navitem {
+  margin-left:5%;
+}
+
+body, html {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+/* body {
+  background-color: #cc99ff;
+} */
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -72,21 +84,27 @@ methods:{
   color: #2c3e50;
 }
 
+
 .navbar {
+  justify-content:center;
   position:fixed;
+  overflow:hidden;
   display:flex;
-  padding-left:25%;
-  padding-top:0%;
+  flex-direction:row;
+  padding-top:.5%;
+  padding-bottom:.5%;
   margin-bottom:5%;
-  width:80%;
+  width:100%;
   font-size:x-large;
   font-weight: bold;
-  color: #2c3e50;
+  background-color: #ffb3d9;
 }
+
 
 li {
   list-style-type:none;
   margin-left:5%;
+  color:black;
 }
 
 a:visited{
@@ -101,7 +119,8 @@ ul a:hover{
   color:#42b983
 }
 
-ul a.router-link-exact-active {
+
+div a.router-link-exact-active {
   text-decoration:none;
   color: #42b983;
 }
