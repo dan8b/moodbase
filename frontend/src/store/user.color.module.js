@@ -45,16 +45,22 @@ export const currentMoodColors = {
         },
     },
     actions: {
-
-        async createInitialState( {commit} ) {
-            await ColorFunctions.post({},'plot/usercolorchoice')
-            .then(res=>res.json())
-            .then(data => {
-                commit('createState',data)
-            })
-        },
-        async getListOfChoices( {commit} ){
-            await ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data=>commit('setColorList', data))
+        createInitialState( {commit} , userMode) {
+            if (userMode===true){
+                return ColorFunctions.post({},'plot/usercolorchoice')
+                .then(res=>res.json())
+                .then(data => {
+                    commit('createState',data)
+                })
+            }
+            else{
+                commit('createState',{
+                    happiness:{hex:"#FBF6D9"},
+                    calm:{hex:'#CFECEC'},
+                    anxiety:{hex:'#C35817'},
+                    sadness:{hex:'#2B1B17'},
+                })
+            }
         },
         getPopularityData( {commit }, newVariable){
             ColorFunctions.get('plot/communitycolors/'+newVariable).then(r=>r.json()).then(data => commit('setPopularityData', data))
@@ -127,9 +133,6 @@ export const currentMoodColors = {
         },
         changeLayer(state){
             state.listLayer = (state.listLayer+1)%2;
-        },
-        setColorList(state,listData){
-            state.listOfColors=listData;
         },
         showColorDemonstration(state, demonstrationData){
             state.demoColor=demonstrationData;

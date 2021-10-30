@@ -19,7 +19,6 @@ export default {
         store.dispatch('auth/activate',data)
         store.dispatch('userData/retrieveClickData')
         store.dispatch('currentMoodColors/createInitialState')
-        store.dispatch('currentMoodColors/getListOfChoices')
         router.push('/home')
       })
   }

@@ -9,14 +9,21 @@
 </template>
 
 <script>
+import ColorFunctions from '@/services/color.functions.js'
 import ColorPanelSubset from './ColorPanelSubset.vue'
 export default {
     name:'ListOfColors',
+    data() {
+        return {
+            listOptions:{}
+        }
+    },
+    created() {
+        this.loadList();
+        
+    },
     components: {ColorPanelSubset},
     computed: {
-        listOptions(){
-            return this.$store.state.currentMoodColors.listOfColors
-        },
         listLayer(){
             return this.$store.state.currentMoodColors.listLayer
         },
@@ -26,6 +33,9 @@ export default {
 
     },
     methods: {
+        loadList() {
+            ColorFunctions.get('plot/listofcolors').then(res=>res.json()).then(data =>{this.listOptions=data})
+        },
         exitPanel(){
             this.$store.commit('currentMoodColors/togglePanel')
         },

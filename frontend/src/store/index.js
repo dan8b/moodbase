@@ -19,7 +19,7 @@ const store = createStore({
     butts,
     },
   plugins: [createPersistedState({
-    paths:['auth','currentMoodColors','userData','communityData','butts']
+    paths:['auth','userData','communityData','butts']
   })],
 
 });

@@ -2,7 +2,7 @@
 
 <transition leave-active-class="animate__animated animate__fadeOut" >
 
-    <div @click="triggerMove" @mouseenter="setHover" @mouseleave="setHover" :style="box">
+    <div @click="triggerMove" @mouseenter="hoverOver=!hoverOver" @mouseleave="hoverOver=!hoverOver" :style="box">
         <slot  > </slot>
     </div>   
 
@@ -11,10 +11,15 @@
 </template>
 
 <script>
+import ColorFunctions from '@/services/color.functions.js'
 export default {
     name:'ColorfulBox2',
     components:{},
     props: {
+        selectionOnly:{
+            type:Boolean,
+            default:false,
+        },
         quadrant: {
             type:String,
             required:true
@@ -27,10 +32,6 @@ export default {
             type:String,
             default:"0%"
         },
-        display:{
-            type:String,
-            default:""
-        }
     },
     data() {
         return {
@@ -62,12 +63,11 @@ export default {
         box() {
             if (this.toggleHover === true){
                 return {
-                    '--h':"linear-gradient(to "+this.xDir+this.xColor+", transparent)",
-                    '--v':"linear-gradient(to "+this.yDir+this.yColor+", transparent)",
+                    '--h':"linear-gradient(to "+this.xDir+this.xColor+")",
+                    '--v':"linear-gradient(to "+this.yDir+this.yColor+")",
                     '--border':this.borderVisibility,
                     '--offsetX':this.x,
                     '--offsetY':this.y,
-                    '--display':this.display
                     }
                 }
             else {
@@ -77,7 +77,6 @@ export default {
                     '--border':this.borderVisibility,
                     '--offsetX':this.x,
                     '--offsetY':this.y,
-                    '--float':this.display
                 }
             }
         },
@@ -96,32 +95,32 @@ export default {
             return this.$store.state.currentMoodColors.quadrants
         },
         xColor() {
-            return this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.xVar];
+            const baseColor =this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.xVar]
+            return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
+
         },
         yColor() {
-            return this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.yVar];
+            const baseColor = this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.yVar];
+            return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
         },
         xDir() {
             if (this.quadrant === "one" || this.quadrant === "three") {
-                return "right, "
+                return "left, "
             }
             else {
-                return "left, "
+                return "right, "
             }
         },
         yDir() {
             if (this.quadrant==="one" || this.quadrant==="two") {
-                return "bottom, "
+                return "top, "
             }
             else {
-                return "top, "
+                return "bottom, "
             }
         },
     },
         methods:{
-            setHover() {
-                this.hoverOver=!this.hoverOver;
-            },
             triggerMove() {
                 this.lockHover=true
                 this.$store.commit('currentMoodColors/animateText',this.quadrant);

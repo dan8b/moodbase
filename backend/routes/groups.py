@@ -8,7 +8,15 @@ groupRoute=APIRouter(
     tags=['GroupData'],
 )
 
-@groupRoute.post('/creategroup')
-def createNewGroup(newGroup: GroupData, user:str=Depends(gate)):
-    GroupSchema.createGroup(newGroup,getUserFromToken(user))
-    return 
+# @groupRoute.post('/creategroup')
+# def createNewGroup(newGroup: GroupData, user:str=Depends(gate)):
+#     GroupSchema.createGroup(newGroup,getUserFromToken(user))
+#     return 
+
+@groupRoute.post('/checkgroupname/{name}')
+def validateName(name:str, user:str=Depends(gate)):
+    return GroupSchema.validateGroupName(name,user)
+
+@groupRoute.post('/checkmembernames')
+def validateMemberNames(names:list,user:str=Depends(gate)):
+    return

@@ -54,7 +54,7 @@ export default {
         },
         colorName() { 
             var val=""
-            const list=this.$store.state.currentMoodColors.listOfColors
+            const list=this.$store.state.auth.listOfColors
             for (let k of Object.keys(list)){
                 if (this.textColor in list[k]){
                     val = list[k][this.textColor]

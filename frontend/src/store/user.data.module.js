@@ -29,14 +29,11 @@ export const userData = {
             return PlotFunctions.bucketMood(toBucket)
         },
         packageChartData(state){
-            // const vals=state.timestamps.map(date => Date.parse(date))
-            // const parseDate = timeParse("%Y-%m-%d")
-            // const dates=extent(vals, val => parseDate(val))
-            return state.happiness
-            // return {
-            //     happiness:state.lineChartArrays.happinessVals,
-            //     calm: state.lineChartArrays.calmVals
-            //     }
+            return {
+                happiness:state.happiness,
+                calm: state.calm,
+                count: state.calm.length
+            }
         },
     },
     actions: {

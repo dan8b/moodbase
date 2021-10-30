@@ -1,8 +1,9 @@
 <template>
 <div class="dashboard">
         <UserDataOverview />
-        <div class="dashboardContainer"> 
-        <UserLineChart :data="chartData" />
+        <div class="dashboard-container"> 
+            <user-scatter-plot :chosenVariables="{happiness:true,calm:true}" :data="chartData" />
+            
         </div>
 
     <!-- <div v-if="popularityPanel===true" >
@@ -21,15 +22,15 @@
 </template>
 
 <script>
-import UserLineChart from '@/components/DataVisualizationComponents/UserLineChart.vue'
 // import CommunityDataOverview from './CommunityDataOverview.vue'
 import UserDataOverview from '@/components/DataVisualizationComponents/UserDataOverview.vue'
+import UserScatterPlot from './UserScatterPlot.vue'
 // import ColorPopularityDetails from './ColorPopularityDetails.vue'
 // import ClickMap from './ClickMap.vue'
 
 export default {
     name: 'VisualizationDashboard',
-    components: { UserLineChart, UserDataOverview},
+    components: { UserScatterPlot, UserDataOverview},
     computed: {
         wheelStatus() {
             return this.$store.getters['wheelLock/isWheelLocked']
@@ -58,9 +59,12 @@ export default {
 
 <style scoped>
 
+.dashboard-container{
+    width:30%;
+}
 
 .dashboard{
-    width:100vw;
+    width:50;
     height:90vw;
 }
 

@@ -3,19 +3,19 @@
 <div  class="navbar" v-if="checkLogin">
 
   <div class="navitem">
-    <router-link to="/home">(moodbase)</router-link> 
+    <router-link to="/home">back to base!</router-link> 
   </div>
   <div class="navitem">
-    <router-link to="/plot">(plot my mood)</router-link> 
+    <router-link to="/plot">how do you feel?</router-link> 
   </div>
   <div class="navitem">
-    <router-link to="/allot">(weigh my mood)</router-link>
+    <router-link to="/allot">what's bothering you?</router-link>
   </div>
   <div class="navitem">
-    <router-link to="/groups">(check my groups)</router-link>
+    <router-link to="/groups">how are your groups doing?</router-link>
   </div>
   <div class="navitem">
-    <a id="logoutButton" @click="logout">(logout)</a>
+    <a id="logoutButton" @click="logout">logout</a>
   </div>  
 </div> 
 
@@ -63,7 +63,7 @@ methods:{
 <style>
 
 .navitem {
-  margin-left:5%;
+  margin-left:2%;
 }
 
 body, html {

@@ -14,7 +14,7 @@
   </transition>
 
   <div class="center">
-      <PlotGrid4 />
+      <PlotGrid4 :userColorMode="true" />
   </div>
 </div>
 </template>
@@ -27,6 +27,11 @@ import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponent
 export default {
     name:'PlotPage',
     components: { PlotGrid4, PlotColorPicker, ColorSelectionPanel},
+    beforeCreate(){
+      console.log("Here?")
+      this.$store.dispatch('currentMoodColors/createInitialState',true)
+      this.$store.dispatch('auth/getListOfChoices')
+    },
     data() {
       return {
         isWheelLocked:false,
@@ -41,12 +46,7 @@ export default {
       currentVariable(){
         return this.$store.state.currentMoodColors.variableSelection
       }
-       
-
-
     },
-
-
 }
 </script>
 

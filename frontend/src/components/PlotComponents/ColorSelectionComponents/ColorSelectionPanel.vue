@@ -5,8 +5,7 @@
   <svg v-if="colorDemonstration!=null">
     <rect  width="200" height="200" :fill="colorDemonstration"/>
   </svg>
-        <button @click="postColorChange" v-if="readyForCommit" > Confirm change </button>
- </div>
+</div>
 
 </template>
 
@@ -16,13 +15,7 @@ import ListOfColors from './ListOfColors.vue'
 export default {
     name: 'ColorSelectionPanel',
     components: { ListOfColors },
-    props: {
-      chosenVariableToChange:String,
-    },
     computed:{
-      readyForCommit(){
-        return this.$store.state.currentMoodColors.readyForCommit
-      },
       currentVariable(){
         return this.$store.state.currentMoodColors.variableSelection;
       },

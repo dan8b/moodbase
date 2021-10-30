@@ -1,20 +1,23 @@
 <template >
-            <button v-if="isQuadrantActive!='none'" @click="unselectQuadrant"> Take me back </button>
+<button v-if="isQuadrantActive!='none'" @click="unselectQuadrant"> Take me back </button>
 
  <div v-make-room-for-panel="getOutTheWay" :watch="getOutTheWay" class="flexct">
    <div class="flexr">
+
         <colorful-box-2 quadrant="one" >
             <text-element quadrantNum="one" :variable="quadrants.one.data.xVar" />
             <text-element quadrantNum="one" :variable="quadrants.one.data.yVar" y="40%"/>        
         </colorful-box-2>
 
-        <colorful-box-2 quadrant="two"  >
+        <colorful-box-2  quadrant="two"  >
             <text-element quadrantNum="two" :variable="quadrants.two.data.xVar" />
             <text-element quadrantNum="two" :variable="quadrants.two.data.yVar" y="40%"/>   
         </colorful-box-2>
+
     </div>
+
     <div class="flexr">
-        <colorful-box-2 quadrant="three">
+        <colorful-box-2  quadrant="three">
             <text-element quadrantNum="three" :variable="quadrants.three.data.xVar" />
             <text-element quadrantNum="three" :variable="quadrants.three.data.yVar" y="40%"/>
         </colorful-box-2>           
@@ -41,6 +44,13 @@ import ColorfulBox2 from './ColorfulBox2.vue'
 export default {
     name: 'PlotGrid4',
     components: {ColorfulBox2,TextElement,PlotBox},
+    props: {
+        userColorMode:{
+            type:Boolean,
+            default:true,
+            required:false,
+        },
+    },
     data() {
         return {
             showGrid:true,
@@ -59,11 +69,14 @@ export default {
             return this.$store.state.currentMoodColors.quadrants
         },
         isQuadrantActive(){
+            if (!this.userColorMode) {
+                return "none"
+            }
             return this.$store.state.currentMoodColors.activeQuadrant
         }
     },
     beforeCreate() {
-         this.$store.commit('currentMoodColors/initializeGridState')
+        this.$store.commit('currentMoodColors/initializeGridState')
         },
     methods:{
         unselectQuadrant(){
@@ -84,7 +97,6 @@ export default {
 </script>
 
 <style scoped>
-
 
 .flexct{
     height:100%;
