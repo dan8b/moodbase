@@ -8,12 +8,6 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    async getListOfChoices( {commit} ){
-      console.log("Before promise")
-      await AuthService.get('plot/listofcolors').then(res=>res.json())
-        .then(data=>{ console.log("after promise") 
-        commit('setColorList', data)})
-    },
     login({ commit }, user) {
       return AuthService.login(user)
       .then(
@@ -62,9 +56,6 @@ export const auth = {
     },
     refreshToken(state,newToken){
       window.localStorage.setItem('accessToken',newToken)
-    },
-    setColorList(state,listData){
-      state.listOfColors=listData;
     },
   },
 

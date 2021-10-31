@@ -6,11 +6,13 @@ import { moodClassification } from "./classification.module";
 import { userData } from './user.data.module'
 import { butts } from './weight.module'
 import { communityData } from "./community.data.module";
+import { plotPage } from './plot.page.module'
 import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
   modules: {
     auth,
+    plotPage,
     currentMoodColors,
     wheelLock,
     moodClassification,

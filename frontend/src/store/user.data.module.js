@@ -53,6 +53,7 @@ export const userData = {
         },
         
         addNewClick(state,clickData){
+            console.log(state)
             state.happiness.push(clickData.lineChartData.happinessVal);
             state.calm.push(clickData.lineChartData.calmVal);
             state.mapX.push(clickData.clickMap.happinessVal);

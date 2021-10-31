@@ -4,6 +4,7 @@
 
 <script>
 import PlotFunctions from '@/services/plot.functions.js'
+import ColorFunctions from '@/services/color.functions.js'
 import _ from 'lodash'
 
 export default {
@@ -20,28 +21,32 @@ export default {
       }      
     },
     xColor() {
-        return this.$store.state.currentMoodColors.quadrants[this.quadrant].data.xColor;
+        const baseColor = this.$store.state.currentMoodColors.quadrants[this.quadrant].data.xColor;
+        return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
+
     },
     yColor() {
-        return this.$store.state.currentMoodColors.quadrants[this.quadrant].data.yColor;
+        const baseColor = this.$store.state.currentMoodColors.quadrants[this.quadrant].data.yColor;
+        return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
+
     },
     xDir() {
         if (this.quadrant === "one" || this.quadrant === "three") {
-            return "right, "
+            return "left, "
         }
         else {
-            return "left, "
+            return "right, "
         }
     },
     yDir() {
         if (this.quadrant==="one" || this.quadrant==="two") {
-            return "bottom, "
-        }
-        else {
             return "top, "
         }
-    },    
-  },
+        else {
+            return "bottom, "
+        }
+    },
+  },    
   methods:{
 
     convertCoordinates(e){      
@@ -51,7 +56,6 @@ export default {
     collectPlotData(e) {
       const transformed = PlotFunctions.coordinateTransform(e,this.quadrant)
       const lineChartData={'happinessVal':transformed.happinessVal,'calmVal':transformed.calmVal}
-
       const clickMapData={'happinessVal':PlotFunctions.maplerize(transformed.happinessVal,"x"),
       'calmVal':PlotFunctions.maplerize(transformed.calmVal,"y")}
       const payload={'lineChart':lineChartData,'clickMap':clickMapData}

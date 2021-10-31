@@ -2,7 +2,8 @@
 
 <transition leave-active-class="animate__animated animate__fadeOut" >
 
-    <div @click="triggerMove" @mouseenter="hoverOver=!hoverOver" @mouseleave="hoverOver=!hoverOver" :style="box">
+    <div @click="triggerMove" @mouseenter="showGradientFill=!showGradientFill" 
+    @mouseleave="showGradientFill=!showGradientFill" :style="setBoxFill">
         <slot  > </slot>
     </div>   
 
@@ -16,13 +17,9 @@ export default {
     name:'ColorfulBox2',
     components:{},
     props: {
-        selectionOnly:{
-            type:Boolean,
-            default:false,
-        },
-        quadrant: {
-            type:String,
-            required:true
+        quadrantData:{
+            type: Object,
+            required:true,
         },
         x: {
             type:String,
@@ -35,37 +32,32 @@ export default {
     },
     data() {
         return {
-            hoverOver:false,
+            showGradientFill:false,
+            hideGradientFill:false,
+            showBorder:"1px solid black"
         }
     },
     computed: {
-        lockHover() {
-            var lock=false;
-            if (this.quadrant===this.$store.state.currentMoodColors.activeQuadrant){
-                lock=true
-            }
-            return lock
+    // get some state data to get started 
+        currentlyActiveQuadrant(){
+            return this.$store.state.plotPage.activeQuadrant
         },
-        allFill(){
-            return this.$store.state.currentMoodColors.variableSelection
-        },
-        toggleHover() {
-            if (this.boxVisibility === false || this.lockHover === true) {
-                return false
-            }
-            else if (this.hoverOver===true || (this.allFill!="" && this.allFill!="hide")){
+    // lock box fill by disabling hover functionality once you've clicked on a box
+        blockHoverEffects() {
+            if (this.hideGradientFill === true){
                 return true
             }
             else {
                 return false
             }
         },
-        box() {
-            if (this.toggleHover === true){
+        // dynamic css styling for the border and background (gradient) of each box
+        setBoxFill() {
+            if ( this.showGradientFill ){
                 return {
                     '--h':"linear-gradient(to "+this.xDir+this.xColor+")",
                     '--v':"linear-gradient(to "+this.yDir+this.yColor+")",
-                    '--border':this.borderVisibility,
+                    '--border':this.showBorder,
                     '--offsetX':this.x,
                     '--offsetY':this.y,
                     }
@@ -74,37 +66,22 @@ export default {
                 return {
                     '--h':"linear-gradient(to right, white, transparent)",
                     '--v':"linear-gradient(to right, white, transparent)",
-                    '--border':this.borderVisibility,
+                    '--border':this.showBorder,
                     '--offsetX':this.x,
                     '--offsetY':this.y,
                 }
             }
         },
-        boxVisibility() {
-            return this.$store.state.currentMoodColors.quadrants[this.quadrant].visibility.showBox
-        },
-        borderVisibility(){
-            if (this.boxVisibility===true){
-                return "1px solid black"
-            }
-            else {
-                return "none"
-            }
-        },
-        quadrantStateData(){
-            return this.$store.state.currentMoodColors.quadrants
-        },
         xColor() {
-            const baseColor =this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.xVar]
+            const baseColor = this.quadrantData.x.color;
             return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
-
         },
         yColor() {
-            const baseColor = this.$store.state.currentMoodColors.colorProfile[this.quadrantStateData[this.quadrant].data.yVar];
+            const baseColor = this.quadrantData.y.color;
             return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
         },
         xDir() {
-            if (this.quadrant === "one" || this.quadrant === "three") {
+            if (this.quadrantData.number === "one" || this.quadrantData.number === "three") {
                 return "left, "
             }
             else {
@@ -112,21 +89,47 @@ export default {
             }
         },
         yDir() {
-            if (this.quadrant==="one" || this.quadrant==="two") {
+            if (this.quadrantData.number ==="one" || this.quadrantData.number ==="two") {
                 return "top, "
             }
             else {
                 return "bottom, "
             }
         },
-    },
-        methods:{
-            triggerMove() {
-                this.lockHover=true
-                this.$store.commit('currentMoodColors/animateText',this.quadrant);
-                this.$store.commit('currentMoodColors/hideQuadrants',this.quadrant);
+        showBoxAfterClick() {
+            if ( this.quadrantData.number != this.currentlyActiveQuadrant && this.currentlyActiveQuadrant !="") {
+                this.showBorder="none"
             }
-        } 
+            else if ( this.quadrantData.number === this.currentlyActiveQuadrant) {
+                return this.waitASecond()
+            }
+            else{
+                return true
+            }
+        }
+    },
+    watch:
+    {
+        currentlyActiveQuadrant(newVal,oldVal){
+            if (newVal === this.quadrantData.number) {
+                this.showBorder="none";
+                this.showGradientFill=false;
+            }
+            else if (oldVal )
+        }
+    },
+    methods:{
+            waitASecond() {
+                setTimeout( ( () => {return false}), 1000)
+            },
+            triggerMove() {
+                this.$store.commit('plotPage/activateQuadrant',this.quadrantData.number)
+                if (this.currentlyActiveQuadrant === this.quadrantData.number) {
+                    this.showGradientFill = false;
+                    this.$store.commit('plotPage/animateText',this.quadrantData.number); 
+                    }
+            }
+    } 
 }
 </script>
 

@@ -77,37 +77,6 @@ class PlotFunctions extends FetchFunctions{
         }
         return classificationInformation
       }
-//maybe redo below with a constructor
-      prepareQuadrants(colorDataObject){
-
-        const variablePairs={
-            one:{xVar:'sadness',yVar:'calm',translateX:0,translateY:0},
-            two:{xVar:'happiness',yVar:'calm', translateX:1,translateY:0},
-            three:{xVar:'sadness',yVar:'anxiety', translateX:0, translateY:1},
-            four:{xVar:'happiness',yVar:'anxiety', translateX:1, translateY:1},
-          }
-
-        const quadrantObject = {}
-
-        for (let num of Object.keys(variablePairs)){
-          quadrantObject[num] = 
-            {
-              data:{
-                xVar: variablePairs[num].xVar,
-                yVar: variablePairs[num].yVar,
-                xColor: colorDataObject[variablePairs[num].xVar],
-                yColor: colorDataObject[variablePairs[num].yVar]
-              },
-              visibility: {
-                showBox:true,
-                showText:true,
-                showClassifier:false,
-              },
-              moveText:false
-            }
-        }
-        return quadrantObject
-      }   
     returnGradient(request){
       if (request.axis==="h"){
           return {x1:1,x2:0,y1:0.5,y2:0.5}

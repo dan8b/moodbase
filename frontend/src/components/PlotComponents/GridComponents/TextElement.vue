@@ -1,6 +1,7 @@
 <template>
 <transition leave-active-class="animate__animated animate__fadeOut" >
-    <div v-transition-grid="variable" :watch="animate" v-if="showText" :style="tStyle" >{{ variable }}</div>
+    <div v-transition-grid="variableAndQuadrantData.variable" :watch="animate" 
+    v-if="showText" :style="tStyle" >{{ variableAndQuadrantData.variable }}</div>
 </transition>
 </template>
 
@@ -19,17 +20,10 @@ export default {
             default:false,
             type:Boolean
         },
-        fill: {
-            default:"black",
-            type: String
-        },
-        variable: {
-            required:true,
-            type:String
-        },
-
-        quadrantNum: {
-            type:String
+        variableAndQuadrantData:{
+            type:Object,
+            required:false,
+            default:( () => {return {}} )
         },
         y: {
             type:String,
@@ -37,27 +31,34 @@ export default {
         }
     },
     computed: {
+        test(){
+            return this.$store.state.plotPage.animateTextInQuadrant
+        },
         animate() {
-            return this.$store.state.currentMoodColors.quadrants[this.quadrantNum].moveText
+            const quadrantToAnimate = this.$store.state.plotPage.animateTextInQuadrant
+            console.log(quadrantToAnimate)
+            if ( quadrantToAnimate === this.variableAndQuadrantData.quadrant){
+                return true
+            }
+            return false
         },
         tStyle() {
             return { '--yOffset':this.y}
         },
         activeQuadrant(){
-            return this.$store.state.currentMoodColors.activeQuadrant
+            return this.$store.state.plotPage.activeQuadrant
         },
         showText(){
-            var show = true;
-            if ( this.activeQuadrant!=this.quadrantNum && this.activeQuadrant!="none"){
-                show=false;
+            if ( this.activeQuadrant!=this.variableAndQuadrantData.quadrant && this.activeQuadrant!=""){
+                return false;
             }
-            return show
+            return true
         }
     },
     directives: {
         transitionGrid: {
             updated: (el, binding) => {
-                const quad = binding.instance.$props.quadrantNum
+                const quad = binding.instance.$props.variableAndQuadrantData.quadrant
                 if (binding.instance.animate){
                     if (binding.value==="calm" || binding.value==="anxiety"){
                         Animator.shiftX(el,quad)

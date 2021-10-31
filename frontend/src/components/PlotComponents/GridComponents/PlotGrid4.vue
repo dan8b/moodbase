@@ -1,36 +1,51 @@
 <template >
-<button v-if="isQuadrantActive!='none'" @click="unselectQuadrant"> Take me back </button>
+
+<!-- a column-display flex box corresponding to the whole 4quadrant box -->
 
  <div v-make-room-for-panel="getOutTheWay" :watch="getOutTheWay" class="flexct">
-   <div class="flexr">
 
-        <colorful-box-2 quadrant="one" >
-            <text-element quadrantNum="one" :variable="quadrants.one.data.xVar" />
-            <text-element quadrantNum="one" :variable="quadrants.one.data.yVar" y="40%"/>        
+     <!-- a button to move the state of this component from showing just one plotbox (data collection) to showing
+     the 4 quadrant box (data visualization) -->
+
+    <button margin-bottom="10%" v-if="currentlyActiveQuadrant!=''" @click="unselectQuadrant"> Take me back </button>
+
+     <!-- row flex first row of the 4quadrant box -->
+
+   <div  class="flexr">
+
+       <!-- a colorful box component for each quadrant within the row --> 
+
+        <colorful-box-2 :quadrantData="quadrants.one" >
+
+            <!-- slot component holding text label for the box; animate on click (move or disappear) -->
+
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('one',true)" />
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('one',false)" y="40%"/>   
+
         </colorful-box-2>
 
-        <colorful-box-2  quadrant="two"  >
-            <text-element quadrantNum="two" :variable="quadrants.two.data.xVar" />
-            <text-element quadrantNum="two" :variable="quadrants.two.data.yVar" y="40%"/>   
+        <colorful-box-2  :quadrantData="quadrants.two"  >
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('two',true)" />
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('two',false)" y="40%"/>   
         </colorful-box-2>
 
     </div>
+
+     <!-- row flex second row of the 4quadrant box -->
 
     <div class="flexr">
-        <colorful-box-2  quadrant="three">
-            <text-element quadrantNum="three" :variable="quadrants.three.data.xVar" />
-            <text-element quadrantNum="three" :variable="quadrants.three.data.yVar" y="40%"/>
+        <!-- a colorful box component for each quadrant within the row --> 
+
+        <colorful-box-2  :quadrantData="quadrants.three">
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('three',true)" />
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('three',false)" y="40%"/>
         </colorful-box-2>           
-        <colorful-box-2 quadrant="four"  >
-            <text-element quadrantNum="four" :variable="quadrants.four.data.xVar" />
-            <text-element quadrantNum="four" :variable="quadrants.four.data.yVar" y="40%"/>   
+        <colorful-box-2 :quadrantData="quadrants.four"  >
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('four',true)" />
+            <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('four',false)" y="40%"/>   
         </colorful-box-2>
     </div>
 
-    <transition enter-active-class="animate__animated animate__fadeIn" >
-
-        <plot-box v-if="isQuadrantActive!='none'" />
-    </transition>
 </div>
 
 
@@ -38,12 +53,12 @@
 
 <script>
 import Animator from '@/services/animation.service.js'
-import PlotBox from './PlotBox.vue'
 import TextElement from './TextElement.vue'
 import ColorfulBox2 from './ColorfulBox2.vue'
 export default {
     name: 'PlotGrid4',
-    components: {ColorfulBox2,TextElement,PlotBox},
+    components: {ColorfulBox2,TextElement},
+
     props: {
         userColorMode:{
             type:Boolean,
@@ -51,12 +66,14 @@ export default {
             required:false,
         },
     },
+
     data() {
         return {
             showGrid:true,
             fill:"none"
         }
     },
+
     computed: {
         getOutTheWay() {
             var moveIt=false;
@@ -66,19 +83,28 @@ export default {
             return moveIt;
         },
         quadrants() {
-            return this.$store.state.currentMoodColors.quadrants
+            return this.$store.getters['plotPage/organizeColorsByQuadrant']
         },
-        isQuadrantActive(){
-            if (!this.userColorMode) {
-                return "none"
-            }
-            return this.$store.state.currentMoodColors.activeQuadrant
+
+        currentlyActiveQuadrant(){
+            return this.$store.state.plotPage.activeQuadrant
         }
     },
-    beforeCreate() {
-        this.$store.commit('currentMoodColors/initializeGridState')
-        },
     methods:{
+        prepareQuadrantDataForTextElement(number, horizontal){
+            if (horizontal === true){
+                return {
+                    variable: this.quadrants[number].x.variable,
+                    quadrant: this.quadrants[number].number
+                }
+            }
+            else {
+                return {
+                    variable: this.quadrants[number].y.variable,
+                    quadrant: this.quadrants[number].number
+                }            
+            }
+        },
         unselectQuadrant(){
             this.$store.commit('currentMoodColors/unselectQuadrant')
             this.$store.commit('currentMoodColors/showQuadrants')
