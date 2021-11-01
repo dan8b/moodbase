@@ -14,7 +14,7 @@ const initialState = {
     animateTextInQuadrant:"",
     oldColorToChange:"",
     newColorOfChange :"",
-    activeQuadrant : "",
+    activeQuadrant : "none",
 }
 
 export const plotPage = {
@@ -28,21 +28,38 @@ export const plotPage = {
                 three:['sadness','anxiety'],
                 four:['happiness','anxiety']
             }
-            const quadrantState = {};
-            for (let [number,variables] of Object.entries(quadrantsByVariable) ) {
-                quadrantState[number]={
-                        x:{
-                        variable:variables[0],
-                        color:state.colorProfile[variables[0]]
+
+            if (state.activeQuadrant != "none") {
+                const vars = quadrantsByVariable[state.activeQuadrant]
+                return {
+                    x:{
+                        variable:vars[0],
+                        color:state.colorProfile[vars[0]]
                     },
                         y:{
-                        variable:variables[1],
-                        color:state.colorProfile[variables[1]],
+                        variable:vars[1],
+                        color:state.colorProfile[vars[1]],
                     },
-                    number:number
+                    number:state.activeQuadrant
                 }
             }
-            return quadrantState
+            else{
+                const allQuadrantState = {};    
+                for (let [number,variables] of Object.entries(quadrantsByVariable) ) {
+                    allQuadrantState[number]={
+                            x:{
+                            variable:variables[0],
+                            color:state.colorProfile[variables[0]]
+                        },
+                            y:{
+                            variable:variables[1],
+                            color:state.colorProfile[variables[1]],
+                        },
+                        number:number
+                    }
+                }
+                return allQuadrantState
+            }
         }
     },
     actions: {

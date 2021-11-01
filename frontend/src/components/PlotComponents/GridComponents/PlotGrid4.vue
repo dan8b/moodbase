@@ -2,7 +2,7 @@
 
 <!-- a column-display flex box corresponding to the whole 4quadrant box -->
 
- <div v-make-room-for-panel="getOutTheWay" :watch="getOutTheWay" class="flexct">
+ <div @click="dataCollectionMode=true"  class="flexct">
 
      <!-- a button to move the state of this component from showing just one plotbox (data collection) to showing
      the 4 quadrant box (data visualization) -->
@@ -45,78 +45,78 @@
             <text-element :variableAndQuadrantData="prepareQuadrantDataForTextElement('four',false)" y="40%"/>   
         </colorful-box-2>
     </div>
-
+    <transition enter-active-class="animate__animated animate__fadeIn" >
+        <!-- div enters data collection mode; at this point -->
+      <plot-box v-if="currentlyActiveQuadrant!='none'" />
+    
+    </transition>
 </div>
 
 
 </template>
 
 <script>
-import Animator from '@/services/animation.service.js'
+// import Animator from '@/services/animation.service.js'
 import TextElement from './TextElement.vue'
 import ColorfulBox2 from './ColorfulBox2.vue'
+import PlotBox from './PlotBox.vue'
+import { ref } from 'vue'
+import { useStore } from 'vuex'
 export default {
     name: 'PlotGrid4',
-    components: {ColorfulBox2,TextElement},
+    components: {ColorfulBox2,TextElement, PlotBox},
 
-    props: {
-        userColorMode:{
-            type:Boolean,
-            default:true,
-            required:false,
-        },
-    },
+    setup(){
+        const store = useStore()
+        const quadrants = store.getters['plotPage/organizeColorsByQuadrant'];
+        const currentlyActiveQuadrant = ref(store.state.plotPage.activeQuadrant);
 
-    data() {
-        return {
-            showGrid:true,
-            fill:"none"
-        }
-    },
 
-    computed: {
-        getOutTheWay() {
-            var moveIt=false;
-            if (this.$store.state.currentMoodColors.variableSelection != ""){
-                moveIt=true;
-            }
-            return moveIt;
-        },
-        quadrants() {
-            return this.$store.getters['plotPage/organizeColorsByQuadrant']
-        },
+        // watch(currentlyActiveQuadrant, (newValue) => {
+        //     if (newValue!="") {
+        //         console.log(newValue)
+        //         quadrants = store.getters['plotPage/organizeColorsByQuadrant'];
+        //     }
+        // })
 
-        currentlyActiveQuadrant(){
-            return this.$store.state.plotPage.activeQuadrant
-        }
-    },
-    methods:{
-        prepareQuadrantDataForTextElement(number, horizontal){
+        function prepareQuadrantDataForTextElement(number, horizontal){
             if (horizontal === true){
                 return {
-                    variable: this.quadrants[number].x.variable,
-                    quadrant: this.quadrants[number].number
+                    variable: quadrants[number].x.variable,
+                    quadrant: quadrants[number].number
                 }
             }
             else {
                 return {
-                    variable: this.quadrants[number].y.variable,
-                    quadrant: this.quadrants[number].number
+                    variable: quadrants[number].y.variable,
+                    quadrant: quadrants[number].number
                 }            
             }
-        },
-        unselectQuadrant(){
-            this.$store.commit('currentMoodColors/unselectQuadrant')
-            this.$store.commit('currentMoodColors/showQuadrants')
         }
+        return { currentlyActiveQuadrant, quadrants, prepareQuadrantDataForTextElement }
     },
-    directives: {
-        makeRoomForPanel:{
-            updated: (el,binding) => {
-                Animator.moveGridAside(el,binding.value)
-            }
-        }        
-    }
+
+
+//graveyard
+        // const getOutTheWay = computed( () => {
+        //     var moveIt = false;
+        //     if ( store.state.plotPage. != ""){
+        //         moveIt=true;
+        //     }
+        //     return moveIt
+        // })
+        // function unselectQuadrant(){
+        //     this.$store.commit('currentMoodColors/unselectQuadrant')
+        //     this.$store.commit('currentMoodColors/showQuadrants')
+        // }
+    // v-make-room-for-panel="getOutTheWay" :watch="getOutTheWay"
+    // directives: {
+    //     makeRoomForPanel:{
+    //         updated: (el,binding) => {
+    //             Animator.moveGridAside(el,binding.value)
+    //         }
+    //     }        
+    // }
 }
 
 

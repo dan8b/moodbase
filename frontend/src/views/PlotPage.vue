@@ -1,7 +1,11 @@
-<template >
 
+<template>
+/* eslint-disable */
+
+<br>
+<br>
 <div class="flexrp">
-  <transition enter-active-class="animate__animated animate__slideInUp fast">
+  <!-- <transition enter-active-class="animate__animated animate__slideInUp fast">
 
   <div class="flexc">
     <PlotColorPicker  v-if="quadrantSelected==='none'" />
@@ -10,30 +14,24 @@
 
     
   </div>
-  </transition>
+  </transition> -->
 
   <div class="center">
-      <PlotGrid4 :userColorMode="true" />
-    
-    <transition enter-active-class="animate__animated animate__fadeIn" >
-        <!-- div enters data collection mode; at this point -->
-      <plot-box v-if="showDataBox" />
-    
-    </transition>
-  </div>
+      <PlotGrid4 />
+    </div>
 </div>
 
 </template>
 
 <script>
-import PlotBox from '@/components/PlotComponents/GridComponents/PlotBox'
 import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
 import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
 import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
 
 export default {
     name:'PlotPage',
-    components: { PlotGrid4, PlotColorPicker, ColorSelectionPanel, PlotBox},
+    components: { PlotGrid4, PlotColorPicker, 
+      ColorSelectionPanel},
     beforeCreate(){
       this.$store.dispatch('plotPage/retrieveUserColorChoices')
     },
@@ -42,7 +40,7 @@ export default {
         if (this.quadrantSelected!="") {
           return true
         }
-        else{
+        else {
           return false
         }
       },

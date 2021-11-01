@@ -3,16 +3,18 @@
 </template>
 
 <script>
+// box we will be using to collect data from click
+
 import PlotFunctions from '@/services/plot.functions.js'
 import ColorFunctions from '@/services/color.functions.js'
 import _ from 'lodash'
 
 export default {
   name: 'PlotBox',
-  components: { },
   computed: {
-    quadrant() {
-      return this.$store.state.currentMoodColors.activeQuadrant
+
+initializeBox() {
+      return this.$store.getters['plotPage/organizeColorsByQuadrant']
     },
     gradients() {
       return{
@@ -21,17 +23,17 @@ export default {
       }      
     },
     xColor() {
-        const baseColor = this.$store.state.currentMoodColors.quadrants[this.quadrant].data.xColor;
-        return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
+      const baseColor = "#FBF6D9"
+      return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
 
     },
     yColor() {
-        const baseColor = this.$store.state.currentMoodColors.quadrants[this.quadrant].data.yColor;
+        const baseColor = "#FBF6D9"
         return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
 
     },
     xDir() {
-        if (this.quadrant === "one" || this.quadrant === "three") {
+        if (this.initializeBox.number === "one" || this.initializeBox.number === "three") {
             return "left, "
         }
         else {
@@ -39,7 +41,7 @@ export default {
         }
     },
     yDir() {
-        if (this.quadrant==="one" || this.quadrant==="two") {
+        if ( this.initializeBox.number ==="one" || this.initializeBox.number ==="two") {
             return "top, "
         }
         else {
@@ -55,9 +57,14 @@ export default {
   },
     collectPlotData(e) {
       const transformed = PlotFunctions.coordinateTransform(e,this.quadrant)
-      const lineChartData={'happinessVal':transformed.happinessVal,'calmVal':transformed.calmVal}
-      const clickMapData={'happinessVal':PlotFunctions.maplerize(transformed.happinessVal,"x"),
-      'calmVal':PlotFunctions.maplerize(transformed.calmVal,"y")}
+      const lineChartData={
+        'happinessVal':transformed.happinessVal,
+        'calmVal':transformed.calmVal
+        }
+      const clickMapData={
+        'happinessVal':PlotFunctions.maplerize(transformed.happinessVal,"x"),
+        'calmVal':PlotFunctions.maplerize(transformed.calmVal,"y")
+        }
       const payload={'lineChart':lineChartData,'clickMap':clickMapData}
       this.$store.commit('userData/addNewClick',payload)
       PlotFunctions.post(payload,'plot/getplotclick')

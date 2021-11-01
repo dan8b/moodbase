@@ -2,8 +2,8 @@
 
 <transition leave-active-class="animate__animated animate__fadeOut" >
 
-    <div @click="triggerMove" @mouseenter="showGradientFill=!showGradientFill" 
-    @mouseleave="showGradientFill=!showGradientFill" :style="setBoxFill">
+    <div @click="triggerMove" @mouseenter="handleBoxVisibility(false)" 
+    @mouseleave="handleBoxVisibility(false)" :style="setBoxFill">
         <slot  > </slot>
     </div>   
 
@@ -53,7 +53,7 @@ export default {
         },
         // dynamic css styling for the border and background (gradient) of each box
         setBoxFill() {
-            if ( this.showGradientFill ){
+            if ( this.showGradientFill && !this.hideGradientFill ){
                 return {
                     '--h':"linear-gradient(to "+this.xDir+this.xColor+")",
                     '--v':"linear-gradient(to "+this.yDir+this.yColor+")",
@@ -96,39 +96,40 @@ export default {
                 return "bottom, "
             }
         },
-        showBoxAfterClick() {
-            if ( this.quadrantData.number != this.currentlyActiveQuadrant && this.currentlyActiveQuadrant !="") {
-                this.showBorder="none"
-            }
-            else if ( this.quadrantData.number === this.currentlyActiveQuadrant) {
-                return this.waitASecond()
-            }
-            else{
-                return true
-            }
-        }
+
     },
     watch:
     {
-        currentlyActiveQuadrant(newVal,oldVal){
+        currentlyActiveQuadrant(newVal){
             if (newVal === this.quadrantData.number) {
-                this.showBorder="none";
-                this.showGradientFill=false;
+                this.$store.commit('plotPage/animateText',this.quadrantData.number); 
+                setTimeout( ( () => {
+                    this.handleBoxVisibility(true)
+                }),
+                1000)
             }
-            else if (oldVal )
+            else { 
+                this.handleBoxVisibility(true);
+            }
         }
     },
     methods:{
-            waitASecond() {
-                setTimeout( ( () => {return false}), 1000)
-            },
-            triggerMove() {
-                this.$store.commit('plotPage/activateQuadrant',this.quadrantData.number)
-                if (this.currentlyActiveQuadrant === this.quadrantData.number) {
-                    this.showGradientFill = false;
-                    this.$store.commit('plotPage/animateText',this.quadrantData.number); 
-                    }
+        handleBoxVisibility(hoverOnly){
+            if (hoverOnly === true){
+                this.hideGradientFill=true
+                this.showBorder=false
+
             }
+            else if (!this.hideGradientFill) {
+                this.showGradientFill=!this.showGradientFill;
+            }
+        },
+        triggerMove() {
+           this.$store.commit('plotPage/activateQuadrant',this.quadrantData.number)
+           if (this.currentlyActiveQuadrant === this.quadrantData.number) {
+               this.showGradientFill = false;
+               }
+        }
     } 
 }
 </script>

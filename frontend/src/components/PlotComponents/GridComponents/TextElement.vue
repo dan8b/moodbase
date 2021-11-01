@@ -36,7 +36,6 @@ export default {
         },
         animate() {
             const quadrantToAnimate = this.$store.state.plotPage.animateTextInQuadrant
-            console.log(quadrantToAnimate)
             if ( quadrantToAnimate === this.variableAndQuadrantData.quadrant){
                 return true
             }
