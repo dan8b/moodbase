@@ -4,19 +4,18 @@
 
 <script>
 import AuthService from '@/services/auth.service.js'
-import {useRouter} from 'vue-router'
-import {useStore} from 'vuex'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
-  name:'Activate',
-  props: { token: String},
-  async setup(props){
-    const store=useStore()
-    const router=useRouter()
+  name: 'Activate',
+  props: { token: String },
+  async setup (props) {
+    const store = useStore()
+    const router = useRouter()
     await AuthService.activate(props.token)
-    .then(res=>res.json())
-    .then(async data=>
-      {
-        store.dispatch('auth/activate',data)
+      .then(res => res.json())
+      .then(async data => {
+        store.dispatch('auth/activate', data)
         store.dispatch('userData/retrieveClickData')
         store.dispatch('currentMoodColors/createInitialState')
         router.push('/home')

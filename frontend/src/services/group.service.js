@@ -1,6 +1,6 @@
-import FetchFunctions from "./fetch.service"
+import FetchFunctions from './fetch.service'
 
-class GroupFunctions extends FetchFunctions{
+class GroupFunctions extends FetchFunctions {
 }
 
-export default new GroupFunctions
+export default new GroupFunctions()

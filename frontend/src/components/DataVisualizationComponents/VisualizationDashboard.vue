@@ -1,9 +1,9 @@
 <template>
 <div class="dashboard">
         <UserDataOverview />
-        <div class="dashboard-container"> 
+        <div class="dashboard-container">
             <user-scatter-plot :chosenVariables="{happiness:true,calm:true}" :data="chartData" />
-            
+
         </div>
 
     <!-- <div v-if="popularityPanel===true" >
@@ -13,12 +13,11 @@
         <!-- <CommunityDataOverview /> -->
 
     <!-- <div  >
-        <ClickMap :isCommunityData="false" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
-        <ClickMap :isCommunityData="true" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" /> 
+        <ClickMap :isCommunityData="false" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" />
+        <ClickMap :isCommunityData="true" @wheel.prevent="isWheelLocked===true" @unlock-wheel="unlockWheel($event)" />
     </div> -->
 </div>
-  
-                    
+
 </template>
 
 <script>
@@ -29,30 +28,30 @@ import UserScatterPlot from './UserScatterPlot.vue'
 // import ClickMap from './ClickMap.vue'
 
 export default {
-    name: 'VisualizationDashboard',
-    components: { UserScatterPlot, UserDataOverview},
-    computed: {
-        wheelStatus() {
-            return this.$store.getters['wheelLock/isWheelLocked']
-        },
-        popularityPanel() {
-            return this.$store.state.currentMoodColors.popularityPanel
-        },
-        currentPopularityData() {
-            return this.$store.state.currentMoodColors.popularityData
-        },
-        chartData() {
-            return this.$store.getters['userData/packageChartData']
-        }
+  name: 'VisualizationDashboard',
+  components: { UserScatterPlot, UserDataOverview },
+  computed: {
+    wheelStatus () {
+      return this.$store.getters['wheelLock/isWheelLocked']
     },
-    methods: {
-        unlockWheel(){
-            this.$store.commit('wheelLock/unlockWheel')
-            },
-        togglePopularityPanel(){
-            this.$store.commit('currentMoodColors/toggleDetailPanel',null)
-            }
-        },   
+    popularityPanel () {
+      return this.$store.state.currentMoodColors.popularityPanel
+    },
+    currentPopularityData () {
+      return this.$store.state.currentMoodColors.popularityData
+    },
+    chartData () {
+      return this.$store.getters['userData/packageChartData']
+    }
+  },
+  methods: {
+    unlockWheel () {
+      this.$store.commit('wheelLock/unlockWheel')
+    },
+    togglePopularityPanel () {
+      this.$store.commit('currentMoodColors/toggleDetailPanel', null)
+    }
+  }
 
 }
 </script>
@@ -68,10 +67,8 @@ export default {
     height:90vw;
 }
 
-
 div {
     color:rgb(0, 0, 0);
 }
-
 
 </style>

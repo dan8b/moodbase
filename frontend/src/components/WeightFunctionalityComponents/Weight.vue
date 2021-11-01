@@ -8,12 +8,12 @@
 
 <script>
 export default {
-    name:'Weight',
-    props: {
-        buttonName: String,
-        buttonValue: Number,
-        userId:Number,
-    },
+  name: 'Weight',
+  props: {
+    buttonName: String,
+    buttonValue: Number,
+    userId: Number
+  }
 
 }
 </script>

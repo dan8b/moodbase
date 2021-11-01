@@ -1,8 +1,8 @@
 <template>
   <Form  id="SetGroupName">
-       
+
     <span v-if="errorMessage!=''"> {{errorMessage}} </span>
-  
+
   <div v-if="!readOnly('name')" >
     <Form :validation-schema="groupNameSchema" id="GroupNameForm" @submit="validateGroupName">
         <label  for="groupName">What's your group called? </label>
@@ -10,7 +10,7 @@
         <button  class="button2"  type="submit">Make my group!</button>
     </Form>
   </div>
-      
+
        <br>
 
   <div v-if="!readOnly('members')" >
@@ -29,8 +29,8 @@
   </div>
 
   <div v-if="unregisteredMembers.length>0">
-    <span> Some of the people on your list are not registered users of the moodbase. 
-            Click the button next to an invitee's name to send them an invite to 
+    <span> Some of the people on your list are not registered users of the moodbase.
+            Click the button next to an invitee's name to send them an invite to
             create an account and join your group. </span>
     <ul v-for="(unregistered,i) in unregisteredMembers" :key="i">
       <li>
@@ -53,7 +53,7 @@
       <PlotColorPicker />
 
       <color-selection-panel v-if="currentVariable!=''"  />
-    
+
     </div>
     <div>
       <plot-grid-4 :userColorMode="false" />
@@ -67,7 +67,7 @@
         <label for="member">Who's in your group (email)? </label>
         <Field  name="member" type="email" /><br><br>
         <button  class="button2"  type="submit">Add this person to my group!</button>
-    </Form>    
+    </Form>
   </div>
 
   </Form>
@@ -78,87 +78,86 @@
 import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
 import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
 import GroupFunctions from '@/services/group.service.js'
-import { Form, Field } from "vee-validate";
-import * as yup from "yup";
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 export default {
-  name:'CreateGroupForm',
+  name: 'CreateGroupForm',
   components: {
     PlotGrid4,
     PlotColorPicker,
     Form,
     Field
   },
-  data() {
+  data () {
     return {
-      activePhase:['name','members','colors','weights','done'],
-      currentPhase:0,
-      errorMessage:"",
-      readyToSubmitMembers:false,
-      listOfMembers:[],
-      unregisteredMembers:[],
+      activePhase: ['name', 'members', 'colors', 'weights', 'done'],
+      currentPhase: 0,
+      errorMessage: '',
+      readyToSubmitMembers: false,
+      listOfMembers: [],
+      unregisteredMembers: []
     }
   },
   methods: {
-    sendInvites() {
+    sendInvites () {
       const inviteToRegister = []
-      for (let member of Object.keys(this.unregisteredMembers)) {
-        if (this.unregisteredMembers[member]===true){
+      for (const member of Object.keys(this.unregisteredMembers)) {
+        if (this.unregisteredMembers[member] === true) {
           inviteToRegister.push(member)
         }
-        return GroupFunctions.post({registered:this.listOfMembers,unregistered:inviteToRegister},'/')
+        return GroupFunctions.post({ registered: this.listOfMembers, unregistered: inviteToRegister }, '/')
       }
     },
-    postMemberList(){
-      return GroupFunctions.post(this.listOfMembers,'/checkmembernames')
+    postMemberList () {
+      return GroupFunctions.post(this.listOfMembers, '/checkmembernames')
         .then(
           async response => {
-            for (let unregistered of response.unregistered){
-              this.unregisteredMembers[unregistered]=false;
+            for (const unregistered of response.unregistered) {
+              this.unregisteredMembers[unregistered] = false
             }
-            this.listOfMembers = response.registered    
+            this.listOfMembers = response.registered
           }
         )
     },
-    addMemberToList(MemberNames){
+    addMemberToList (MemberNames) {
       this.listOfMembers.push(MemberNames.name)
     },
-    validateGroupName(GroupNameForm){
-      return GroupFunctions.post({},'/checkgroupname'+GroupNameForm.groupName)
+    validateGroupName (GroupNameForm) {
+      return GroupFunctions.post({}, '/checkgroupname' + GroupNameForm.groupName)
         .then(
-          async response=>{
-            if ('success' in response){
-              this.errorMessage = "";
-              this.phase++;
+          async response => {
+            if ('success' in response) {
+              this.errorMessage = ''
+              this.phase++
+            } else {
+              this.errorMessage = response.error
+            }
           }
-            else{
-              this.errorMessage = response.error;
-          }
-        }
-      )
+        )
     },
-    readOnly(phase){
-      if (this.activePhase[this.currentPhase]===phase){
+    readOnly (phase) {
+      if (this.activePhase[this.currentPhase] === phase) {
         return false
       }
       return true
     }
-  }, 
-  setup() {
+  },
+  setup () {
     const groupNameSchema = yup.object().shape({
       groupName: yup
         .string()
-        .required("Username is required!")
-        .min(3, "Must be at least 3 characters!")
-        .max(20, "Must be maximum 20 characters!"),
-    });
+        .required('Username is required!')
+        .min(3, 'Must be at least 3 characters!')
+        .max(20, 'Must be maximum 20 characters!')
+    })
     const memberSchema = yup.object().shape({
       memberEmail: yup
         .string()
-        .required("Email is required!")
-        .email("Email is invalid!")
-        .max(30, "Must be maximum 30 characters!"),
-    });    
-    return {groupNameSchema, memberSchema}
+        .required('Email is required!')
+        .email('Email is invalid!')
+        .max(30, 'Must be maximum 30 characters!')
+    })
+    return { groupNameSchema, memberSchema }
   }
 }
 </script>

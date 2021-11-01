@@ -10,8 +10,8 @@
 <script>
 import ColorTextElement from './ColorTextElement.vue'
 export default {
-    name:'PlotColorPicker',
-    components: {ColorTextElement},
+  name: 'PlotColorPicker',
+  components: { ColorTextElement }
 }
 </script>
 

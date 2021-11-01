@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div >
   which color best describes {{currentVariable}}?
   <ListOfColors />
@@ -13,28 +13,28 @@
 import PlotFunctions from '@/services/plot.functions.js'
 import ListOfColors from './ListOfColors.vue'
 export default {
-    name: 'ColorSelectionPanel',
-    components: { ListOfColors },
-    computed:{
-      currentVariable(){
-        return this.$store.state.currentMoodColors.variableSelection;
-      },
-      colorDemonstration(){
-        return this.$store.state.currentMoodColors.demoColor;
-      },
-
+  name: 'ColorSelectionPanel',
+  components: { ListOfColors },
+  computed: {
+    currentVariable () {
+      return this.$store.state.currentMoodColors.variableSelection
     },
+    colorDemonstration () {
+      return this.$store.state.currentMoodColors.demoColor
+    }
 
-    methods: {
+  },
 
-      postColorChange(){
-        const changeDataInfo=this.$store.getters['currentMoodColors/packageChangeData']
-        PlotFunctions.post(changeDataInfo,'plot/changecolors')
-        this.$store.commit('currentMoodColors/togglePanel')
-        this.$store.commit('currentMoodColors/changeLayer')
-        },
-      
-    },
+  methods: {
+
+    postColorChange () {
+      const changeDataInfo = this.$store.getters['currentMoodColors/packageChangeData']
+      PlotFunctions.post(changeDataInfo, 'plot/changecolors')
+      this.$store.commit('currentMoodColors/togglePanel')
+      this.$store.commit('currentMoodColors/changeLayer')
+    }
+
+  }
 
 }
 </script>

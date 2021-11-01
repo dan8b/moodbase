@@ -3,17 +3,15 @@
 <div>
  <h2 > Confused? Check out the documentation.</h2>
 
-
-<h2> <span> <router-link to="/register"> Sign up</router-link> </span> to start showing and sharing how you feel.  </h2> 
+<h2> <span> <router-link to="/register"> Sign up</router-link> </span> to start showing and sharing how you feel.  </h2>
 
  <h2> Or, <span> <router-link to="/login"> Sign in</router-link> </span> to record your mood! </h2>
 </div>
 </template>
 
-
 <script>
 export default {
-    name: "PublicHome",
+  name: 'PublicHome'
 }
 </script>
 

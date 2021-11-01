@@ -12,7 +12,6 @@
 
     <color-selection-panel v-if="currentVariable!=''"  />
 
-    
   </div>
   </transition> -->
 
@@ -24,33 +23,26 @@
 </template>
 
 <script>
-import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
+// import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
 import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
-import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
+// import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
 
 export default {
-    name:'PlotPage',
-    components: { PlotGrid4, PlotColorPicker, 
-      ColorSelectionPanel},
-    beforeCreate(){
-      this.$store.dispatch('plotPage/retrieveUserColorChoices')
+  name: 'PlotPage',
+  components: {
+    PlotGrid4
+  },
+  beforeCreate () {
+    this.$store.dispatch('plotPage/retrieveUserColorChoices')
+  },
+  computed: {
+    quadrantSelected () {
+      return this.$store.state.plotPage.activeQuadrant
     },
-    computed: {
-      showDataBox(){
-        if (this.quadrantSelected!="") {
-          return true
-        }
-        else {
-          return false
-        }
-      },
-      quadrantSelected(){
-        return this.$store.state.plotPage.activeQuadrant
-      },
-      currentVariable(){
-        return this.$store.state.plotPage.variableSelectedForColorChange
-      },
-    },
+    currentVariable () {
+      return this.$store.state.plotPage.variableSelectedForColorChange
+    }
+  }
 }
 </script>
 
@@ -58,7 +50,7 @@ export default {
 
 .flexrp{
   position:fixed;
-  transform: translate(30%, 0);  
+  transform: translate(30%, 0);
   display:flex;
   margin:0;
   padding:0;

@@ -2,10 +2,10 @@
 
 <transition leave-active-class="animate__animated animate__fadeOut" >
 
-    <div @click="triggerMove" @mouseenter="handleBoxVisibility(false)" 
+    <div @click="triggerMove" @mouseenter="handleBoxVisibility(false)"
     @mouseleave="handleBoxVisibility(false)" :style="setBoxFill">
         <slot  > </slot>
-    </div>   
+    </div>
 
 </transition>
 
@@ -14,123 +14,116 @@
 <script>
 import ColorFunctions from '@/services/color.functions.js'
 export default {
-    name:'ColorfulBox2',
-    components:{},
-    props: {
-        quadrantData:{
-            type: Object,
-            required:true,
-        },
-        x: {
-            type:String,
-            default:"0%"
-        },
-        y: {
-            type:String,
-            default:"0%"
-        },
+  name: 'ColorfulBox2',
+  components: {},
+  props: {
+    quadrantData: {
+      type: Object,
+      required: true
     },
-    data() {
-        return {
-            showGradientFill:false,
-            hideGradientFill:false,
-            showBorder:"1px solid black"
-        }
+    x: {
+      type: String,
+      default: '0%'
     },
-    computed: {
-    // get some state data to get started 
-        currentlyActiveQuadrant(){
-            return this.$store.state.plotPage.activeQuadrant
-        },
+    y: {
+      type: String,
+      default: '0%'
+    }
+  },
+  data () {
+    return {
+      showGradientFill: false,
+      hideGradientFill: false,
+      showBorder: '1px solid black'
+    }
+  },
+  computed: {
+    // get some state data to get started
+    currentlyActiveQuadrant () {
+      return this.$store.state.plotPage.activeQuadrant
+    },
     // lock box fill by disabling hover functionality once you've clicked on a box
-        blockHoverEffects() {
-            if (this.hideGradientFill === true){
-                return true
-            }
-            else {
-                return false
-            }
-        },
-        // dynamic css styling for the border and background (gradient) of each box
-        setBoxFill() {
-            if ( this.showGradientFill && !this.hideGradientFill ){
-                return {
-                    '--h':"linear-gradient(to "+this.xDir+this.xColor+")",
-                    '--v':"linear-gradient(to "+this.yDir+this.yColor+")",
-                    '--border':this.showBorder,
-                    '--offsetX':this.x,
-                    '--offsetY':this.y,
-                    }
-                }
-            else {
-                return {
-                    '--h':"linear-gradient(to right, white, transparent)",
-                    '--v':"linear-gradient(to right, white, transparent)",
-                    '--border':this.showBorder,
-                    '--offsetX':this.x,
-                    '--offsetY':this.y,
-                }
-            }
-        },
-        xColor() {
-            const baseColor = this.quadrantData.x.color;
-            return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
-        },
-        yColor() {
-            const baseColor = this.quadrantData.y.color;
-            return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
-        },
-        xDir() {
-            if (this.quadrantData.number === "one" || this.quadrantData.number === "three") {
-                return "left, "
-            }
-            else {
-                return "right, "
-            }
-        },
-        yDir() {
-            if (this.quadrantData.number ==="one" || this.quadrantData.number ==="two") {
-                return "top, "
-            }
-            else {
-                return "bottom, "
-            }
-        },
-
+    blockHoverEffects () {
+      if (this.hideGradientFill === true) {
+        return true
+      } else {
+        return false
+      }
     },
-    watch:
+    // dynamic css styling for the border and background (gradient) of each box
+    setBoxFill () {
+      if (this.showGradientFill && !this.hideGradientFill) {
+        return {
+          '--h': 'linear-gradient(to ' + this.xDir + this.xColor + ')',
+          '--v': 'linear-gradient(to ' + this.yDir + this.yColor + ')',
+          '--border': this.showBorder,
+          '--offsetX': this.x,
+          '--offsetY': this.y
+        }
+      } else {
+        return {
+          '--h': 'linear-gradient(to right, white, transparent)',
+          '--v': 'linear-gradient(to right, white, transparent)',
+          '--border': this.showBorder,
+          '--offsetX': this.x,
+          '--offsetY': this.y
+        }
+      }
+    },
+    xColor () {
+      const baseColor = this.quadrantData.x.color
+      return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
+    },
+    yColor () {
+      const baseColor = this.quadrantData.y.color
+      return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
+    },
+    xDir () {
+      if (this.quadrantData.number === 'one' || this.quadrantData.number === 'three') {
+        return 'left, '
+      } else {
+        return 'right, '
+      }
+    },
+    yDir () {
+      if (this.quadrantData.number === 'one' || this.quadrantData.number === 'two') {
+        return 'top, '
+      } else {
+        return 'bottom, '
+      }
+    }
+
+  },
+  watch:
     {
-        currentlyActiveQuadrant(newVal){
-            if (newVal === this.quadrantData.number) {
-                this.$store.commit('plotPage/animateText',this.quadrantData.number); 
-                setTimeout( ( () => {
-                    this.handleBoxVisibility(true)
-                }),
-                1000)
-            }
-            else { 
-                this.handleBoxVisibility(true);
-            }
+      currentlyActiveQuadrant (newVal) {
+        if (newVal === this.quadrantData.number) {
+          this.$store.commit('plotPage/animateText', this.quadrantData.number)
+          setTimeout(() => {
+            this.handleBoxVisibility(true)
+          },
+          1000)
+        } else {
+          this.handleBoxVisibility(true)
         }
+      }
     },
-    methods:{
-        handleBoxVisibility(hoverOnly){
-            if (hoverOnly === true){
-                this.hideGradientFill=true
-                this.showBorder=false
-
-            }
-            else if (!this.hideGradientFill) {
-                this.showGradientFill=!this.showGradientFill;
-            }
-        },
-        triggerMove() {
-           this.$store.commit('plotPage/activateQuadrant',this.quadrantData.number)
-           if (this.currentlyActiveQuadrant === this.quadrantData.number) {
-               this.showGradientFill = false;
-               }
-        }
-    } 
+  methods: {
+    handleBoxVisibility (hoverOnly) {
+      if (hoverOnly === true) {
+        this.hideGradientFill = true
+        this.showBorder = false
+      } else if (!this.hideGradientFill) {
+        this.showGradientFill = !this.showGradientFill
+      }
+    },
+    triggerMove () {
+      this.$store.commit('plotPage/activateQuadrant', this.quadrantData.number)
+      if (this.currentlyActiveQuadrant === this.quadrantData.number) {
+        this.showGradientFill = false
+      }
+    }
+  }
 }
 </script>
 

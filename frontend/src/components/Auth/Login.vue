@@ -13,55 +13,53 @@
     <br>
       <button class="button2"> <router-link to="/forgot"> Click on me if you forgot your password </router-link> </button>
 
-
 </div>
 </template>
 
 <script>
-import { Form, Field } from "vee-validate";
-import * as yup from "yup";
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     Form,
-    Field,
+    Field
   },
 
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.loggedIn;
-    },
+    loggedIn () {
+      return this.$store.state.auth.loggedIn
+    }
   },
-  created() {
+  created () {
     if (this.loggedIn) {
-      this.$router.push("/home");
+      this.$router.push('/home')
     }
   },
   methods: {
-    handleLogin(loginForm) {
-      return this.$store.dispatch("auth/login",loginForm)
-      .then(
-        async response =>{
-        if (Object.keys(response)[0]==="access_token"){
-          await this.$store.dispatch('userData/retrieveClickData')
-          await this.$store.dispatch('communityData/communityClickData')
-          await this.$store.dispatch('butts/createButts')
-          this.$router.push('/home')
-        }
-        else {
-          alert(new Error('Login failed'))
-        }
-        })
+    handleLogin (loginForm) {
+      return this.$store.dispatch('auth/login', loginForm)
+        .then(
+          async response => {
+            if (Object.keys(response)[0] === 'access_token') {
+              await this.$store.dispatch('userData/retrieveClickData')
+              await this.$store.dispatch('communityData/communityClickData')
+              await this.$store.dispatch('butts/createButts')
+              this.$router.push('/home')
+            } else {
+              alert(new Error('Login failed'))
+            }
+          })
     }
-    },
-  setup() {
+  },
+  setup () {
     const schema = yup.object().shape({
-      username: yup.string().required("Username is required!"),
-      password: yup.string().required("Password is required!"),
-    });
-    return {schema}
+      username: yup.string().required('Username is required!'),
+      password: yup.string().required('Password is required!')
+    })
+    return { schema }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -87,7 +85,6 @@ export default {
   color:#BBBBBB;
   border-color:#BBBBBB;
 }
-
 
 label {
   font-size:150%;

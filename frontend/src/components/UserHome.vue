@@ -8,16 +8,15 @@
 <script>
 import VisualizationDashboard from '@/components/DataVisualizationComponents/VisualizationDashboard.vue'
 export default {
-components: { VisualizationDashboard },
-name: 'UserHome',
+  components: { VisualizationDashboard },
+  name: 'UserHome',
 
-
-computed: {
-    checkedLoggedIn() {
-      if (this.$store.state.auth.loggedIn===true) { return true}
+  computed: {
+    checkedLoggedIn () {
+      if (this.$store.state.auth.loggedIn === true) { return true }
       return false
-   }
-},
+    }
+  }
 }
 
 </script>

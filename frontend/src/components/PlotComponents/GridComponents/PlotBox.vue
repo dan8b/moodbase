@@ -13,63 +13,59 @@ export default {
   name: 'PlotBox',
   computed: {
 
-initializeBox() {
+    initializeBox () {
       return this.$store.getters['plotPage/organizeColorsByQuadrant']
     },
-    gradients() {
-      return{
-      '--h':"linear-gradient(to "+this.xDir+this.xColor+", transparent)",
-      '--v':"linear-gradient(to "+this.yDir+this.yColor+", transparent)",
-      }      
+    gradients () {
+      return {
+        '--h': 'linear-gradient(to ' + this.xDir + this.xColor + ', transparent)',
+        '--v': 'linear-gradient(to ' + this.yDir + this.yColor + ', transparent)'
+      }
     },
-    xColor() {
-      const baseColor = "#FBF6D9"
-      return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
-
+    xColor () {
+      const baseColor = '#FBF6D9'
+      return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
-    yColor() {
-        const baseColor = "#FBF6D9"
-        return ColorFunctions.createGradientString(baseColor, [7,100])+baseColor+" 100%"
-
+    yColor () {
+      const baseColor = '#FBF6D9'
+      return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
-    xDir() {
-        if (this.initializeBox.number === "one" || this.initializeBox.number === "three") {
-            return "left, "
-        }
-        else {
-            return "right, "
-        }
+    xDir () {
+      if (this.initializeBox.number === 'one' || this.initializeBox.number === 'three') {
+        return 'left, '
+      } else {
+        return 'right, '
+      }
     },
-    yDir() {
-        if ( this.initializeBox.number ==="one" || this.initializeBox.number ==="two") {
-            return "top, "
-        }
-        else {
-            return "bottom, "
-        }
-    },
-  },    
-  methods:{
-
-    convertCoordinates(e){      
-      const transformed=PlotFunctions.coordinateTransform(e,this.quadrant)
-      console.log(PlotFunctions.classifyMoodValues(transformed))
+    yDir () {
+      if (this.initializeBox.number === 'one' || this.initializeBox.number === 'two') {
+        return 'top, '
+      } else {
+        return 'bottom, '
+      }
+    }
   },
-    collectPlotData(e) {
-      const transformed = PlotFunctions.coordinateTransform(e,this.quadrant)
-      const lineChartData={
-        'happinessVal':transformed.happinessVal,
-        'calmVal':transformed.calmVal
-        }
-      const clickMapData={
-        'happinessVal':PlotFunctions.maplerize(transformed.happinessVal,"x"),
-        'calmVal':PlotFunctions.maplerize(transformed.calmVal,"y")
-        }
-      const payload={'lineChart':lineChartData,'clickMap':clickMapData}
-      this.$store.commit('userData/addNewClick',payload)
-      PlotFunctions.post(payload,'plot/getplotclick')
-      },
-    throttleClick:_.throttle(function(e) {this.collectPlotData(e);},1000)
+  methods: {
+
+    convertCoordinates (e) {
+      const transformed = PlotFunctions.coordinateTransform(e, this.quadrant)
+      console.log(PlotFunctions.classifyMoodValues(transformed))
+    },
+    collectPlotData (e) {
+      const transformed = PlotFunctions.coordinateTransform(e, this.quadrant)
+      const lineChartData = {
+        happinessVal: transformed.happinessVal,
+        calmVal: transformed.calmVal
+      }
+      const clickMapData = {
+        happinessVal: PlotFunctions.maplerize(transformed.happinessVal, 'x'),
+        calmVal: PlotFunctions.maplerize(transformed.calmVal, 'y')
+      }
+      const payload = { lineChart: lineChartData, clickMap: clickMapData }
+      this.$store.commit('userData/addNewClick', payload)
+      PlotFunctions.post(payload, 'plot/getplotclick')
+    },
+    throttleClick: _.throttle(function (e) { this.collectPlotData(e) }, 1000)
   }
 }
 </script>

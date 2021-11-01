@@ -3,10 +3,10 @@
 <div  class="navbar" v-if="checkLogin">
 
   <div class="navitem">
-    <router-link to="/home">back to base!</router-link> 
+    <router-link to="/home">back to base!</router-link>
   </div>
   <div class="navitem">
-    <router-link to="/plot">how do you feel?</router-link> 
+    <router-link to="/plot">how do you feel?</router-link>
   </div>
   <div class="navitem">
     <router-link to="/allot">what's bothering you?</router-link>
@@ -16,14 +16,13 @@
   </div>
   <div class="navitem">
     <a id="logoutButton" @click="logout">logout</a>
-  </div>  
-</div> 
+  </div>
+</div>
 
   <br>
 
   <br>
     <router-view :key="$route.fullPath"></router-view>
-
 
 </body>
 </template>
@@ -31,34 +30,33 @@
 <script>
 // import {mapActions} from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      hide:false
+      hide: false
     }
   },
 
-  computed: { 
-    checkLogin() {
-      return this.$store.state.auth.loggedIn;
-      },
+  computed: {
+    checkLogin () {
+      return this.$store.state.auth.loggedIn
+    }
 
   },
 
-methods:{ 
-  toggleHide() {
-      this.hide=!this.hide;
+  methods: {
+    toggleHide () {
+      this.hide = !this.hide
     },
-  logout() { 
-    this.$store.commit('currentMoodColors/wipeColorState')
-    this.$store.commit('userData/wipeDataState')
-    this.$store.dispatch('auth/logout');
-    this.$router.push('/');
+    logout () {
+      this.$store.commit('currentMoodColors/wipeColorState')
+      this.$store.commit('userData/wipeDataState')
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/')
     }
-}
+  }
 
 }
 </script>
-
 
 <style>
 
@@ -84,7 +82,6 @@ body, html {
   color: #2c3e50;
 }
 
-
 .navbar {
   justify-content:center;
   position:fixed;
@@ -99,7 +96,6 @@ body, html {
   font-weight: bold;
   background-color: #ffb3d9;
 }
-
 
 li {
   list-style-type:none;
@@ -118,7 +114,6 @@ a {
 ul a:hover{
   color:#42b983
 }
-
 
 div a.router-link-exact-active {
   text-decoration:none;

@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import PopularColors from "./PopularColors.vue"
+import PopularColors from './PopularColors.vue'
 export default {
-    name:'CommunityDataOverview',
-    components: {PopularColors}
+  name: 'CommunityDataOverview',
+  components: { PopularColors }
 }
 </script>
 

@@ -4,40 +4,40 @@
         <label for="password">Your new password </label>
         <Field class="field" name="password" type="text" /><br><br>
         </Form>
-        
+
 </template>
 
 <script>
 import AuthService from '@/services/auth.service.js'
-import { Form, Field } from "vee-validate";
-import * as yup from "yup";
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 export default {
-    name:'ResetPasswordForm',
-    components: {
+  name: 'ResetPasswordForm',
+  components: {
     Form,
-    Field,
+    Field
   },
   props: {
-    token:String,
+    token: String
   },
 
-  data(){
-      const schema = yup.object().shape({
-        password: yup.string().required("Password is required!").min(6,"must be at least 6 characters"),
-      })
-      return {schema}
+  data () {
+    const schema = yup.object().shape({
+      password: yup.string().required('Password is required!').min(6, 'must be at least 6 characters')
+    })
+    return { schema }
   },
-  
-  methods:{
-      resetPassword(newPassword){
-        const checkToken=this.$route.params.token
-        const passwordPayload=
+
+  methods: {
+    resetPassword (newPassword) {
+      const checkToken = this.$route.params.token
+      const passwordPayload =
         {
-          newPassword:newPassword.password,
-          token:checkToken
+          newPassword: newPassword.password,
+          token: checkToken
         }
-        console.log(passwordPayload)
-        return AuthService.reset(passwordPayload)
+      console.log(passwordPayload)
+      return AuthService.reset(passwordPayload)
     }
   }
 }

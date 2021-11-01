@@ -4,34 +4,33 @@
       <span  :style="{'color':colorHex}"> {{colorName}}</span></button>
 </div>
 
-</template> 
+</template>
 
 <script>
 export default {
-    name: 'ColorPanelButton',
-    props: {
-        colorName:String,
-        colorHex:String,
+  name: 'ColorPanelButton',
+  props: {
+    colorName: String,
+    colorHex: String
+  },
+  computed: {
+    classVar () {
+      return { '--color': this.colorHex }
     },
-    computed: {
-        classVar() {
-            return { '--color':this.colorHex}
-        },
-        variableName(){
-            return this.$store.state.currentMoodColors.variableSelection;
-        }
-    },
-    methods: {
-        changeColor()
-        {
-            this.$store.commit('currentMoodColors/changeColor',this.colorHex);   
-        },
-        showColorDemonstration(){
-            this.$store.commit('currentMoodColors/showColorDemonstration',this.colorHex)
-        }
-    },
-
+    variableName () {
+      return this.$store.state.currentMoodColors.variableSelection
     }
+  },
+  methods: {
+    changeColor () {
+      this.$store.commit('currentMoodColors/changeColor', this.colorHex)
+    },
+    showColorDemonstration () {
+      this.$store.commit('currentMoodColors/showColorDemonstration', this.colorHex)
+    }
+  }
+
+}
 </script>
 <style scoped>
 #colorbutton{

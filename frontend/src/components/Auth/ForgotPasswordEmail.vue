@@ -8,31 +8,31 @@
 
 <script>
 import AuthService from '@/services/auth.service.js'
-import { Form, Field } from "vee-validate";
-import * as yup from "yup";
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 export default {
-name:'ForgotPasswordEmail',
+  name: 'ForgotPasswordEmail',
   components: {
     Form,
-    Field,
+    Field
   },
-   data() {
+  data () {
     const schema = yup.object().shape({
-            email: yup
+      email: yup
         .string()
-        .required("Email is required!")
-        .email("Email is invalid!")
-    });
+        .required('Email is required!')
+        .email('Email is invalid!')
+    })
     return { schema }
   },
   methods: {
-    submitResetRequest(e){
-      const resetModelObject={
-        email:e.email,
-        token:"",
-        newPassword:""
+    submitResetRequest (e) {
+      const resetModelObject = {
+        email: e.email,
+        token: '',
+        newPassword: ''
       }
-      return AuthService.forgot(resetModelObject).then(response=>response.json()).then(data=>{alert(data.message)})
+      return AuthService.forgot(resetModelObject).then(response => response.json()).then(data => { alert(data.message) })
     }
   }
 }

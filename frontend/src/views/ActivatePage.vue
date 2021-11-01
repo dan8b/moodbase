@@ -6,8 +6,8 @@
 import Activate from '../components/Auth/Activate.vue'
 
 export default {
-    name:'ActivatePage',
-    components: {Activate}
+  name: 'ActivatePage',
+  components: { Activate }
 }
 </script>
 

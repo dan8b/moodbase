@@ -8,39 +8,39 @@
         <Field class="field h-8" name="memberName" type="text" /><br><br>
 
         <button class="rounded-b-md h-8 px-2 font-bold" type="submit">Continue</button>
-    
+
     </Form>
 
 </div>
 </template>
 
 <script>
-import { Form, Field } from "vee-validate";
-import * as yup from "yup";
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 export default {
-  name: "SetNameAndMembers",
+  name: 'SetNameAndMembers',
   components: {
     Form,
-    Field,
+    Field
   },
 
   computed: {
 
   },
-  created() {
+  created () {
 
   },
   methods: {
 
-    },
-  setup() {
+  },
+  setup () {
     const schema = yup.object().shape({
-        groupName: yup.string().required("Group name is required!"),
-        memberName:yup.string().email("Email is invalid!")
-    });
-    return {schema}
+      groupName: yup.string().required('Group name is required!'),
+      memberName: yup.string().email('Email is invalid!')
+    })
+    return { schema }
   }
-};
+}
 </script>
 
 <style>
