@@ -67,7 +67,7 @@ export default {
           console.log(response)
           if (response.status === 200) {
             alert("Success! You'll be getting an activation link in your email soon.")
-          } else if (response.status != 200) {
+          } else if (response.status !== 200) {
             alert('User with that username or email already exists')
           }
         })

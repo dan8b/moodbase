@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     showDetails (emotion) {
-      if (this.currentVariable != emotion) {
+      if (this.currentVariable !== emotion) {
         this.$store.dispatch('currentMoodColors/getPopularityData', emotion)
       }
       this.$store.commit('currentMoodColors/toggleDetailPanel', emotion)

@@ -22,8 +22,8 @@ export const userData = {
           sign: Math.sign(state.happiness[i])
         },
         y: {
-          magnitude: Math.round(Math.abs(state.happiness[i])),
-          sign: Math.sign(state.happiness[i])
+          magnitude: Math.round(Math.abs(state.calm[i])),
+          sign: Math.sign(state.calm[i])
         }
       }
       return PlotFunctions.bucketMood(toBucket)
@@ -53,9 +53,8 @@ export const userData = {
     },
 
     addNewClick (state, clickData) {
-      console.log(state)
-      state.happiness.push(clickData.lineChartData.happinessVal)
-      state.calm.push(clickData.lineChartData.calmVal)
+      state.happiness.push(clickData.lineChart.happinessVal)
+      state.calm.push(clickData.lineChart.calmVal)
       state.mapX.push(clickData.clickMap.happinessVal)
       state.mapY.push(clickData.clickMap.calmVal)
     },

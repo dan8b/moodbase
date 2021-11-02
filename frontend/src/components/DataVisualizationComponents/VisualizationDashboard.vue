@@ -2,7 +2,7 @@
 <div class="dashboard">
         <UserDataOverview />
         <div class="dashboard-container">
-            <user-scatter-plot :chosenVariables="{happiness:true,calm:true}" :data="chartData" />
+            <user-scatter-plot :chosenVariables="{happiness:false,calm:true}" :data="chartData" />
 
         </div>
 

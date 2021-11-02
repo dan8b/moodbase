@@ -16,10 +16,6 @@ export default {
     subset: Object
   },
   methods: {
-    exitSubsetLayer () {
-      this.$store.commit('currentMoodColors/setSubset', null)
-      this.$store.commit('currentMoodColors/changeLayer')
-    }
   }
 }
 </script>

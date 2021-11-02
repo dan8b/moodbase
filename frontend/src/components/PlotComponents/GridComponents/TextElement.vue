@@ -48,7 +48,7 @@ export default {
       return this.$store.state.plotPage.activeQuadrant
     },
     showText () {
-      if (this.activeQuadrant != this.variableAndQuadrantData.quadrant && this.activeQuadrant != '') {
+      if (this.activeQuadrant !== this.variableAndQuadrantData.quadrant && this.activeQuadrant !== 'none') {
         return false
       }
       return true
@@ -61,13 +61,13 @@ export default {
         if (binding.instance.animate) {
           if (binding.value === 'calm' || binding.value === 'anxiety') {
             Animator.shiftX(el, quad)
-          } else if (binding.value == 'happiness' || binding.value === 'sadness') {
+          } else if (binding.value === 'happiness' || binding.value === 'sadness') {
             Animator.shiftY(el, quad)
           }
         } else {
           if (binding.value === 'calm' || binding.value === 'anxiety') {
             Animator.revertX(el, quad)
-          } else if (binding.value == 'happiness' || binding.value === 'sadness') {
+          } else if (binding.value === 'happiness' || binding.value === 'sadness') {
             Animator.revertY(el, quad)
           }
         }

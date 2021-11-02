@@ -1,6 +1,6 @@
 <template>
 <div :style="classVar">
-  <button @click="changeColor" @mouseover="showColorDemonstration">
+  <button @click="changeColor">
       <span  :style="{'color':colorHex}"> {{colorName}}</span></button>
 </div>
 
@@ -18,15 +18,12 @@ export default {
       return { '--color': this.colorHex }
     },
     variableName () {
-      return this.$store.state.currentMoodColors.variableSelection
+      return this.$store.state.plotPage.panelState.variableSelectedForColorChange
     }
   },
   methods: {
     changeColor () {
-      this.$store.commit('currentMoodColors/changeColor', this.colorHex)
-    },
-    showColorDemonstration () {
-      this.$store.commit('currentMoodColors/showColorDemonstration', this.colorHex)
+      this.$store.commit('plotPage/holdColorChange', this.colorHex)
     }
   }
 

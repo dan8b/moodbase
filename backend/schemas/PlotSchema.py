@@ -107,12 +107,12 @@ def createNewDay(listOfValues:list):
             'dayList':datetime.now().replace(hour=0,minute=0,second=0),
             'mapX':listOfValues[0],
             'mapY':listOfValues[1],
-            'averageHappiness':listOfValues[2],
-            'averageCalm':listOfValues[3],
+            'averageLineChartHappiness':listOfValues[2],
+            'averageLineChartCalm':listOfValues[3],
             'totalHappinessByDay':listOfValues[2],
             'totalCalmByDay':listOfValues[3],
             },
-        '$update':
+        '$inc':
             {'clickCount':1}
         })
     return True

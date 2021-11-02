@@ -48,7 +48,6 @@ export default {
       this.hide = !this.hide
     },
     logout () {
-      this.$store.commit('currentMoodColors/wipeColorState')
       this.$store.commit('userData/wipeDataState')
       this.$store.dispatch('auth/logout')
       this.$router.push('/')

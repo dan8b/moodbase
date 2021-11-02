@@ -1,9 +1,10 @@
 <template>
 <div id="panel">
 
-    <ul  v-for="(colorCategory,i) in listOptions" :key="i" >
-        <div :style="{'color':i}" @click="enterSubsetLayer(i)" v-if="listLayer===0">  {{ i }} </div>
-        <ColorPanelSubset v-if="listLayer===1 && currentSubset===i" :subset="colorCategory" />
+    <ul  v-for="(colorCategory,colorName) in listOptions" :key="colorName" >
+        <div :style="{'color':colorName}" @click="enterSubsetLayer(colorName)"
+        v-if="currentSubset===''">  {{ colorName }} </div>
+        <ColorPanelSubset v-if="currentSubset===colorName" :subset="colorCategory" />
     </ul>
  </div>
 </template>
@@ -23,24 +24,18 @@ export default {
   },
   components: { ColorPanelSubset },
   computed: {
-    listLayer () {
-      return this.$store.state.currentMoodColors.listLayer
-    },
     currentSubset () {
-      return this.$store.state.currentMoodColors.currentSubset
+      return this.$store.state.plotPage.panelState.inPanelSubset
     }
-
   },
   methods: {
     loadList () {
-      ColorFunctions.get('plot/listofcolors').then(res => res.json()).then(data => { this.listOptions = data })
+      ColorFunctions.get('plot/listofcolors')
+        .then(res => res.json())
+        .then(data => { this.listOptions = data })
     },
-    exitPanel () {
-      this.$store.commit('currentMoodColors/togglePanel')
-    },
-    enterSubsetLayer (subsetName) {
-      this.$store.commit('currentMoodColors/setSubset', subsetName)
-      this.$store.commit('currentMoodColors/changeLayer')
+    enterSubsetLayer (layerToEnter) {
+      this.$store.commit('plotPage/setColorSubset', layerToEnter)
     }
   }
 

@@ -13,7 +13,7 @@ export default {
   name: 'PlotBox',
   computed: {
 
-    initializeBox () {
+    quadrantData () {
       return this.$store.getters['plotPage/organizeColorsByQuadrant']
     },
     gradients () {
@@ -23,22 +23,22 @@ export default {
       }
     },
     xColor () {
-      const baseColor = '#FBF6D9'
+      const baseColor = this.quadrantData.x.color
       return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
     yColor () {
-      const baseColor = '#FBF6D9'
+      const baseColor = this.quadrantData.y.color
       return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
     xDir () {
-      if (this.initializeBox.number === 'one' || this.initializeBox.number === 'three') {
+      if (this.quadrantData.number === 'one' || this.quadrantData.numberr === 'three') {
         return 'left, '
       } else {
         return 'right, '
       }
     },
     yDir () {
-      if (this.initializeBox.number === 'one' || this.initializeBox.number === 'two') {
+      if (this.quadrantData.number === 'one' || this.quadrantData.number === 'two') {
         return 'top, '
       } else {
         return 'bottom, '
@@ -52,7 +52,7 @@ export default {
       console.log(PlotFunctions.classifyMoodValues(transformed))
     },
     collectPlotData (e) {
-      const transformed = PlotFunctions.coordinateTransform(e, this.quadrant)
+      const transformed = PlotFunctions.coordinateTransform(e, this.quadrantData.number)
       const lineChartData = {
         happinessVal: transformed.happinessVal,
         calmVal: transformed.calmVal

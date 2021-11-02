@@ -1,25 +1,33 @@
 import ColorFunctions from '@/services/color.functions.js'
 
-const initialState = {
-  colorProfile: {
-    happiness: '#FBF6D9',
-    calm: '#CFECEC',
-    anxiety: '#C35817',
-    sadness: '#2B1B17'
-  },
+const defaultColors = {
+  happiness: '#FBF6D9',
+  calm: '#CFECEC',
+  anxiety: '#C35817',
+  sadness: '#2B1B17'
+}
+
+const initialPanelState = {
+  oldColorToChange: '',
+  newColorOfChange: '',
   variableSelectedForColorChange: '',
-  showPanelSubset: false,
+  inPanelSubset: '',
+  colorList: {}
+}
+
+const initialGridState = {
+  colorProfile: defaultColors,
   showDataCollectionBox: false,
   showTextVariableQuadrant: { quadrant: '', move: false },
   animateTextInQuadrant: '',
-  oldColorToChange: '',
-  newColorOfChange: '',
-  activeQuadrant: 'none'
+  activeQuadrant: 'none',
+  panelState: initialPanelState,
+  displayOnlyMode: true
 }
 
 export const plotPage = {
   namespaced: true,
-  state: initialState,
+  state: initialGridState,
   getters: {
     organizeColorsByQuadrant (state) {
       const quadrantsByVariable = {
@@ -62,6 +70,11 @@ export const plotPage = {
     }
   },
   actions: {
+    loadListOfColors ({ commit }) {
+      ColorFunctions.get('plot/listofcolors')
+        .then(res => res.json())
+        .then(data => { commit('holdListOfColors', data) })
+    },
     retrieveUserColorChoices ({ commit }) {
       return ColorFunctions.post({}, 'plot/usercolorchoice')
         .then(res => res.json())
@@ -71,6 +84,9 @@ export const plotPage = {
     }
   },
   mutations: {
+    activateDisplayOnlyMode (state, value) {
+      state.displayOnlyMode = value
+    },
     activateQuadrant (state, quadrantToActivate) {
       state.activeQuadrant = quadrantToActivate
     },
@@ -82,6 +98,31 @@ export const plotPage = {
       state.colorProfile.sadness = colorChoices.sadness.hex
       state.colorProfile.calm = colorChoices.calm.hex
       state.colorProfile.anxiety = colorChoices.anxiety.hex
+    },
+    setVariableForColorChange (state, value) {
+      if (value === '') {
+        state.colorProfile[state.panelState.variableSelectedForColorChange] = state.panelState.oldColorToChange
+        state.panelState.variableSelectedForColorChange = value
+        state.panelState.oldColorToChange = ''
+        state.panelState.inPanelSubset = ''
+      } else {
+        state.panelState.variableSelectedForColorChange = value
+        state.panelState.oldColorToChange = state.colorProfile[value]
+      }
+    },
+    holdColorChange (state, value) {
+      state.panelState.newColorOfChange = value
+      state.colorProfile[state.panelState.variableSelectedForColorChange] = value
+      console.log(state.panelState)
+    },
+    setColorSubset (state, subsetName) {
+      state.panelState.inPanelSubset = subsetName
+    },
+    clearPanelState (state) {
+      state.panelState = initialPanelState
+    },
+    holdListOfColors (state, list) {
+      state.panelState.colorList = list
     }
   }
 }

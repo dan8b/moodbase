@@ -12,11 +12,11 @@ class Animator {
   shiftY (passRef, quadrant) {
     switch (quadrant) {
       case 'one':
-        gsap.to(passRef, { y: '1450%', duration: 0.5 })
+        gsap.to(passRef, { y: '1000%', duration: 0.5 })
         gsap.to(passRef, { x: '10%', duration: 0.5 })
         break
       case 'two':
-        gsap.to(passRef, { y: '1500%', duration: 0.5 })
+        gsap.to(passRef, { y: '1000%', duration: 0.5 })
         break
       default:
         gsap.to(passRef, { y: '750%', duration: 0.5 })

@@ -1,11 +1,9 @@
-
 <template>
-/* eslint-disable */
-
+<div>
 <br>
 <br>
 <div class="flexrp">
-  <!-- <transition enter-active-class="animate__animated animate__slideInUp fast">
+  <transition enter-active-class="animate__animated animate__slideInUp fast">
 
   <div class="flexc">
     <PlotColorPicker  v-if="quadrantSelected==='none'" />
@@ -13,34 +11,36 @@
     <color-selection-panel v-if="currentVariable!=''"  />
 
   </div>
-  </transition> -->
+  </transition>
 
   <div class="center">
       <PlotGrid4 />
     </div>
 </div>
-
+</div>
 </template>
 
 <script>
-// import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
+import ColorSelectionPanel from '@/components/PlotComponents/ColorSelectionComponents/ColorSelectionPanel.vue'
 import PlotGrid4 from '@/components/PlotComponents/GridComponents/PlotGrid4.vue'
-// import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
+import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponents/PlotColorPicker.vue'
 
 export default {
   name: 'PlotPage',
-  components: {
-    PlotGrid4
-  },
   beforeCreate () {
-    this.$store.dispatch('plotPage/retrieveUserColorChoices')
+    this.$store.commit('plotPage/activateDisplayOnlyMode', false)
+  },
+  components: {
+    ColorSelectionPanel,
+    PlotGrid4,
+    PlotColorPicker
   },
   computed: {
     quadrantSelected () {
       return this.$store.state.plotPage.activeQuadrant
     },
     currentVariable () {
-      return this.$store.state.plotPage.variableSelectedForColorChange
+      return this.$store.state.plotPage.panelState.variableSelectedForColorChange
     }
   }
 }

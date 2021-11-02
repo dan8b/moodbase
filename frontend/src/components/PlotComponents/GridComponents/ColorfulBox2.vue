@@ -38,6 +38,9 @@ export default {
     }
   },
   computed: {
+    lockGradientFill () {
+      return this.$store.state.plotPage.displayOnlyMode
+    },
     // get some state data to get started
     currentlyActiveQuadrant () {
       return this.$store.state.plotPage.activeQuadrant
@@ -52,7 +55,7 @@ export default {
     },
     // dynamic css styling for the border and background (gradient) of each box
     setBoxFill () {
-      if (this.showGradientFill && !this.hideGradientFill) {
+      if ((this.showGradientFill && !this.hideGradientFill) || this.lockGradientFill) {
         return {
           '--h': 'linear-gradient(to ' + this.xDir + this.xColor + ')',
           '--v': 'linear-gradient(to ' + this.yDir + this.yColor + ')',
@@ -117,10 +120,14 @@ export default {
         this.showGradientFill = !this.showGradientFill
       }
     },
-    triggerMove () {
-      this.$store.commit('plotPage/activateQuadrant', this.quadrantData.number)
-      if (this.currentlyActiveQuadrant === this.quadrantData.number) {
-        this.showGradientFill = false
+    triggerMove (e) {
+      if (this.lockGradientFill) {
+        e.preventDefault()
+      } else {
+        this.$store.commit('plotPage/activateQuadrant', this.quadrantData.number)
+        if (this.currentlyActiveQuadrant === this.quadrantData.number) {
+          this.showGradientFill = false
+        }
       }
     }
   }
