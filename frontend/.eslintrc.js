@@ -6,8 +6,8 @@ module.exports = {
   },
 
   extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
+    'plugin:vue/vue3-recommended',
+    'eslint:essential',
     '@vue/standard'
   ],
 
@@ -17,7 +17,13 @@ module.exports = {
 
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'indent': 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+      "vue/script-indent": ["error", TYPE, {
+        "baseIndent": 0,
+        "switchCase": 0,
+        "ignores": []
+      }]
   },
 
   extends: [

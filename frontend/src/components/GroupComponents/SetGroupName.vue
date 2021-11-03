@@ -1,9 +1,12 @@
 <template>
-<div >
+<div class="name-style">
     <Form :validation-schema="groupNameSchema" id="GroupNameForm" @submit="validateGroupName">
-        <label  for="groupName">What's your group called? </label>
-        <Field  name="groupName" type="text" /><br><br>
+        <label  for="groupName">What's your group called? </label> <br>
+        <Field  name="groupName" type="text" />
         <button  class="button2"  type="submit">Make my group!</button>
+        <div >
+        <error-message name="groupName" />
+        </div>
     </Form>
 
 </div>
@@ -11,13 +14,14 @@
 
 <script>
 import { useStore } from 'vuex'
-import { Form, Field } from 'vee-validate'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 export default {
   name: 'SetGroupName',
   components: {
     Form,
-    Field
+    Field,
+    ErrorMessage
   },
   setup () {
     const store = useStore()
@@ -27,9 +31,10 @@ export default {
     const groupNameSchema = yup.object().shape({
       groupName: yup
         .string()
-        .required('Username is required!')
-        .min(3, 'Must be at least 3 characters!')
-        .max(20, 'Must be maximum 20 characters!')
+        .required('Please give your group a name')
+        .min(3, 'Group name must be at least 3 characters')
+        .max(20, 'Group name must have maximum 20 characters')
+        .matches(/^[a-zA-Z0-9_.-]*$/, 'bad input')
     })
     return { groupNameSchema, validateGroupName }
   }
@@ -37,8 +42,31 @@ export default {
 </script>
 
 <style>
+input {
+  font-size:xx-large;
+  width:50%;
+  border:3px solid black;
+}
+input:valid {
+  border-color: green;
+}
+
+input:invalid {
+  border-color: red;
+  background-color: red;
+}
+.name-style{
+  display: flex;
+  margin: auto;
+  box-sizing: border-box;
+  width: max-content;
+  padding: 5%;
+  flex-direction: column;
+  border: 5px solid black;
+  font-size: xxx-large;
+}
 .field{
-  border: 2px solid black;
+  border: 10px solid black;
   border-radius: 4px;
 }
 </style>

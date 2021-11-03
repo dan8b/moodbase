@@ -5,7 +5,7 @@ from schemas import ColorSchema, WeightSchema, PlotSchema
 
 def validateGroupName(user:str,groupName:str):
     if groupData.find({'name':groupName,'owner':user}).limit(1).count()>0:
-        return {"error":"You already own a group with this name!"}
+        return {"error":"You already own a group with this name"}
     return {"success": "Group name valid"}
 
 def validateMemberNames(listOfNames:list):

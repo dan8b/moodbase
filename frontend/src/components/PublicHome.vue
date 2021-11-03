@@ -1,12 +1,9 @@
 <template>
- <h1 >Hello, and welcome to the moodbase! </h1>
-<div>
- <h2 > Confused? Check out the documentation.</h2>
+  <div class="flexrh">
+    <router-link to="/register"> Sign up</router-link>
+    <router-link to="/login"> Sign in</router-link>
+  </div>
 
-<h2> <span> <router-link to="/register"> Sign up</router-link> </span> to start showing and sharing how you feel.  </h2>
-
- <h2> Or, <span> <router-link to="/login"> Sign in</router-link> </span> to record your mood! </h2>
-</div>
 </template>
 
 <script>
@@ -16,21 +13,17 @@ export default {
 </script>
 
 <style scoped>
-
-span {
-  font-size:140%;
+.flexrh{
+  display: flex;
+  margin: auto;
+  box-sizing: border-box;
+  width: max-content;
+  padding: 5%;
+  flex-direction: column;
+  border: 5px solid black;
+  font-size: xxx-large;
 }
 
-.s1 {
-  margin-right:60%;
-}
-h1 {
-  font-size:400%;
-}
-
-h2 {
-  font-size:333%;
-}
 /* body, html {
   padding: 0;
   margin: 0;
