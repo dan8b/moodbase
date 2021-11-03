@@ -74,11 +74,11 @@ export default {
       }
     },
     xColor () {
-      const baseColor = this.quadrantData.x.color
+      const baseColor = this.$store.state.plotPage.colorProfile[this.quadrantData.x]
       return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
     yColor () {
-      const baseColor = this.quadrantData.y.color
+      const baseColor = this.$store.state.plotPage.colorProfile[this.quadrantData.y]
       return ColorFunctions.createGradientString(baseColor, [7, 100]) + baseColor + ' 100%'
     },
     xDir () {

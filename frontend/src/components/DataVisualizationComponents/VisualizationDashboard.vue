@@ -2,7 +2,7 @@
 <div class="dashboard">
         <UserDataOverview />
         <div class="dashboard-container">
-            <user-scatter-plot :chosenVariables="{happiness:false,calm:true}" :data="chartData" />
+            <user-scatter-plot :chosenVariables="variableArray" :data="chartData" :count=28 />
 
         </div>
 
@@ -30,6 +30,11 @@ import UserScatterPlot from './UserScatterPlot.vue'
 export default {
   name: 'VisualizationDashboard',
   components: { UserScatterPlot, UserDataOverview },
+  data () {
+    return {
+      variableArray: ['calm', 'happiness']
+    }
+  },
   computed: {
     wheelStatus () {
       return this.$store.getters['wheelLock/isWheelLocked']
@@ -45,6 +50,9 @@ export default {
     }
   },
   methods: {
+    toggleDataVisibility () {
+
+    },
     unlockWheel () {
       this.$store.commit('wheelLock/unlockWheel')
     },

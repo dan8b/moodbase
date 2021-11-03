@@ -22,7 +22,8 @@ const initialGridState = {
   animateTextInQuadrant: '',
   activeQuadrant: 'none',
   panelState: initialPanelState,
-  displayOnlyMode: true
+  displayOnlyMode: 0,
+  incrementDisplayToggle: 1
 }
 
 export const plotPage = {
@@ -40,28 +41,16 @@ export const plotPage = {
       if (state.activeQuadrant !== 'none') {
         const vars = quadrantsByVariable[state.activeQuadrant]
         return {
-          x: {
-            variable: vars[0],
-            color: state.colorProfile[vars[0]]
-          },
-          y: {
-            variable: vars[1],
-            color: state.colorProfile[vars[1]]
-          },
+          x: vars[0],
+          y: vars[1],
           number: state.activeQuadrant
         }
       } else {
         const allQuadrantState = {}
         for (const [number, variables] of Object.entries(quadrantsByVariable)) {
           allQuadrantState[number] = {
-            x: {
-              variable: variables[0],
-              color: state.colorProfile[variables[0]]
-            },
-            y: {
-              variable: variables[1],
-              color: state.colorProfile[variables[1]]
-            },
+            x: variables[0],
+            y: variables[1],
             number: number
           }
         }
@@ -84,8 +73,19 @@ export const plotPage = {
     }
   },
   mutations: {
-    activateDisplayOnlyMode (state, value) {
-      state.displayOnlyMode = value
+    setDisplayToggleIncrementValue (state, value) {
+      if (value === 2) {
+        state.displayOnlyMode = 1
+      }
+      state.incrementDisplayToggle = value
+    },
+    toggleDisplayOnlyMode (state) {
+      state.displayOnlyMode = (state.displayOnlyMode + state.incrementDisplayToggle) % 2
+      if (state.displayOnlyMode === 0) {
+        return false
+      } else {
+        return true
+      }
     },
     activateQuadrant (state, quadrantToActivate) {
       state.activeQuadrant = quadrantToActivate
@@ -113,13 +113,15 @@ export const plotPage = {
     holdColorChange (state, value) {
       state.panelState.newColorOfChange = value
       state.colorProfile[state.panelState.variableSelectedForColorChange] = value
-      console.log(state.panelState)
     },
     setColorSubset (state, subsetName) {
       state.panelState.inPanelSubset = subsetName
     },
     clearPanelState (state) {
-      state.panelState = initialPanelState
+      state.panelState.oldColorToChange = ''
+      state.panelState.newColorOfChange = ''
+      state.panelState.variableSelectedForColorChange = ''
+      state.panelState.inPanelSubset = ''
     },
     holdListOfColors (state, list) {
       state.panelState.colorList = list

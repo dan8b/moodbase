@@ -1,9 +1,22 @@
 <template>
-  <svg viewBox="-30 0 100 100" ref="svgRef">
-    <div background-color="blue" width="50%" height="50%" />
-    <!-- <rect width="100%" y="7%" height="7%" fill="blue" /> -->
-    <g class="x-axis" />
-    <g class="y-axis"/>
+  <svg viewBox='-5 0 95 200' ref='svgRef'>
+  <defs>
+    <linearGradient v-for='i in count' :key = 'i' :id='"gradient"+String(i)'
+    gradientTransform="rotate(90)">
+      <stop offset="5%"  :stop-color='"rgb(255,0,0,."+String(100 - 10 * i)+")"' />
+      <stop offset="95%" stop-color="rgb(255,0,0,0)" />
+    </linearGradient>
+  </defs>
+  <rect v-for='i in count' :key= 'i'
+  x=0 :y='String(((i - 1) * 7))+"%"' width=100% height='7%'
+  :fill='"url(#gradient"+String(i)+")"' />
+  <!-- using my linear gradient -->
+  <!-- <g>
+
+  <rect x=0 y=0 width=100% height=100% fill="url('#myGradient')" />
+  </g> -->
+    <g class='x-axis' />
+    <g class='y-axis'/>
   </svg>
 
 </template>
@@ -28,18 +41,40 @@ import {
 export default {
   name: 'UserScatterPlot',
   props: {
+    count: {
+      type: Number
+    },
     data: {
       required: true,
       type: Object
     },
     chosenVariables: {
-      type: Object
+      type: Array
     }
   },
   setup (props) {
     const svgRef = ref()
     useStore().dispatch('plotPage/retrieveUserColorChoices')
     const colors = useStore().state.plotPage.colorProfile
+    var boxCount = ref(14)
+    if (props.chosenVariables.length === 2) {
+      boxCount.value = 28
+    }
+    // function generateBackgroundGradients (intensityMultiplier) {
+    //   if (props.chosenVariables.length === 2) {
+
+    //   }
+    //   var baseColor = ''
+    //   if (intensityMultiplier > 7) {
+    //   }
+
+    //   var checked = 0
+    //   for (const v of props.chosenVariables) {
+    //     if (v === 'calm') {
+
+    //     }
+    //   }
+    // }
     onMounted(() => {
       const svg = select(svgRef.value)
       const t = svg.attr('viewBox').split(' ')
@@ -70,31 +105,22 @@ export default {
         }
       }
 
-      // function drawGradients(box,variable,switch){
-      //     for (let i = 0; i<14; i++){
-      //       svg.append("rect")
-      //         .attr("y",String(i*7))
-      //         .attr("width", "100%")
-      //         .attr("height", "7%")
-      //         .attr("fill", "pink");
-      //       }
-      // }
+      function drawCircle (dotData, v) {
+        svg
+          .selectAll('.circle')
+          .data(dotData)
+          .enter()
+          .append('circle')
+          .attr('fill', (d) => { return dotColor(d, v) })
+          .attr('stroke', 'none')
+          .attr('cx', (_, i) => { return xScale(i) })
+          .attr('cy', (d) => { return yScale((d)) })
+          .attr('r', 1)
+      }
       const xAxis = axisBottom(xScale).tickValues([])
 
-      for (const v of Object.keys(props.chosenVariables)) {
-        if (props.chosenVariables[v] === true) {
-        // drawGradients(svg,v,seen)
-          svg
-            .selectAll('.circle')
-            .data(props.data[v])
-            .enter()
-            .append('circle')
-            .attr('fill', (d) => { return dotColor(d, v) })
-            .attr('stroke', 'none')
-            .attr('cx', (_, i) => { return xScale(i) })
-            .attr('cy', (d) => { return yScale((d)) })
-            .attr('r', 1)
-        }
+      for (const v of props.chosenVariables) {
+        drawCircle(props.data[v], v)
       }
 
       svg
@@ -107,12 +133,12 @@ export default {
       svg
         .select('.y-axis')
         .style('font-size', '4px')
-      // .style("transform",`translateX(100px)`)
+      // .style('transform',`translateX(100px)`)
         .call(yAxis)
     })
 
     // return refs to make them available in template
-    return { svgRef }
+    return { svgRef, boxCount }
   }
 }
 

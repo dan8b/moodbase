@@ -6,6 +6,7 @@ import { userData } from './user.data.module'
 import { butts } from './weight.module'
 import { communityData } from './community.data.module'
 import { plotPage } from './plot.page.module'
+import { groupCreator } from './group.creator'
 import createPersistedState from 'vuex-persistedstate'
 
 const store = createStore({
@@ -16,6 +17,7 @@ const store = createStore({
     moodClassification,
     userData,
     communityData,
+    groupCreator,
     butts
   },
   plugins: [createPersistedState({

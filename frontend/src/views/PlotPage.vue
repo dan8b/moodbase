@@ -28,7 +28,7 @@ import PlotColorPicker from '@/components/PlotComponents/ColorSelectionComponent
 export default {
   name: 'PlotPage',
   beforeCreate () {
-    this.$store.commit('plotPage/activateDisplayOnlyMode', false)
+    this.$store.commit('plotPage/setDisplayToggleIncrementValue', 1)
   },
   components: {
     ColorSelectionPanel,

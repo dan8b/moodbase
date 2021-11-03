@@ -3,10 +3,10 @@
         enter-active-class="animate__animated animate__fadeIn"
         leave-active-class="animate__animated animate__fadeOut animate__faster" >
         <div v-if="handleButtonDisplay.showBoxAtAll">
-            <span>  {{variable}} is a
-                <text :style="styleVar"> {{ nameOfColor }} </text> color
-            </span>
-            <br>
+            <div class="flexc">
+            <span>  {{variable}}: </span>
+            <text :style="styleVar"> {{ nameOfColor }} </text>
+            </div>
             <button @click="handleColorChange(variable)" v-if="handleButtonDisplay.grossChangeIt"> Gross, change it!  </button>
             <button @click="postColorChange" v-if="!handleButtonDisplay.grossChangeIt && handleButtonDisplay.waitNevermind"> Yes, this one!  </button>
             <button @click="handleColorChange('')" v-if="handleButtonDisplay.waitNevermind"> Wait, nevermind </button>
@@ -55,6 +55,9 @@ export default {
         '--color': this.textColor
       }
     },
+    magicNumber () {
+      return this.$store.state.plotPage.incrementDisplayToggle
+    },
     currentVariable () {
       return this.currentPanelState.variableSelectedForColorChange
     },
@@ -80,19 +83,24 @@ export default {
   methods: {
     handleColorChange (value) {
       this.$store.commit('plotPage/setVariableForColorChange', value)
+      this.$store.commit('plotPage/toggleDisplayOnlyMode')
     },
     postColorChange () {
-      const colorChangeData = {
-        variable: this.currentVariable,
-        colorChange: {
-          family: this.currentSubset,
-          hex: this.textColor
+      if (this.magicNumber === 1) {
+        const colorChangeData = {
+          variable: this.currentVariable,
+          colorChange: {
+            family: this.currentSubset,
+            hex: this.textColor
+          }
         }
+        return ColorFunctions.post(colorChangeData, 'plot/changecolors')
+          .then(r => r.json())
+          .then(this.$store.commit('plotPage/clearPanelState'))
+      } else if (this.magicNumber === 2) {
+        console.log('Hi')
+        this.$store.commit('plotPage/clearPanelState')
       }
-      console.log(colorChangeData)
-      return ColorFunctions.post(colorChangeData, 'plot/changecolors')
-        .then(r => r.json())
-        .then(this.$store.commit('plotPage/clearPanelState'))
     },
     returnToListOfSubsets () {
       this.$store.commit('plotPage/setColorSubset', '')

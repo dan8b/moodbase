@@ -1,5 +1,6 @@
 <template>
 <div class="flexcl">
+  <span> Your colors </span>
     <color-text-element variable="happiness" />
     <color-text-element variable="sadness" />
     <color-text-element variable="calm" />

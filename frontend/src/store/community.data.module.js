@@ -15,40 +15,6 @@ export const communityData = {
   namespaced: true,
   state: initialState,
   getters: {
-    returnChartData (state) {
-      const dataObj =
-            {
-              labels: state.dayList.map(date => Date.parse(date)),
-              datasets: [
-                {
-                  data: state.averageLineChartHappiness.map(val => Number(val)),
-                  label: 'Average happiness/sadness',
-                  borderColor: '#3e95cd',
-                  fill: false
-                },
-
-                {
-                  data: state.averageLineChartCalm.map(val => Number(val)),
-                  label: 'average calm/anxiety',
-                  borderColor: '#FF5733',
-                  fill: false
-                },
-                {
-                  data: state.totalHappinessByDay.map(val => Number(val)),
-                  label: 'total happiness/sadness',
-                  borderColor: '#25BD65',
-                  fill: false
-                },
-                {
-                  data: state.totalCalmByDay.map(val => Number(val)),
-                  label: 'total calm/anxiety',
-                  borderColor: '#904985',
-                  fill: false
-                }
-              ]
-            }
-      return dataObj
-    }
   },
   actions: {
 

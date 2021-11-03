@@ -60,12 +60,12 @@ export default {
     function prepareQuadrantDataForTextElement (number, horizontal) {
       if (horizontal === true) {
         return {
-          variable: quadrants[number].x.variable,
+          variable: quadrants[number].x,
           quadrant: quadrants[number].number
         }
       } else {
         return {
-          variable: quadrants[number].y.variable,
+          variable: quadrants[number].y,
           quadrant: quadrants[number].number
         }
       }
