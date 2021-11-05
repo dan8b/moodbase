@@ -1,7 +1,7 @@
 <template>
-<set-group-name v-if='currentPhase === 0' />
-<set-group-members v-if='currentPhase === 1' />
-<set-group-colors v-if='currentPhase === 2' />
+<set-group-name v-if='currentPhase === "name"' />
+<set-group-members v-if='currentPhase === "addMembers"' />
+<set-group-colors v-if='currentPhase === "setColors"' />
 </template>
 
 <script>
@@ -17,12 +17,50 @@ export default {
   },
   computed: {
     currentPhase () {
-      return this.$store.state.groupCreator.phaseOfCreation
+      return this.$store.state.groupCreator.phaseList[this.$store.state.groupCreator.phaseList.length - 1]
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+.btn {
+  padding: 15px 100px;
+  margin:10px 4px;
+  color: black;
+  font-family: sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  display:inline-block;
+}
 
+.btn::before{
+  content: "";
+position: absolute;
+top: 0;
+left: 0;
+display: block;
+width: 100%;
+height: 100%;
+z-index: -1;
+background-color: #000;
+-webkit-transform: scaleY(.3);
+transform: scaleY(.3);
+opacity: 0;
+transition: all .3s
+}
+.btn:hover{
+  color:#6098FF;
+}
+.btn:hover::before{
+  opacity: 1;
+  background-color: #fff;
+  -webkit-transform: scaleY(1);
+  transform: scaleY(1);
+  transition: -webkit-transform .6s cubic-bezier(.08, .35, .13, 1.02), opacity .4s;
+  transition: transform .6s cubic-bezier(.08, .35, .13, 1.02), opacity
+}
 </style>

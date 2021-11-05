@@ -33,11 +33,13 @@ export default {
   data () {
     return {
       showGradientFill: false,
-      hideGradientFill: false,
       showBorder: '1px solid black'
     }
   },
   computed: {
+    hideGradientFill () {
+      return this.$store.state.plotPage.hoverOnlyMode
+    },
     lockGradientFill () {
       return this.$store.state.plotPage.displayOnlyMode
     },
@@ -112,8 +114,8 @@ export default {
       }
     },
   methods: {
-    handleBoxVisibility (hoverOnly) {
-      if (hoverOnly === true) {
+    handleBoxVisibility (blockHover) {
+      if (blockHover === true) {
         this.hideGradientFill = true
         this.showBorder = false
       } else if (!this.hideGradientFill) {

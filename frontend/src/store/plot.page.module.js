@@ -23,7 +23,8 @@ const initialGridState = {
   activeQuadrant: 'none',
   panelState: initialPanelState,
   displayOnlyMode: 0,
-  incrementDisplayToggle: 1
+  incrementDisplayToggle: 1,
+  hoverOnlyMode: false
 }
 
 export const plotPage = {
@@ -78,6 +79,9 @@ export const plotPage = {
         state.displayOnlyMode = 1
       }
       state.incrementDisplayToggle = value
+    },
+    toggleHoverOnlyMode (state) {
+      state.hoverOnlyMode = !state.hoverOnlyMode
     },
     toggleDisplayOnlyMode (state) {
       state.displayOnlyMode = (state.displayOnlyMode + state.incrementDisplayToggle) % 2

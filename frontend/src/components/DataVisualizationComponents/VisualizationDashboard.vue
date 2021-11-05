@@ -2,7 +2,7 @@
 <div class="dashboard">
         <UserDataOverview />
         <div class="dashboard-container">
-            <user-scatter-plot :chosenVariables="variableArray" :data="chartData" :count=28 />
+            <user-scatter-plot :chosenVariables="variableArray" :data="chartData" :count=14 />
 
         </div>
 
@@ -32,7 +32,7 @@ export default {
   components: { UserScatterPlot, UserDataOverview },
   data () {
     return {
-      variableArray: ['calm', 'happiness']
+      variableArray: ['happiness']
     }
   },
   computed: {

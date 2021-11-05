@@ -1,42 +1,24 @@
-import GroupFunctions from '@/services/group.service.js'
+// import GroupFunctions from '@/services/group.service.js'
 
 export const groupCreator = {
   namespaced: true,
   state: {
-    formData: {
-      groupName: '',
-      groupMembers: [],
-      groupColors: {},
-      groupWeights: []
-    },
-    phaseOfCreation: 0,
-    pastPhases: []
-  },
-  actions: {
-    validateGroupName ({ commit }, name) {
-      return GroupFunctions.post({}, '/checkgroupname' + name)
-        .then(
-          async response => {
-            if ('success' in response) {
-              console.log(response)
-              commit('setName', name)
-            }
-          }
-        )
-    }
+    allFormData: {},
+    phaseList: ['name'],
+    currentPhase: 'name',
+    confirmColorChange: false
   },
   mutations: {
-    setName (state, name) {
-      state.formData.groupName = name
-      state.pastPhases.push('groupName')
-      state.phaseOfCreation++
+    nextForm (state, formData) {
+      state.allFormData[state.currentPhase] = formData.formValues
+      state.phaseList.push(formData.nextFormName)
+      state.currentPhase = formData.nextFormName
     },
-    addMember (state, memberName) {
-      state.formData.groupMembers.push(memberName)
+    previousForm (state) {
+      console.log(state)
     },
-    confirmMembers (state) {
-      state.pastPhases.push('groupMembers')
-      state.phaseOfCreation++
+    readyToConfirmColorChange (state) {
+      state.confirmColorChange = true
     }
   }
 }

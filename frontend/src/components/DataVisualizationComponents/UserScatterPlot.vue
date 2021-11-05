@@ -3,12 +3,14 @@
   <defs>
     <linearGradient v-for='i in count' :key = 'i' :id='"gradient"+String(i)'
     gradientTransform="rotate(90)">
-      <stop offset="5%"  :stop-color='"rgb(255,0,0,."+String(100 - 10 * i)+")"' />
-      <stop offset="95%" stop-color="rgb(255,0,0,0)" />
+      <stop offset="0%"  :stop-color='backgroundGradient((i - 1) * 7).startGradient' />
+      <stop offset="100%" :stop-color='backgroundGradient(i * 7).stopGradient' />
     </linearGradient>
   </defs>
   <rect v-for='i in count' :key= 'i'
-  x=0 :y='String(((i - 1) * 7))+"%"' width=100% height='7%'
+  border='none'
+  x=0 :y='backgroundGradient((i - 1) * 7).startY' width=100%
+  height='8%'
   :fill='"url(#gradient"+String(i)+")"' />
   <!-- using my linear gradient -->
   <!-- <g>
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-// import ColorFunctions from '@/services/color.functions.js'
+import ColorFunctions from '@/services/color.functions.js'
 import { useStore } from 'vuex'
 import { onMounted, ref } from 'vue'
 import {
@@ -56,25 +58,18 @@ export default {
     const svgRef = ref()
     useStore().dispatch('plotPage/retrieveUserColorChoices')
     const colors = useStore().state.plotPage.colorProfile
-    var boxCount = ref(14)
-    if (props.chosenVariables.length === 2) {
-      boxCount.value = 28
+
+    function backgroundGradient (index) {
+      if (index > 42) {
+        if (props.chosenVariables[0] === 'calm') {
+          return ColorFunctions.hexToInverseGradient(colors.anxiety, index)
+        } else {
+          return ColorFunctions.hexToInverseGradient(colors.sadness, index)
+        }
+      } else {
+        return ColorFunctions.hexToInverseGradient(colors[props.chosenVariables[0]], index)
+      }
     }
-    // function generateBackgroundGradients (intensityMultiplier) {
-    //   if (props.chosenVariables.length === 2) {
-
-    //   }
-    //   var baseColor = ''
-    //   if (intensityMultiplier > 7) {
-    //   }
-
-    //   var checked = 0
-    //   for (const v of props.chosenVariables) {
-    //     if (v === 'calm') {
-
-    //     }
-    //   }
-    // }
     onMounted(() => {
       const svg = select(svgRef.value)
       const t = svg.attr('viewBox').split(' ')
@@ -138,7 +133,7 @@ export default {
     })
 
     // return refs to make them available in template
-    return { svgRef, boxCount }
+    return { svgRef, backgroundGradient }
   }
 }
 

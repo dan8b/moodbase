@@ -3,6 +3,8 @@
   <div class="flexr">
       <button> Use my colors </button>
       <button @click="changeColors"> Make changes </button>
+      <button v-if='showConfirmationButton' @click="confirmChanges"> Use these colors </button>
+
   </div>
   <div class="flexr">
     <plot-grid-4 />
@@ -37,6 +39,9 @@ export default {
     this.$store.commit('plotPage/setDisplayToggleIncrementValue', 2)
   },
   computed: {
+    showConfirmationButton () {
+      return this.$store.state.groupCreator.confirmColorChange
+    },
     currentVariable () {
       return this.$store.state.plotPage.panelState.variableSelectedForColorChange
     }

@@ -98,7 +98,7 @@ export default {
           .then(r => r.json())
           .then(this.$store.commit('plotPage/clearPanelState'))
       } else if (this.magicNumber === 2) {
-        console.log('Hi')
+        this.$store.commit('groupCreator/readyToConfirmColorChange')
         this.$store.commit('plotPage/clearPanelState')
       }
     },

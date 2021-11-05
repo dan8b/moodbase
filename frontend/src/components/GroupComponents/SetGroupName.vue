@@ -3,7 +3,7 @@
     <Form :validation-schema="groupNameSchema" id="GroupNameForm" @submit="validateGroupName">
         <label  for="groupName">What's your group called? </label> <br>
         <Field  name="groupName" type="text" />
-        <button  class="button2"  type="submit">Make my group!</button>
+        <button  class="btn"  type="submit">Make my group!</button>
         <div >
         <error-message name="groupName" />
         </div>
@@ -26,7 +26,7 @@ export default {
   setup () {
     const store = useStore()
     function validateGroupName (GroupNameForm) {
-      store.commit('groupCreator/setName', GroupNameForm.groupName)
+      store.commit('groupCreator/nextForm', { nextFormName: 'addMembers', formValues: GroupNameForm.groupName })
     }
     const groupNameSchema = yup.object().shape({
       groupName: yup
