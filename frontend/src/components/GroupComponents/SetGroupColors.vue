@@ -1,7 +1,7 @@
 <template>
 <div class="flexc">
   <div class="flexr">
-      <button> Use my colors </button>
+      <button @click="confirmChanges"> Use my colors </button>
       <button @click="changeColors"> Make changes </button>
       <button v-if='showConfirmationButton' @click="confirmChanges"> Use these colors </button>
 
@@ -33,12 +33,18 @@ export default {
   methods: {
     changeColors () {
       this.newColors = !this.newColors
+    },
+    confirmChanges () {
+      this.$store.commit('groupCreator/nextForm', { nextFormName: 'setWeights', formValues: this.colorData })
     }
   },
   beforeMount () {
     this.$store.commit('plotPage/setDisplayToggleIncrementValue', 2)
   },
   computed: {
+    colorData () {
+      return this.$store.state.plotPage.colorProfile
+    },
     showConfirmationButton () {
       return this.$store.state.groupCreator.confirmColorChange
     },

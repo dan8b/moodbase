@@ -2,18 +2,21 @@
 <set-group-name v-if='currentPhase === "name"' />
 <set-group-members v-if='currentPhase === "addMembers"' />
 <set-group-colors v-if='currentPhase === "setColors"' />
+<set-group-weights v-if='currentPhase === "setWeights"' />
 </template>
 
 <script>
 import SetGroupName from './SetGroupName.vue'
 import SetGroupMembers from './SetGroupMembers.vue'
 import SetGroupColors from './SetGroupColors.vue'
+import SetGroupWeights from './SetWeights.vue'
 export default {
   name: 'CreateGroupForm',
   components: {
     SetGroupName,
     SetGroupMembers,
-    SetGroupColors
+    SetGroupColors,
+    SetGroupWeights
   },
   computed: {
     currentPhase () {

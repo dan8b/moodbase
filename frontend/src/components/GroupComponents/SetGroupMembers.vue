@@ -26,7 +26,7 @@ export default {
   setup () {
     const store = useStore()
     function moveToNextForm () {
-      store.commit('groupCreator/nextForm', { nextFormName: 'setColors', formValues: currentList })
+      store.commit('groupCreator/nextForm', { nextFormName: 'setColors', formValues: Object.keys(currentList) })
     }
     function addMemberToList (MembershipField) {
       currentList[MembershipField.memberEmail] = true
