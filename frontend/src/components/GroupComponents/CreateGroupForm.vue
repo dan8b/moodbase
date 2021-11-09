@@ -3,9 +3,12 @@
 <set-group-members v-if='currentPhase === "addMembers"' />
 <set-group-colors v-if='currentPhase === "setColors"' />
 <set-group-weights v-if='currentPhase === "setWeights"' />
+<button @click='backButton' v-if='currentPhase !== "name"' > previous </button>
+<button v-if='currentPhase === "confirm"' > confirm group settings </button>
 </template>
 
 <script>
+// import GroupFunctions from '@/services/group.service.js'
 import SetGroupName from './SetGroupName.vue'
 import SetGroupMembers from './SetGroupMembers.vue'
 import SetGroupColors from './SetGroupColors.vue'
@@ -18,7 +21,15 @@ export default {
     SetGroupColors,
     SetGroupWeights
   },
+  methods: {
+    backButton () {
+      this.$store.commit('groupCreator/previousForm')
+    }
+  },
   computed: {
+    testData () {
+      return this.$store.state.groupCreator.allFormData
+    },
     currentPhase () {
       return this.$store.state.groupCreator.phaseList[this.$store.state.groupCreator.phaseList.length - 1]
     }

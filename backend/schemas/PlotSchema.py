@@ -1,118 +1,132 @@
 from db import plotData
-from datetime import datetime
+from datetime import date, timedelta
 from models.plotModel import PlotDataSubmission
-from bson import Decimal128
-# def createCommunityDocument(initialData:PlotDataSubmission):
-#     plotData.insert_one(
-#         {
-#             'community':True,
-#             'dayList':[datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)],
-#             'mapX':[initialData.clickMap['happinessVal']],
-#             'mapY':[initialData.clickMap['calmVal']],
-#             'averageLineChartHappiness':[initialData.lineChart['happinessVal']],
-#             'averageLineChartCalm':[initialData.lineChart['calmVal']],
-#             'totalHappinessByDay':[initialData.lineChart['happinessVal']],    
-#             'totalCalmByDay':[initialData.lineChart['calmVal']],
-#             'clickCount':0   
-#         }
-#     )
-#     return True
+# from bson import Decimal128
 
-def createUserPlotDataDocument(user:str):
-    clickData= { 
-        'user':user,
-        'happiness':[],
-        'calm':[],
-        'mapX':[],
-        'mapY':[],
-        'timestamp':[]
+
+def createPlotDataDocument(user: str, newData: PlotDataSubmission):
+    plotData.insert_one(
+        {
+            'user': user,
+            'day': newData.timestamp
         }
-    plotData.insert_one(clickData)
-    return clickData
-
-def updateUserPlotDataDocument(user:str,newData:PlotDataSubmission):
-    plotData.update_one(
-        {'user':user},        
-            {
-            '$push':
-                {
-                    'happiness':newData.lineChart['happinessVal'],
-                    'calm':newData.lineChart['calmVal'],
-                    'mapX':newData.clickMap['happinessVal'],
-                    'mapY':newData.clickMap['calmVal'],
-                    'timestamp':newData.timestamp
-                },
-            },
-            upsert=True     
-        )
+    )
     return True
 
-def dumbDecimalThing(floatVal,decimal128Val,countVal):
-    decimal2Float=float(str(decimal128Val))
-    return Decimal128(str((floatVal+decimal2Float)/countVal))
 
-def updateCommunityPlotData(newData:PlotDataSubmission):
-    listOfValues=newData.returnList()
-    i=0
-    currentCommunityData = plotData.find_one({'community':True})
-    clickCount=currentCommunityData['clickCount']+1
-    if len(currentCommunityData['dayList'])<1 or currentCommunityData['dayList'][-1].day != datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).day:
-        createNewDay(listOfValues)
-    else:
-        index=len(currentCommunityData['dayList'])-1
-        del currentCommunityData['_id']
-        for key,value in currentCommunityData.items():
-            if key[0]=="m":
-                plotData.update_one(
-                    {'community':True},
-                    {'$set':
-                        {key+'.'+str(index):dumbDecimalThing(listOfValues[i],value[index],clickCount)}
-                    }
-                )
-                i+=1
-            if key[0]=="a":
-                plotData.update_one(
-                    {'community':True},
-                    {'$set':
-                        {key+"."+str(index):dumbDecimalThing(listOfValues[i],value[index],clickCount)}
-                    }
-                )
-                i+=1
-            elif key[0]=='t':
-                plotData.update_one(
-                    {'community':True},
-                    {'$inc':
-                        {
-                        'totalHappinessByDay.'+str(index):newData.lineChart['happinessVal'],
-                        'totalCalmByDay.'+str(index):newData.lineChart['calmVal'],
-                        }
-                    }
-                )
-        plotData.update_one(
-            {'community':True},
-            {'$inc':
-                {
-                'clickCount':1
-                }
+def updateUserPlotDataDocument(user: str, newData: PlotDataSubmission):
+    plotData.update_one(
+        {'user': user},
+        {
+        '$set':
+            {
+                newData.timerange: createDataDict(newData)
+            },
+            '$inc':
+            {
+                'clickCount': 1
+            }
+        },
+        upsert = True
+    )
+    return True
+
+
+def createDataDict(data: PlotDataSubmission):
+    return {
+        'happiness': data.happiness,
+        'calm': data.calm,
+        'mapX': data.mapX,
+        'mapY': data.mapY
+    }
+
+
+def updateMean(n: int, old: float, new: float, modifier: int):
+    print("new")
+    print(float(str(new)))
+    return ((float(str(old))*n)+float(str(new)))/(n+modifier)
+
+
+def updateDailyCommunityData(newData: PlotDataSubmission):
+    print("Here?")
+    if plotData.find({'user': f"!community_{date.today()}"}).limit(1).count() < 1:
+        print("no daily")
+        plotData.insert_one(
+            {
+                'user': f"!community_{date.today()}",
+                'day': date.today(),
+                newData.timerange: createDataDict(newData),
+                'clickCount': 1
             }
         )
-            
-    
-    return True
-
-def createNewDay(listOfValues:list):
-    plotData.update_one({'community':True},
-        {'$push':
+        setNewMeansAllTime()
+        return True
+    currentCommunityValues = plotData.find_one(
+        {'user': f"!community_{date.today()}"})
+    if newData.timerange in currentCommunityValues:
+        print("found one")
+        plotData.update_one(
             {
-            'dayList':datetime.now().replace(hour=0,minute=0,second=0),
-            'mapX':listOfValues[0],
-            'mapY':listOfValues[1],
-            'averageLineChartHappiness':listOfValues[2],
-            'averageLineChartCalm':listOfValues[3],
-            'totalHappinessByDay':listOfValues[2],
-            'totalCalmByDay':listOfValues[3],
+                'user': f"!community_{date.today()}",
+                'day': str(date.today())
             },
-        '$inc':
-            {'clickCount':1}
-        })
-    return True
+            {
+                '$set':
+                {
+                    newData.timerange: setNewMeansDaily(
+                        currentCommunityValues, newData)
+                },
+                '$inc':
+                {
+                    'clickCount': 1
+                }
+             },
+             upsert=True
+        )
+    else:
+        updateUserPlotDataDocument(f"!community_{date.today()}", newData)
+    return
+
+def setNewMeansAllTime():
+    yesterdaysNews = plotData.find_one(
+        {'user': f"!community_{date.today()-timedelta(1)}"})
+    print(f"clickcount yesterday = {yesterdaysNews['clickCount']}")
+    allTime = plotData.find_one({'user': '!communityAllTime'})
+    print(f"clickcount for alltime = {allTime['clickCount']}")    
+    timeRangeLoop = ['morning', 'midday', 'evening']
+    variableKeyLoop = ['happiness', 'calm', 'mapX', 'mapY']
+    for t in timeRangeLoop:
+        newAllTimeValues = {}
+        for k in variableKeyLoop:
+            newAllTimeValues[k] = updateMean(allTime['clickCount'],
+                                             allTime[t][k], yesterdaysNews[t][k], yesterdaysNews['clickCount'])
+        plotData.update_one(
+            {
+                'user': '!communityAllTime'
+            },
+            {'$set':
+                {
+                    t: newAllTimeValues
+                }
+             },
+            {'$inc':
+                {
+                    'clickCount': yesterdaysNews['clickCount']
+                }
+             }
+        )
+    return
+
+def setNewMeansDaily(oldMeans: dict, newData: dict):
+    d = newData.dict()
+    ct = oldMeans['clickCount']
+    vals = oldMeans[newData.timerange]
+    updated = {}
+    fields = ['happiness', 'calm', 'mapX', 'mapY']
+    for f in fields:
+        updated[f] = updateMean(ct, vals[f], d[f], 1)
+    print(updated)
+    return updated
+
+def getAllUserData(user: str):
+    return plotData.find({'user': user})

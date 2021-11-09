@@ -48,18 +48,17 @@ export default {
   methods: {
     collectPlotData (e) {
       const transformed = PlotFunctions.coordinateTransform(e, this.quadrantData.number)
-      const lineChartData = {
-        happinessVal: transformed.happinessVal,
-        calmVal: transformed.calmVal
+      const payload = {
+        happiness: transformed.happinessVal,
+        calm: transformed.calmVal,
+        mapX: Math.round(PlotFunctions.maplerize(transformed.happinessVal, 'x')),
+        mapY: Math.round(PlotFunctions.maplerize(transformed.calmVal, 'y')),
+        timerange: PlotFunctions.determineTimeRange()
       }
-      const clickMapData = {
-        happinessVal: PlotFunctions.maplerize(transformed.happinessVal, 'x'),
-        calmVal: PlotFunctions.maplerize(transformed.calmVal, 'y')
-      }
-      const payload = { lineChart: lineChartData, clickMap: clickMapData }
-      this.$store.commit('userData/addNewClick', payload)
+      // this.$store.commit('userData/addNewClick', payload)
       PlotFunctions.post(payload, 'plot/getplotclick')
     },
+
     throttleClick: _.throttle(function (e) { this.collectPlotData(e) }, 1000)
   }
 }
@@ -71,7 +70,7 @@ div {
   background: var(--h), var(--v);
   position:absolute;
   width:90%;
-  height:80%;
+  height:90%;
   z-index:10;
   background-blend-mode: multiply;
 

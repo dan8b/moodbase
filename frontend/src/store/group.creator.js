@@ -1,5 +1,3 @@
-// import GroupFunctions from '@/services/group.service.js'
-
 export const groupCreator = {
   namespaced: true,
   state: {
@@ -15,7 +13,11 @@ export const groupCreator = {
       state.currentPhase = formData.nextFormName
     },
     previousForm (state) {
-      console.log(state)
+      if (state.currentPhase in state.allFormData) {
+        delete state.allFormData[state.currentPhase]
+      }
+      state.phaseList.pop()
+      state.currentPhase = state.phaseList[state.phaseList.length - 1]
     },
     readyToConfirmColorChange (state) {
       state.confirmColorChange = true

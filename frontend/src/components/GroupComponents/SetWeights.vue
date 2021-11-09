@@ -8,6 +8,8 @@
       <ul  v-for="(showWeight, weightName) in selectedWeights" :key="weightName">
         <li :v-if='showWeight' > {{ weightName }} <button @click='removeWeightFromList(weightName)' > remove </button></li>
       </ul>
+      <button @click='moveToNextForm' v-if='Object.keys(selectedWeights).length > 0'> Let's track these for now </button>
+
 </div>
 </template>
 
@@ -25,7 +27,7 @@ export default {
   setup () {
     const store = useStore()
     function moveToNextForm () {
-      store.commit('groupCreator/nextForm', { nextFormName: 'confirm', formValues: selectedWeights })
+      store.commit('groupCreator/nextForm', { nextFormName: 'confirm', formValues: Object.keys(selectedWeights) })
     }
     function addWeightToList (WeightButtonField) {
       selectedWeights[WeightButtonField.weightName] = true

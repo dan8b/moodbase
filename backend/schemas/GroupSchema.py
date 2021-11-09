@@ -1,6 +1,6 @@
 from db import groupData, userData
 from models.groupModel import GroupData
-from modules.AuthenticationModule import sendGroupInvitations, pwd_context
+from modules.AuthenticationModule import sendGroupInvitations
 from schemas import ColorSchema, WeightSchema, PlotSchema
 
 def validateGroupName(user:str,groupName:str):
@@ -19,7 +19,7 @@ def validateMemberNames(listOfNames:list):
     return response
 
 def createGroup(data:GroupData,adminUser:str):
-    groupName=adminUser+'!!!'+data.name
+    groupName=data.name
     if groupData.find({'name':groupName}).limit(1).count()>0:
         return False
     groupData.insert_one({

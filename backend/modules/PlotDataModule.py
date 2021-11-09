@@ -6,20 +6,16 @@ from bson import json_util
 import json
 
 def filePlotClick(user:str,data:PlotDataSubmission):
-    data.truncateCoordinates()
-    # if plotData.find({'community':True}).limit(1).countDocuments()<1:
-    #     PlotSchema.createCommunityDocument(data)
     PlotSchema.updateUserPlotDataDocument(user,data)
-    PlotSchema.updateCommunityPlotData(data)
-    ColorSchema.getPopularColors()
+    PlotSchema.updateDailyCommunityData(data)    
     return True
 
-def getUserClickData(user:str):
-    if plotData.find({'user':user}).limit(1).count()<1:
-        clickData=PlotSchema.createUserPlotDataDocument(user)
-    else:
-        clickData=plotData.find_one({'user':user},{'_id':0})
-    return clickData
+# def getUserClickData(user:str):
+#     if plotData.find({'user':user}).limit(1).count()<1:
+#         clickData=PlotSchema.createPlotDataDocument(user)
+#     else:
+#         clickData=plotData.find_one({'user':user},{'_id':0})
+#     return clickData
 
 def getCommunityClickData():
     communityData = plotData.find_one({'community':True})

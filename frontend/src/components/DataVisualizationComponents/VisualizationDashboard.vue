@@ -2,7 +2,7 @@
 <div class="dashboard">
         <UserDataOverview />
         <div class="dashboard-container">
-            <user-scatter-plot :chosenVariables="variableArray" :data="chartData" :count=14 />
+            <!-- <user-scatter-plot :chosenVariables="variableArray" :data="chartData" :count=14 /> -->
 
         </div>
 
@@ -23,13 +23,13 @@
 <script>
 // import CommunityDataOverview from './CommunityDataOverview.vue'
 import UserDataOverview from '@/components/DataVisualizationComponents/UserDataOverview.vue'
-import UserScatterPlot from './UserScatterPlot.vue'
+// import UserScatterPlot from './UserScatterPlot.vue'
 // import ColorPopularityDetails from './ColorPopularityDetails.vue'
 // import ClickMap from './ClickMap.vue'
 
 export default {
   name: 'VisualizationDashboard',
-  components: { UserScatterPlot, UserDataOverview },
+  components: { UserDataOverview },
   data () {
     return {
       variableArray: ['happiness']
