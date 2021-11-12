@@ -1,22 +1,6 @@
 import FetchFunctions from './fetch.service'
 
 class PlotFunctions extends FetchFunctions {
-  determineTimeRange () {
-    const timeOfReading = new Date()
-    const timeArr = []
-    for (let i = 0; i < 3; i++) {
-      timeArr.push(new Date())
-      timeArr[i].setHours(8 * i, 0, 0, 0)
-    }
-    if (timeOfReading > timeArr[0] && timeOfReading < timeArr[1]) {
-      return 'morning'
-    } else if (timeOfReading > timeArr[1] && timeOfReading < timeArr[2]) {
-      return 'midday'
-    } else {
-      return 'evening'
-    }
-  }
-
   coordinateTransform (e, quadrant) {
     var xValue = 0
     var yValue = 0

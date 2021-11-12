@@ -1,6 +1,5 @@
 <template>
   <div class="flexct">
-    <div class="circle" />
     <br>
     <keep-alive>
     <Weights />

@@ -2,6 +2,22 @@ const API_URL = 'http://localhost:8000/api/'
 const unprotectedRoutes = ['plot/listofcolors', 'auth/login', 'auth/register', 'auth/reset', 'auth/forgot', 'auth/activate']
 
 export default class FetchFunctions {
+  determineTimeRange () {
+    const timeOfReading = new Date()
+    const timeArr = []
+    for (let i = 0; i < 3; i++) {
+      timeArr.push(new Date())
+      timeArr[i].setHours(8 * i, 0, 0, 0)
+    }
+    if (timeOfReading > timeArr[0] && timeOfReading < timeArr[1]) {
+      return 'morning'
+    } else if (timeOfReading > timeArr[1] && timeOfReading < timeArr[2]) {
+      return 'midday'
+    } else {
+      return 'evening'
+    }
+  }
+
   updateToken () {
     return fetch('http://localhost:8000/api/auth/refresh',
       {

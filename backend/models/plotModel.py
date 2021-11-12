@@ -1,6 +1,6 @@
 from typing import ValuesView
 from pydantic import BaseModel, Field
-from datetime import date
+from datetime import datetime
 
 
 # remember x value is happiness y value is calm
@@ -10,8 +10,7 @@ class PlotDataSubmission(BaseModel):
     mapX: int
     mapY: int
     timerange: str
-    timestamp = str(date.today())
-        
+
 class UserPlotData(BaseModel):
     user:str
     dictWithLists:dict

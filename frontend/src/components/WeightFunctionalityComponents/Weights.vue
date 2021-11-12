@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import WeightFunctions from '@/services/weight.functions.js'
 import Weight from '@/components/WeightFunctionalityComponents/Weight.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
@@ -30,8 +31,12 @@ export default {
     Weight,
     ErrorMessage
   },
+  beforeCreate () {
+    this.$store.dispatch('butts/createButts')
+  },
   data () {
     return {
+      weightConfigObject: {},
       newButtonRules: yup.string().required('Give your weight a name!'),
       start: 0,
       interval: null
@@ -42,16 +47,24 @@ export default {
       return this.$store.state.butts.numButts
     },
     loadButts () {
-      return this.$store.state.butts.myButts
+      return this.$store.state.butts.todaysButts
+    },
+    currentStartVal () {
+      return this.$store.state.butts.start
     }
-
   },
   methods: {
     getStartTime (e, buttVal, buttName) {
       this.$store.commit('butts/incrementButt', { initialValue: buttVal, name: buttName, type: e.button })
     },
     updateWeight (buttVal, buttName) {
-      this.$store.commit('butts/updateButt', { value: buttVal, name: buttName })
+      this.$store.commit('butts/updateButt')
+      WeightFunctions.post({
+        name: buttName,
+        value: buttVal,
+        delta: buttVal - this.currentStartVal,
+        timerange: WeightFunctions.determineTimeRange()
+      }, 'allot/updateweightdata')
     },
     createNewWeight (NewButton) {
       if (this.loadButts[NewButton.name] != null) {

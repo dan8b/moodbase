@@ -49,6 +49,7 @@ export default {
     },
     logout () {
       this.$store.commit('userData/wipeDataState')
+      this.$store.commit('butts/wipeButts')
       this.$store.dispatch('auth/logout')
       this.$router.push('/')
     }

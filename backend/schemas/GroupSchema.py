@@ -3,10 +3,20 @@ from models.groupModel import GroupData
 from modules.AuthenticationModule import sendGroupInvitations
 from schemas import ColorSchema, WeightSchema, PlotSchema
 
+def validateGroupData(func: str, data: dict):
+    return validationDispatch[func](data)
+
 def validateGroupName(user:str,groupName:str):
     if groupData.find({'name':groupName,'owner':user}).limit(1).count()>0:
         return {"error":"You already own a group with this name"}
     return {"success": "Group name valid"}
+
+validationDispatch = {
+    'validateGroupName':validateGroupName,
+    'validateMember':validateMember,
+    'validateColors':validateColors,
+    'validateWeights':validateWeights
+}
 
 def validateMemberNames(listOfNames:list):
     response = {'unregistered':[],'registered':[]}

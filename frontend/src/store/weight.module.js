@@ -1,10 +1,10 @@
 import WeightFunctions from '@/services/weight.functions.js'
 
 const initialState = {
-  myButts: {},
+  todaysButts: {},
+  buttConfig: {},
   interval: null,
-  start: 0,
-  delta: 0
+  start: 0
 }
 
 export const butts = {
@@ -29,31 +29,38 @@ export const butts = {
   },
   mutations: {
     deleteButt (state, toDelete) {
-      delete state.myButts[toDelete]
+      delete state.todaysButts[toDelete]
+      delete state.buttConfig[toDelete]
     },
     brandNewButt (state, newButt) {
       state.myButts[newButt] = 0
     },
     loadInitialButts (state, buttsToLoad) {
-      state.myButts = buttsToLoad
-      state.numButts = Object.keys(buttsToLoad).length
+      state.buttConfig = buttsToLoad.config
+      if (!buttsToLoad.todaysData) {
+        Object.keys(buttsToLoad.config).forEach(k => { state.todaysButts[k] = 0 })
+      } else {
+        Object.keys(buttsToLoad.config).forEach(k => {
+          if (k in buttsToLoad.todaysData) {
+            if (WeightFunctions.determineTimeRange() in buttsToLoad.todaysData[k]) {
+              state.todaysButts[k] = buttsToLoad.todaysData[k][WeightFunctions.determineTimeRange()]
+            }
+          }
+        })
+      }
+      state.numButts = Object.keys(buttsToLoad.config).length
     },
     incrementButt (state, buttclick) {
       state.start = buttclick.initialValue
       if (buttclick.type === 0) {
-        state.interval = window.setInterval(function () { state.myButts[buttclick.name]++ }, 1000)
+        state.interval = window.setInterval(function () { state.todaysButts[buttclick.name]++ }, 300)
       } else {
-        state.interval = window.setInterval(function () { state.myButts[buttclick.name]-- }, 1000)
+        state.interval = window.setInterval(function () { state.todaysButts[buttclick.name]-- }, 300)
       }
     },
-    updateButt (state, buttClickRelease) {
+    updateButt (state) {
       window.clearInterval(state.interval)
       state.interval = null
-      WeightFunctions.post({
-        delta: (buttClickRelease.value - state.start),
-        name: buttClickRelease.name,
-        value: buttClickRelease.value
-      }, 'allot/updateweightdata')
     },
     wipeButts (state) {
       state.interval = null
