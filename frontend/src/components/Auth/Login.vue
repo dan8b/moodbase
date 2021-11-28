@@ -11,7 +11,7 @@
 
     </Form>
     <br>
-      <button class="button2"> <router-link to="/forgot"> Click on me if you forgot your password </router-link> </button>
+      <button class="button2"> <router-link to="/forgot"> Click on this if you forgot your password </router-link> </button>
 
 </div>
 </template>
@@ -25,7 +25,6 @@ export default {
     Form,
     Field
   },
-
   computed: {
     loggedIn () {
       return this.$store.state.auth.loggedIn
@@ -63,36 +62,5 @@ export default {
 </script>
 
 <style scoped>
-.button2{
-  display:inline-block;
-  padding:0.5em 3em;
-  border:0.16em solid #FFFFFF;
-  margin:0 0.3em 0.3em 0;
-  box-sizing: border-box;
-  text-decoration:none;
-  /* text-transform:uppercase; */
-  font-family:'Roboto',sans-serif;
-  font-weight:400;
-  color:black;
-  text-align:center;
-  transition: all 0.15s;
-}
-.button2:hover{
-  /* color:#DDDDDD; */
-  border-color:#DDDDDD;
-}
-.button2:active{
-  color:#BBBBBB;
-  border-color:#BBBBBB;
-}
 
-label {
-  font-size:150%;
-}
-
-.field {
-  width:30%;
-  border: 2px solid black;
-  border-radius: 7%;
-}
 </style>

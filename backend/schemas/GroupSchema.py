@@ -11,14 +11,7 @@ def validateGroupName(user:str,groupName:str):
         return {"error":"You already own a group with this name"}
     return {"success": "Group name valid"}
 
-validationDispatch = {
-    'validateGroupName':validateGroupName,
-    'validateMember':validateMember,
-    'validateColors':validateColors,
-    'validateWeights':validateWeights
-}
-
-def validateMemberNames(listOfNames:list):
+def validateMembers(listOfNames:list):
     response = {'unregistered':[],'registered':[]}
     for name in listOfNames:
         checkUser = userData.find_one({'email':name})
@@ -27,6 +20,11 @@ def validateMemberNames(listOfNames:list):
         else:
             response['registered'].append(checkUser)
     return response
+
+validationDispatch = {
+    'validateGroupName':validateGroupName,
+    'validateMember':validateMembers,
+}
 
 def createGroup(data:GroupData,adminUser:str):
     groupName=data.name

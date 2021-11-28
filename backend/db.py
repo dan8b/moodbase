@@ -4,7 +4,7 @@ load_dotenv('.env')
 from decouple import config
 
 conn = MongoClient(config('conn'))
-db=conn['UserData']
+db=conn['mbdata']
 userData=db['Users']
 plotData=db['PlotData']
 colorData=db['ColorChoices']

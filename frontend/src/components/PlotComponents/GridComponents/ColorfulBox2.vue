@@ -116,21 +116,16 @@ export default {
   methods: {
     handleBoxVisibility (blockHover) {
       if (blockHover === true) {
-        this.hideGradientFill = true
+        this.showGradientFill = false
         this.showBorder = false
       } else if (!this.hideGradientFill) {
         this.showGradientFill = !this.showGradientFill
       }
     },
     triggerMove (e) {
-      if (this.lockGradientFill) {
-        e.preventDefault()
-      } else {
-        this.$store.commit('plotPage/activateQuadrant', this.quadrantData.number)
-        if (this.currentlyActiveQuadrant === this.quadrantData.number) {
-          this.showGradientFill = false
-        }
-      }
+      this.$store.commit('plotPage/activateQuadrant', this.quadrantData.number)
+      console.log(this.lockGradientFill)
+      this.showGradientFill = false
     }
   }
 }

@@ -15,7 +15,6 @@ class Envs:
     MAIL_FROM_NAME = config('MAIL_FROM_NAME')
 
 # mail config
-
 mailer = ConnectionConfig(
     MAIL_USERNAME=Envs.MAIL_USERNAME,
     MAIL_PASSWORD=Envs.MAIL_PASSWORD,
@@ -26,7 +25,7 @@ mailer = ConnectionConfig(
     MAIL_TLS=True,
     MAIL_SSL=False,
     USE_CREDENTIALS=True,
-    # TEMPLATE_FOLDER=Path(__file__).parent.parent / "templates"
+    TEMPLATE_FOLDER=Path('./templates')
 )
 
 # mail functions
@@ -54,6 +53,7 @@ async def sendEmailBackground(emailSpecs:dict):
     )
     # background_task=BackgroundTasks
     fm = FastMail(mailer)
+    print(emailSpecs)
     await fm.send_message( message, template_name=emailSpecs['template'])
 
     # return {'message':'email has been sent'}
