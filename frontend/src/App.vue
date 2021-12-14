@@ -48,9 +48,10 @@ export default {
       this.hide = !this.hide
     },
     logout () {
-      this.$store.commit('userData/wipeDataState')
-      this.$store.commit('butts/wipeButts')
+      // this.$store.commit('userData/wipeDataState')
+      // this.$store.commit('butts/wipeButts')
       this.$store.dispatch('auth/logout')
+      console.log('s')
       this.$router.push('/')
     }
   }
@@ -84,7 +85,6 @@ body, html {
 
 .navbar {
   justify-content:center;
-  position:fixed;
   overflow:hidden;
   display:flex;
   flex-direction:row;

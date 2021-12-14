@@ -1,6 +1,6 @@
 <template>
-<div class="bg-black hover:bg-red-700 text-white text-xl px-4 py-8  border rounded-full">
-  <button @mousedown="startTime" @mouseup="endTime">
+<div>
+  <button class="weightButton" @mousedown="startTime" @mouseup="endTime">
      {{buttonName}} : {{buttonValue}}
   </button>
 </div>
@@ -19,5 +19,16 @@ export default {
 </script>
 
 <style>
-
+.weightButton {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 25%;
+}
 </style>

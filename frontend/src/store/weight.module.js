@@ -1,15 +1,28 @@
 import WeightFunctions from '@/services/weight.functions.js'
 
 const initialState = {
-  todaysButts: {},
+  vertexButtCoordinates: {},
+  currentButtCoordinates: {
+    x: 0,
+    y: 0
+  },
   buttConfig: {},
   interval: null,
-  start: 0
+  sumX: 0,
+  sumY: 0
 }
 
 export const butts = {
   namespaced: true,
   state: initialState,
+  getters: {
+    dataForDotRendering (state) {
+      return {
+        numPoints: Object.keys(state.todaysButts).length,
+        buttNames: Object.keys(state.todaysButts)
+      }
+    }
+  },
   actions: {
     createButts ({ commit }) {
       WeightFunctions.get('allot/retrieveweightdata')
@@ -28,45 +41,26 @@ export const butts = {
     }
   },
   mutations: {
-    deleteButt (state, toDelete) {
-      delete state.todaysButts[toDelete]
-      delete state.buttConfig[toDelete]
+    vertexCoordinates (state, variable, coords) {
+      state.vertexButtCoordinates[variable].x = coords.x
+      state.vertexButtCoordinates[variable].y = coords.y
     },
-    brandNewButt (state, newButt) {
-      state.myButts[newButt] = 0
-    },
-    loadInitialButts (state, buttsToLoad) {
-      state.buttConfig = buttsToLoad.config
-      if (!buttsToLoad.todaysData) {
-        Object.keys(buttsToLoad.config).forEach(k => { state.todaysButts[k] = 0 })
-      } else {
-        Object.keys(buttsToLoad.config).forEach(k => {
-          if (k in buttsToLoad.todaysData) {
-            if (WeightFunctions.determineTimeRange() in buttsToLoad.todaysData[k]) {
-              state.todaysButts[k] = buttsToLoad.todaysData[k][WeightFunctions.determineTimeRange()]
-            }
-          }
-        })
+    drawPath (state, variable) {
+      var wiggleRoom = 0
+      for (const v of Object.values(state.currentButtCoordinates)) {
+        for (const sv of v) {
+          wiggleRoom += sv ** 2
+        }
       }
-      state.numButts = Object.keys(buttsToLoad.config).length
-    },
-    incrementButt (state, buttclick) {
-      state.start = buttclick.initialValue
-      if (buttclick.type === 0) {
-        state.interval = window.setInterval(function () { state.todaysButts[buttclick.name]++ }, 300)
-      } else {
-        state.interval = window.setInterval(function () { state.todaysButts[buttclick.name]-- }, 300)
+      var x = state.currentButtCoordinates[variable].x
+      var y = state.currentButtCoordinates[variable].y
+      while (x ** 2 + y ** 2 <= wiggleRoom) {
+        const incrementOrDecrement = WeightFunctions.wackyLogic(x, y)
+        state.currentButtCoordinates[variable].x += incrementOrDecrement.x
+        state.currentButtCoordinates[variable].y += incrementOrDecrement.y
+        x += incrementOrDecrement.x
+        y += incrementOrDecrement.y
       }
-    },
-    updateButt (state) {
-      window.clearInterval(state.interval)
-      state.interval = null
-    },
-    wipeButts (state) {
-      state.interval = null
-      state.start = null
-      state.delta = null
-      Object.keys(state.myButts).forEach(key => delete state.myButts[key])
     }
   }
 }

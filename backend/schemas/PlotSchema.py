@@ -15,7 +15,6 @@ def createPlotDataDocument(user: str, newData: PlotDataSubmission):
     return True
 
 def updateUserPlotDataDocument(user: str, newData: PlotDataSubmission):
-    print('here')
     plotData.update_one(
         {
             'user': user,
@@ -46,7 +45,7 @@ def updateMean(n: int, old: float, new: float, modifier: int):
 
 
 def updateDailyCommunityData(newData: PlotDataSubmission):
-    if plotData.find({'user': "!community"}).limit(1).count() < 1:
+    if plotData.find({'user': "!community", 'day': returnDay()}).limit(1).count() < 1:
         plotData.insert_one(
             {
                 'user': "!community",
