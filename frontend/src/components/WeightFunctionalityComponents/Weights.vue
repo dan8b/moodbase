@@ -1,5 +1,5 @@
 <template>
-<svg height='40%' width='40%' viewBox='-100 -100 225 225 ' ref='weightCanvas'>
+<svg height='40%' width='40%' viewBox='-103 -100 250 250' ref='weightCanvas'>
   <circle cx='0' cy='0' r="1%"/>
 
 <!-- <path :d='reactivePath1'
@@ -30,6 +30,9 @@ export default {
     ...mapGetters({
       propsToPass: 'butts/dataForDotRendering'
     })
+  },
+  created () {
+    this.$store.dispatch('butts/createButts')
   }
 }
 </script>

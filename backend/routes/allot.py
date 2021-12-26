@@ -15,7 +15,7 @@ def updateWeightData(data:WeightData,user:str=Depends(gate)):
 
 @weightRoute.get('/retrieveweightdata')
 def retrieveWeightData(user:str=Depends(gate)):
-    return weight.retrieveWeightData(user)
+    return weight.lookForDailyRadius(user)
     
 @weightRoute.post('/createnewbutton/{name}')
 def createNewWeight(name:str,user:str=Depends(gate)):

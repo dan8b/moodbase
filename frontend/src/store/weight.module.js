@@ -1,15 +1,11 @@
 import WeightFunctions from '@/services/weight.functions.js'
 
 const initialState = {
-  vertexButtCoordinates: {},
-  currentButtCoordinates: {
-    x: 0,
-    y: 0
-  },
-  buttConfig: {},
+  weightsByRadius: {},
   interval: null,
-  sumX: 0,
-  sumY: 0
+  pathByVariable: {},
+  wiggleRoom: 100,
+  activeVariable: null
 }
 
 export const butts = {
@@ -18,8 +14,8 @@ export const butts = {
   getters: {
     dataForDotRendering (state) {
       return {
-        numPoints: Object.keys(state.todaysButts).length,
-        buttNames: Object.keys(state.todaysButts)
+        numPoints: Object.keys(state.weightsByRadius).length,
+        buttNames: Object.keys(state.weightsByRadius)
       }
     }
   },
@@ -41,26 +37,42 @@ export const butts = {
     }
   },
   mutations: {
-    vertexCoordinates (state, variable, coords) {
-      state.vertexButtCoordinates[variable].x = coords.x
-      state.vertexButtCoordinates[variable].y = coords.y
+    // takes the data on weight config from the GET request in createButts
+    // saves names and number of buttons to state variables
+    loadInitialButts (state, buttConfigData) {
+      state.weightsByRadius = buttConfigData
+      var i = 0
+      for (const cPair of Object.values(buttConfigData)) {
+        state.pathByVariable[Object.keys(buttConfigData)[i]] = WeightFunctions.polarToCartesian({
+          radius: cPair,
+          iter: i,
+          nGon: Object.keys(buttConfigData).length
+        })
+        i++
+      }
     },
     drawPath (state, variable) {
-      var wiggleRoom = 0
-      for (const v of Object.values(state.currentButtCoordinates)) {
-        for (const sv of v) {
-          wiggleRoom += sv ** 2
+      state.activeVariable = variable.vName
+      var currentRadius = state.weightsByRadius[variable.vName]
+      const incrementOrDecrement = WeightFunctions.wackyLogic(variable.coordinates)
+      state.wiggleRoom = WeightFunctions.computeWiggleRoom(Object.values(state.weightsByRadius))
+      state.interval = window.setInterval(() => {
+        if ((state.wiggleRoom < 0 && variable.shrinkPath === 1) || (Math.abs(currentRadius) < 0.01 && variable.shrinkPath === -1)) {
+          window.clearInterval(state.interval)
+          state.interval = null
+        } else {
+          currentRadius += Math.sqrt(2) * variable.shrinkPath
+          state.pathByVariable[variable.vName].x += incrementOrDecrement.x * variable.shrinkPath
+          state.pathByVariable[variable.vName].y += incrementOrDecrement.y * variable.shrinkPath
+          state.weightsByRadius[variable.vName] = currentRadius
+          state.wiggleRoom = WeightFunctions.computeWiggleRoom(Object.values(state.weightsByRadius))
+          console.log(state.wiggleRoom)
         }
-      }
-      var x = state.currentButtCoordinates[variable].x
-      var y = state.currentButtCoordinates[variable].y
-      while (x ** 2 + y ** 2 <= wiggleRoom) {
-        const incrementOrDecrement = WeightFunctions.wackyLogic(x, y)
-        state.currentButtCoordinates[variable].x += incrementOrDecrement.x
-        state.currentButtCoordinates[variable].y += incrementOrDecrement.y
-        x += incrementOrDecrement.x
-        y += incrementOrDecrement.y
-      }
+      }, 1)
+    },
+    completePath (state) {
+      window.clearInterval(state.interval)
+      state.interval = null
     }
   }
 }

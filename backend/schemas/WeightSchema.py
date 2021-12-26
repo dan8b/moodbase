@@ -1,11 +1,12 @@
 from db import weightData, weightPopularityData
-from models.weightModel import WeightData
+from models.weightModel import WeightData, WeightLookupObject
 from modules.HelperFunctions import returnDay
 
 
 def createWeightConfigDocument(user: str):
     defaultWeightConfig = {
-        'user': f"{user}!weightconfig",
+        'user': user,
+        'config': True,
         'family': {'dateAdded': returnDay(), 'valueToDate': 0},
         'health': {'dateAdded': returnDay(), 'valueToDate': 0},
         'work': {'dateAdded': returnDay(), 'valueToDate': 0},
@@ -17,10 +18,33 @@ def createWeightConfigDocument(user: str):
     for key in defaultWeightConfig.keys():
         if key != 'user':
             updateWeightPopularity(key)
-    return defaultWeightConfig
+    return True
 
 # increment the count of users with a given weight button by 1 when assigning user default weight buttons
 
+# looks for a set of weight configs and up-to-date data for user
+# params: user (string) - a username to query by
+# returns: serialized JSON (dict) containing database entry corresponding to user weight data for that time - config and current
+def lookForDailyRadius(user: str):
+    if weightData.find({'user': user, 'config': True}).limit(1).count() < 1:
+        createWeightConfigDocument(user)
+    if weightData.find({'user':user, 'day':returnDay()}).limit(1).count() < 1:
+        return createDailyRadius(user)
+    else:
+        return weightData.find_one({'user':user, 'day':returnDay()}, {'_id':0, 'user':0, 'day':0} )
+
+# create placeholder mood weight data
+# params: user (string) - user for whom to create data entry
+# returns: serialized JSON (dict) with database entry - current only
+def createDailyRadius(user: str):
+    userConfig = weightData.find_one({'user': user, 'config':True}, {'_id':0, 'user':0, 'config': 0})
+    dailyVertices = {}
+    for configVariable in userConfig.keys():
+        dailyVertices[configVariable] = 0
+    dailyVertices['user'] = user
+    dailyVertices['day'] = returnDay()
+    weightData.insert_one(dailyVertices)
+    return dailyVertices
 
 def updateWeightPopularity(name: str):
     weightPopularityData.update_one(
@@ -47,22 +71,6 @@ def updateWeightData(user: str, newData: WeightData):
     )
     return True
 
-
-def retrieveWeightData(user: str):
-    if weightData.find({'user': f"{user}!weightconfig"}).limit(1).count() < 1:
-        return createWeightConfigDocument(user)
-    else:
-        weightConfig = weightData.find_one({'user': f"{user}!weightconfig"}, {'_id': 0, 'user': 0})
-        if weightData.find({'user': f"{user}!{returnDay()}"}).limit(1).count() > 0:
-            return {
-                'config': weightConfig,
-                'todaysData': weightData.find_one({'user': f"{user}!{returnDay()}"}, {'_id': 0, 'user': 0})
-            }  
-        else:
-            return {
-                'config': weightConfig,
-                'todaysData': False
-            }
 
 def createNewButton(name: str, user: str):
     weightData.update_one({'user': f"{user}!weightconfig"},

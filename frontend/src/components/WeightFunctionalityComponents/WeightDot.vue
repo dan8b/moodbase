@@ -1,38 +1,45 @@
 <template>
-  <circle @mousedown='beginUpdate' :id='iter' :cx='x' :cy='y' r="1%"/>
+  <text :x='coords.x' :y='coords.y - 5'> {{ buttName }} </text>
+  <line x1="0" y1="0" :x2="pathCoords.x" :y2="pathCoords.y" stroke="black" />
+  <rect :x="coords.x" :y="coords.y" width="20" height="20" stroke="rgba(0,255,0,0.5)" fill="rgba(0,255,0,0.5)"
+  @mousedown='beginPathRender(1)' @mouseup='endPathRender()' />
+  <rect :x="coords.x + 21" :y="coords.y" width="20" height="20" stroke="rgba(255,0,0,0.5)" fill="rgba(255,0,0,0.75)"
+  @mousedown='beginPathRender(-1)' @mouseup='endPathRender()'  />
 </template>
 
 <script>
-import { useStore } from 'vuex'
+import WeightFunctions from '@/services/weight.functions.js'
 export default {
   name: 'WeightDot',
   props: {
     iter: Number,
     buttName: String
   },
-  setup (props) {
-    var interval = null
-    const store = useStore()
-    const nGon = store.getters['butts/dataForDotRendering'].numPoints
-    const sign = {
-      x: 1,
-      y: 1
+  computed: {
+    pathCoords () {
+      return this.$store.state.butts.pathByVariable[this.buttName]
+    },
+    nGon () {
+      return this.$store.getters['butts/dataForDotRendering'].numPoints
+    },
+    coords () {
+      return WeightFunctions.polarToCartesian({ iter: this.iter, nGon: this.nGon })
     }
-    const theta = ((props.iter) * ((Math.PI * 2) / (nGon)))
-    if (theta < Math.PI / 2 && theta > Math.PI * 3 / 2) {
-      sign.x = -1
+  },
+  // watch: {
+  //   pathCoords (n, o) {
+  //     console.log(n)
+  //     console.log(o)
+  //   }
+  // },
+  methods: {
+    beginPathRender (reverse) {
+      this.$store.commit('butts/drawPath', { coordinates: this.coords, vName: this.buttName, shrinkPath: reverse })
+    },
+
+    endPathRender () {
+      this.$store.commit('butts/completePath')
     }
-    if (theta < Math.PI && theta > 2 * Math.PI) {
-      sign.y = -1
-    }
-    const x = 100 * sign.x * Math.cos((props.iter * ((Math.PI * 2) / nGon)))
-    const y = 100 * sign.x * Math.sin((props.iter * ((Math.PI * 2) / nGon)))
-    function beginUpdate () {
-      interval = window.setInterval(() => {
-        store.commit('butts/drawPath', props.nGon)
-      })
-    }
-    return { x, y, beginUpdate, interval }
   }
 }
 </script>
