@@ -24,19 +24,22 @@ export default {
     },
     coords () {
       return WeightFunctions.polarToCartesian({ iter: this.iter, nGon: this.nGon })
+    },
+    wiggleRoom () {
+      return this.$store.state.butts.wiggleRoom
     }
   },
-  // watch: {
-  //   pathCoords (n, o) {
-  //     console.log(n)
-  //     console.log(o)
-  //   }
-  // },
+  watch: {
+    wiggleRoom (remaining) {
+      if (remaining < 0.001) {
+        this.$store.commit('butts/snapshotAndShrink', this.buttName)
+      }
+    }
+  },
   methods: {
     beginPathRender (reverse) {
       this.$store.commit('butts/drawPath', { coordinates: this.coords, vName: this.buttName, shrinkPath: reverse })
     },
-
     endPathRender () {
       this.$store.commit('butts/completePath')
     }

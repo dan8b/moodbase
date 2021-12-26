@@ -3,9 +3,11 @@ import WeightFunctions from '@/services/weight.functions.js'
 const initialState = {
   weightsByRadius: {},
   interval: null,
+  interval2: null,
   pathByVariable: {},
   wiggleRoom: 100,
-  activeVariable: null
+  activeVariable: null,
+  snapshots: {}
 }
 
 export const butts = {
@@ -66,13 +68,18 @@ export const butts = {
           state.pathByVariable[variable.vName].y += incrementOrDecrement.y * variable.shrinkPath
           state.weightsByRadius[variable.vName] = currentRadius
           state.wiggleRoom = WeightFunctions.computeWiggleRoom(Object.values(state.weightsByRadius))
-          console.log(state.wiggleRoom)
         }
       }, 1)
     },
     completePath (state) {
       window.clearInterval(state.interval)
       state.interval = null
+    },
+    adjustOtherPaths (state, variable) {
+      state.snapshots[variable] = state.weightsByRadius[variable]
+      state.interval2 = window.setInterval(() => {
+        
+      })
     }
   }
 }
