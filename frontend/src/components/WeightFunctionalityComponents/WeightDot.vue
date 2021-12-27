@@ -32,7 +32,7 @@ export default {
   watch: {
     wiggleRoom (remaining) {
       if (remaining < 0.001) {
-        this.$store.commit('butts/snapshotAndShrink', this.buttName)
+        this.$store.commit('butts/adjustOtherPaths', this.buttName)
       }
     }
   },

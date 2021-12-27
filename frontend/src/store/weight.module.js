@@ -77,8 +77,19 @@ export const butts = {
     },
     adjustOtherPaths (state, variable) {
       state.snapshots[variable] = state.weightsByRadius[variable]
+      state.wiggleRoom += state.weightsByRadius[variable]
+      console.log(state.wiggleRoom)
+      const pathShrinkOperation = WeightFunctions.wackyLogic(state.pathByVariable[variable]) * -1
       state.interval2 = window.setInterval(() => {
-        
+        if (state.wiggleRoom < 0) {
+          window.clearInterval(state.interval2)
+          state.interval2 = null
+        } else {
+          state.weightsByRadius[variable] -= Math.sqrt(2)
+          state.pathByVariable[variable].x += pathShrinkOperation
+          state.pathByVariable[variable].y += pathShrinkOperation
+          state.wiggleRoom += 1
+        }
       })
     }
   }
