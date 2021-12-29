@@ -24,16 +24,6 @@ export default {
     },
     coords () {
       return WeightFunctions.polarToCartesian({ iter: this.iter, nGon: this.nGon })
-    },
-    wiggleRoom () {
-      return this.$store.state.butts.wiggleRoom
-    }
-  },
-  watch: {
-    wiggleRoom (remaining) {
-      if (remaining < 0.001) {
-        this.$store.commit('butts/adjustOtherPaths', this.buttName)
-      }
     }
   },
   methods: {

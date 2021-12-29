@@ -3,11 +3,11 @@ import WeightFunctions from '@/services/weight.functions.js'
 const initialState = {
   weightsByRadius: {},
   interval: null,
-  interval2: null,
+  moveOtherPoints: false,
   pathByVariable: {},
   wiggleRoom: 100,
   activeVariable: null,
-  snapshots: {}
+  snapshotRadius: {}
 }
 
 export const butts = {
@@ -59,38 +59,49 @@ export const butts = {
       const incrementOrDecrement = WeightFunctions.wackyLogic(variable.coordinates)
       state.wiggleRoom = WeightFunctions.computeWiggleRoom(Object.values(state.weightsByRadius))
       state.interval = window.setInterval(() => {
-        if ((state.wiggleRoom < 0 && variable.shrinkPath === 1) || (Math.abs(currentRadius) < 0.01 && variable.shrinkPath === -1)) {
+        if (state.wiggleRoom < 0.001 && variable.shrinkPath === 1) {
+          state.wiggleRoom = 0
+          for (const [weight, radius] of Object.entries(state.weightsByRadius)) {
+            if (weight !== variable.vName) {
+              state.wiggleRoom += radius
+              state.snapshotRadius[weight] = radius
+            }
+          }
+          if (state.wiggleRoom > 0) {
+            state.moveOtherPoints = true
+          } else {
+            state.moveOtherPoints = false
+            window.clearInterval(state.interval)
+            state.interval = null
+          }
+        } else if (Math.abs(currentRadius) < 0.01 && variable.shrinkPath === -1) {
+          state.moveOtherPoints = false
           window.clearInterval(state.interval)
           state.interval = null
         } else {
+          if (state.moveOtherPoints) {
+            const weightNames = Object.keys(state.weightsByRadius)
+            var adjustmentDirection = null
+            for (const name of weightNames) {
+              if (state.weightsByRadius[name] > 0 && name !== variable.vName) {
+                adjustmentDirection = WeightFunctions.wackyLogic(state.pathByVariable[name])
+                state.pathByVariable[name].x += (adjustmentDirection.x * -1)
+                state.pathByVariable[name].y += (adjustmentDirection.y * -1)
+                state.weightByRadius[name] -= Math.sqrt(2)
+              }
+            }
+          }
           currentRadius += Math.sqrt(2) * variable.shrinkPath
           state.pathByVariable[variable.vName].x += incrementOrDecrement.x * variable.shrinkPath
           state.pathByVariable[variable.vName].y += incrementOrDecrement.y * variable.shrinkPath
           state.weightsByRadius[variable.vName] = currentRadius
-          state.wiggleRoom = WeightFunctions.computeWiggleRoom(Object.values(state.weightsByRadius))
+          state.wiggleRoom--
         }
       }, 1)
     },
     completePath (state) {
       window.clearInterval(state.interval)
       state.interval = null
-    },
-    adjustOtherPaths (state, variable) {
-      state.snapshots[variable] = state.weightsByRadius[variable]
-      state.wiggleRoom += state.weightsByRadius[variable]
-      console.log(state.wiggleRoom)
-      const pathShrinkOperation = WeightFunctions.wackyLogic(state.pathByVariable[variable]) * -1
-      state.interval2 = window.setInterval(() => {
-        if (state.wiggleRoom < 0) {
-          window.clearInterval(state.interval2)
-          state.interval2 = null
-        } else {
-          state.weightsByRadius[variable] -= Math.sqrt(2)
-          state.pathByVariable[variable].x += pathShrinkOperation
-          state.pathByVariable[variable].y += pathShrinkOperation
-          state.wiggleRoom += 1
-        }
-      })
     }
   }
 }
