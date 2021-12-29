@@ -6,7 +6,7 @@
  :iter='i' :buttName='propsToPass.buttNames[i - 1]' />
 
 <LineBetweenDots v-for='i in propsToPass.numPoints' :key='i'
-  :vIndex=i - 1 />
+  :vIndex='i' />
 
 </svg>
 </template>
@@ -18,7 +18,8 @@ import LineBetweenDots from './LineBetweenDots.vue'
 export default {
   name: 'Weights',
   components: {
-    WeightDot
+    WeightDot,
+    LineBetweenDots
   },
   data () {
     return {

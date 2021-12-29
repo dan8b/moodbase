@@ -7,7 +7,8 @@ const initialState = {
   pathByVariable: {},
   wiggleRoom: 100,
   activeVariable: null,
-  snapshotRadius: {}
+  snapshotRadius: {},
+  pathToFrom: []
 }
 
 export const butts = {
@@ -103,6 +104,21 @@ export const butts = {
     completePath (state) {
       window.clearInterval(state.interval)
       state.interval = null
+    },
+    generatePathToFrom (state, index) {
+      const weights = Object.keys(state.weightsByRadius)
+      var endWeight = (index === weights.length) ? weights[weights.length - 1] : weights[index]
+      const startWeight = weights[index - 1]
+      state.pathToFrom.push({
+        start: {
+          x: state.pathByVariable[startWeight].x,
+          y: state.pathByVariable[startWeight].y
+        },
+        end: {
+          x: state.pathByVariable[endWeight].x,
+          y: state.pathByVariable[endWeight].y
+        }
+      })
     }
   }
 }
