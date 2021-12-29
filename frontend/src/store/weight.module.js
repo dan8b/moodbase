@@ -83,11 +83,12 @@ export const butts = {
             const weightNames = Object.keys(state.weightsByRadius)
             var adjustmentDirection = null
             for (const name of weightNames) {
-              if (state.weightsByRadius[name] > 0 && name !== variable.vName) {
+              if (state.weightsByRadius[name] > 0 && name !== variable.vName && (Math.abs(state.pathByVariable[name].x) + Math.abs(state.pathByVariable[name].y) > 0)) {
                 adjustmentDirection = WeightFunctions.wackyLogic(state.pathByVariable[name])
-                state.pathByVariable[name].x += (adjustmentDirection.x * -1)
-                state.pathByVariable[name].y += (adjustmentDirection.y * -1)
-                state.weightByRadius[name] -= Math.sqrt(2)
+                state.pathByVariable[name].x += (adjustmentDirection.x * -1 * variable.shrinkPath)
+                state.pathByVariable[name].y += (adjustmentDirection.y * -1 * variable.shrinkPath)
+                state.weightsByRadius[name] -= Math.sqrt(2)
+                console.log(name)
               }
             }
           }

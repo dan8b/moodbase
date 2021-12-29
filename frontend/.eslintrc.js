@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-recommended',
     'eslint:essential',
-    '@vue/standard'
   ],
 
   parserOptions: {
@@ -23,6 +22,10 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    '@vue/standard'
+  ],
+
+  'extends': [
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
   ]
 }

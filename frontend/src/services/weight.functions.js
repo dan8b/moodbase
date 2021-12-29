@@ -12,7 +12,7 @@ class WeightFunctions extends FetchFunctions {
     if (Math.abs(v) < 0.001) {
       return 0
     } else {
-      return Math.sign(v)
+      return Math.sign(v) / 1
     }
   }
 

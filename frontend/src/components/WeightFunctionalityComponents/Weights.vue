@@ -2,20 +2,19 @@
 <svg height='40%' width='40%' viewBox='-103 -100 250 250' ref='weightCanvas'>
   <circle cx='0' cy='0' r="1%"/>
 
-<!-- <path :d='reactivePath1'
-  style="stroke: #ff0000;
-          stroke-width: 3;
-          fill: none;
-          "
-/> -->
 <WeightDot v-for='i in propsToPass.numPoints' :key='i'
  :iter='i' :buttName='propsToPass.buttNames[i - 1]' />
+
+<LineBetweenDots v-for='i in propsToPass.numPoints' :key='i'
+  :vIndex=i - 1 />
+
 </svg>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import WeightDot from './WeightDot.vue'
+import LineBetweenDots from './LineBetweenDots.vue'
 export default {
   name: 'Weights',
   components: {
@@ -27,6 +26,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['butts', ['pathsByVariable']]),
     ...mapGetters({
       propsToPass: 'butts/dataForDotRendering'
     })
